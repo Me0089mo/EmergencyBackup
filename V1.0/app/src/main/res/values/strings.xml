@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">EmergencyBackupV1.0</string>
+    <string name="email">E-mail</string>
+    <string name="contraseña">Contraseña</string>
+    <string name="siguiente">Siguiente</string>
+    <string name="celular">Celular</string>
+    <string name="necessaryData">Los siguientes datos son necesarios para garantizar la seguridad de tu información</string>
+    <string name="securityQuestion">Pregunta de seguridad</string>
+    <string name="sqInfo">Selecciona una de las siguientes. No olvides tu respuesta, en caso de ser necesario se
+    te pedirá que la ingreses exactamente como lo hayas escrito la primera vez.</string>
+</resources>
