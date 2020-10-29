@@ -63,9 +63,9 @@
             </LinearLayout>
         </androidx.cardview.widget.CardView>
         <Button
-                android:text="@string/siguiente"
+                android:text="@string/registrarse"
                 android:layout_width="match_parent"
-                android:layout_height="58dp" android:id="@+id/button"
+                android:layout_height="58dp" android:id="@+id/btnRegistrarse"
                 android:layout_marginTop="50dp"
                 android:layout_marginStart="50dp"
                 android:layout_marginEnd="50dp"

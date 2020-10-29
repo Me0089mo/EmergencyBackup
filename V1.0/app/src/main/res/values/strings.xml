@@ -4,8 +4,15 @@
     <string name="contraseña">Contraseña</string>
     <string name="siguiente">Siguiente</string>
     <string name="celular">Celular</string>
-    <string name="necessaryData">Los siguientes datos son necesarios para garantizar la seguridad de tu información</string>
+    <string name="necessaryData">Los siguientes datos son necesarios para garantizar la seguridad de tu información
+    </string>
     <string name="securityQuestion">Pregunta de seguridad</string>
     <string name="sqInfo">Selecciona una de las siguientes. No olvides tu respuesta, en caso de ser necesario se
-    te pedirá que la ingreses exactamente como lo hayas escrito la primera vez.</string>
+        te pedirá que la ingreses exactamente como lo hayas escrito la primera vez.
+    </string>
+    <string name="registrarse">Registrarse</string>
+    <string name="title_activity_home">Home</string>
+    <string name="title_inicio">Inicio</string>
+    <string name="title_ajustes">Ajustes</string>
+    <string name="title_respaldo">Respaldo</string>
 </resources>
