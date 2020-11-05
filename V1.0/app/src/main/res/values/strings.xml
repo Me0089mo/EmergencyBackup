@@ -10,9 +10,16 @@
     <string name="sqInfo">Selecciona una de las siguientes. No olvides tu respuesta, en caso de ser necesario se
         te pedirá que la ingreses exactamente como lo hayas escrito la primera vez.
     </string>
-    <string name="registrarse">Registrarse</string>
+    <string name="login">Iniciar sesión</string>
+    <string name="signup">Registrarse</string>
     <string name="title_activity_home">Home</string>
     <string name="title_inicio">Inicio</string>
     <string name="title_ajustes">Ajustes</string>
     <string name="title_respaldo">Respaldo</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dash</string>
+    <string name="title_notifications">Notif</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>
