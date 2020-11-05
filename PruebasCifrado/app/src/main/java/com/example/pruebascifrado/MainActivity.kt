@@ -1,16 +1,32 @@
 package com.example.pruebascifrado
 
+import android.Manifest
 import android.app.Activity
+import android.app.Instrumentation
+import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.database.Cursor
 import android.net.Uri
 import android.os.Build
+import android.os.Build.VERSION_CODES.M
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Environment
 import android.provider.DocumentsContract
+import android.provider.OpenableColumns
+import android.util.Log
 import android.widget.Button
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.ActivityResultCallback
+import androidx.activity.result.ActivityResultRegistry
 import androidx.annotation.RequiresApi
+import androidx.core.app.ActivityCompat
+import androidx.core.app.ActivityCompat.startActivityForResult
+import androidx.core.content.ContextCompat
 import androidx.core.net.toFile
 import androidx.core.net.toUri
+import androidx.documentfile.provider.DocumentFile
 import java.io.*
 import java.net.URI
 import java.security.*
@@ -20,9 +36,10 @@ import javax.crypto.SecretKey
 
 class MainActivity : AppCompatActivity() {
 
-    private var fileData: ByteArray? = null
-    private var encryptedData:ByteArray? = null
-    private var decryptedData:ByteArray? = null
+    /*private var fileData: ByteArray? = null
+    private var encryptedData: ByteArray? = null
+    private var decryptedData: ByteArray? = null*/
+    private var cipheredDataPath = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,10 +47,15 @@ class MainActivity : AppCompatActivity() {
         /*Security.getAlgorithms("Cipher").forEach {alg :String ->
             println(alg)
         }*/
-        println("Started")
+
+        //Creating file for ciphered data
+        val uri = Uri.parse(cipheredDataPath)
+        val f = File(Environment.getDataDirectory().name + "/CipheredData")
+        if(f.mkdir()) println("Correctly created")
+        cipheredDataPath = f.toUri().toString()
+        //Creating document picker
         val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE).apply {
-            addCategory(Intent.CATEGORY_DEFAULT)
-            //type = "*/*"
+            flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
         }
         startActivityForResult(intent, 42)
     }
@@ -42,51 +64,49 @@ class MainActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if(requestCode == 42 && resultCode == Activity.RESULT_OK) {
-            println(data?.data)
-            val path:Uri = DocumentsContract.buildDocumentUri(data?.data?.authority, data?.data?.lastPathSegment)
-            println(path.normalizeScheme())
-            readFile(path)
-            println("Final path: ${path}")
-            println(path.lastPathSegment)
-            println(URI.create(path.toString()))
-            /*val direct = File(URI.create(path.toString()))
-            println(direct.name)
-            println("Archivo: ${direct?.isFile}")
-            println("Directorio: ${direct?.isDirectory}")
-            if(direct!!.isDirectory){
-                println("Name: ${direct?.name}")
-                val allFiles = direct?.listFiles()
-                allFiles.forEachIndexed { index, file ->
-                    println("$index: ${file.name}")
-                    readFile(file.toUri())
+            data?.data.also { uri ->
+                uri?.let {
+                    val f = DocumentFile.fromTreeUri(this, it)
+                    if(f?.isDirectory!!){
+                        f.listFiles().forEach { documentFile ->
+                            var auxNewName: String? = documentFile.name
+                            var cipheredName:String = ""
+                            if(auxNewName != null)
+                                cipheredName = generateNewName(auxNewName)
+                            var plainData = readFile(documentFile.uri)
+                            var cipherData = plainData?.let { it1 -> cipherFile(it1) }
+                            var cipheredFile = File(cipheredDataPath + "/" + cipheredName)
+                            cipheredFile.mkdir()
+                            if (cipherData != null) {
+                                cipheredFile.writeBytes(cipherData)
+                            }
+                        }
+                    }
                 }
+            }
+        }
+    }
 
-                /*fileData?.forEach { b:Byte->
-                    print(b)
-                }
-                encryptedData = if(fileData != null) cipherFile(fileData!!) else null
-                println("\n")
-                encryptedData?.forEach { b: Byte ->
-                    print(b)
-                }*/
-            }*/
+    fun analyzeDirectory(uri:Uri){
+        val cursor: Cursor? = applicationContext.contentResolver.query(uri, null, null, null, null, null)
+        cursor?.use {
+            println("Analizing directory")
+            if(it.moveToFirst()){
+                val name = it.getString(it.getColumnIndex(OpenableColumns.DISPLAY_NAME))
+                println(name)
+            }
         }
     }
 
     @Throws(IOException::class)
     fun readFile(path: Uri): ByteArray? {
         var data: ByteArray? = null
+        println(path.path)
         contentResolver.openInputStream(path)?.use { reader ->
             val byte_arr = BufferedInputStream(reader).readBytes()
             data = ByteArray(byte_arr.size)
             data = byte_arr.clone()
             println("\tSize: ${byte_arr.size}")
-            /* Opción de Android Developers
-            var nextByte: Int = inputStream.read()
-            while (nextByte != -1) {
-                byteArrayOutputStream.write(nextByte)
-                nextByte = inputStream.read()
-            }*/
         }
         return data
     }
@@ -101,6 +121,18 @@ class MainActivity : AppCompatActivity() {
         val iv: ByteArray = cipher.iv
         println(iv)
         return ciphertext
+    }
+
+    fun generateNewName(name:String):String{
+        var newName = ""
+        for (index in (name.length-1).downTo(0)){
+            if (name[index] == '.'){
+                newName = name.substring(0, index) + "Ciphered"
+                newName += name.substring(index, name.length)
+                break
+            }
+        }
+        return newName
     }
 }
 
