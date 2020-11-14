@@ -14,13 +14,14 @@ class Login : AppCompatActivity() {
         setContentView(R.layout.activity_login)
     }
 
-    public fun singUp(view:View){
+    public fun signUp(view:View){
         val intent = Intent(this, SignUp::class.java)
         startActivity(intent)
     }
 
     public fun logIn(view:View){
         val correctCreds = true
+        Log.i("Login", "Login started")
         if(correctCreds){
             val intent = Intent(this, Home::class.java)
             startActivity(intent)

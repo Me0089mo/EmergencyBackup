@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<resources>
+    <string-array name="questions_arr">
+        <item>Pregunta 1 </item>
+        <item>Pregunta 2 </item>
+        <item>Pregunta 3 </item>
+    </string-array>
+</resources>

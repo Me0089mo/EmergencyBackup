@@ -11,6 +11,7 @@
         te pedirá que la ingreses exactamente como lo hayas escrito la primera vez.
     </string>
     <string name="login">Iniciar sesión</string>
+    <string name="arg_backuponcloud">backuponclound</string>
     <string name="signup">Registrarse</string>
     <string name="title_activity_home">Home</string>
     <string name="title_inicio">Inicio</string>

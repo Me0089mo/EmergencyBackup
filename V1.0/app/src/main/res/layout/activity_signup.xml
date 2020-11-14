@@ -111,6 +111,12 @@
                                                         android:layout_height="wrap_content"
                                                         android:layout_width="match_parent"
                                                         android:hint="respuesta"/>
+                                                <Button
+                                                        android:id="@+id/signup_complete_bttn"
+                                                        android:layout_width="match_parent"
+                                                        android:layout_height="wrap_content"
+                                                        android:text="@string/signup"
+                                                        android:onClick="signUp"/>
                                             </LinearLayout>
                                 </RelativeLayout>
 

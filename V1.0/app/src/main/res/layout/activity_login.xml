@@ -4,17 +4,19 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/colorBackground"
-        android:baselineAligned="false" android:orientation="horizontal">
+        android:baselineAligned="false"
+        android:orientation="horizontal">
 
     <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight=".15"></RelativeLayout>
+            android:layout_weight=".10
+"></RelativeLayout>
 
     <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight=".70">
+            android:layout_weight=".80">
 
         <LinearLayout
                 android:layout_width="match_parent"
@@ -24,12 +26,13 @@
             <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight=".15"></RelativeLayout>
+                    android:layout_weight=".10
+"></RelativeLayout>
 
             <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight=".70">
+                    android:layout_weight=".80">
 
                 <androidx.cardview.widget.CardView
                         android:layout_width="match_parent"
@@ -46,7 +49,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:background="@color/colorForeground"
-                            android:baselineAligned="false" android:orientation="horizontal">
+                            android:baselineAligned="false"
+                            android:orientation="horizontal">
 
                         <RelativeLayout
                                 android:layout_width="0dp"
@@ -66,12 +70,14 @@
                                 <RelativeLayout
                                         android:layout_width="match_parent"
                                         android:layout_height="0dp"
-                                        android:layout_weight=".05"></RelativeLayout>
+                                        android:layout_weight=".10
+"></RelativeLayout>
 
                                 <RelativeLayout
                                         android:layout_width="match_parent"
                                         android:layout_height="0dp"
-                                        android:layout_weight=".70">
+                                        android:layout_weight=".70"
+                                        android:gravity="center">
 
                                     <LinearLayout
                                             android:layout_width="match_parent"
@@ -100,30 +106,34 @@
                                                 android:id="@+id/loginbttn"
                                                 android:layout_width="match_parent"
                                                 android:layout_height="wrap_content"
-                                                android:text="@string/login"
-                                                android:onClick="logIn"/>
+                                                android:background="@color/colorAccent"
+                                                android:onClick="logIn"
+                                                android:text="@string/login" />
 
                                         <Button
-                                                android:id="@+id/signupbttn"
+                                                android:id="@+id/logintosignupbttn"
                                                 android:layout_width="match_parent"
                                                 android:layout_height="wrap_content"
-                                                android:text="@string/signup"
-                                                android:onClick="singUp"/>
+                                                android:background="@color/colorAccent"
+                                                android:onClick="signUp"
+                                                android:paddingVertical="10dp"
+                                                android:text="@string/signup" />
                                     </LinearLayout>
                                 </RelativeLayout>
 
                                 <RelativeLayout
                                         android:layout_width="match_parent"
                                         android:layout_height="0dp"
-                                        android:layout_weight=".05"
-                                        ></RelativeLayout>
+                                        android:layout_weight=".10
+"></RelativeLayout>
                             </LinearLayout>
                         </RelativeLayout>
 
                         <RelativeLayout
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
-                                android:layout_weight=".10"></RelativeLayout>
+                                android:layout_weight=".10
+"></RelativeLayout>
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
             </RelativeLayout>
@@ -131,12 +141,14 @@
             <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight=".15"></RelativeLayout>
+                    android:layout_weight=".10
+"></RelativeLayout>
         </LinearLayout>
     </RelativeLayout>
 
     <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight=".15"></RelativeLayout>
+            android:layout_weight=".10
+"></RelativeLayout>
 </LinearLayout>

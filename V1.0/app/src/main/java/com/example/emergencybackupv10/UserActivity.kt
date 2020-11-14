@@ -7,4 +7,5 @@ class UserActivity(val descripcion:String, val fecha:Time, val detalles:String) 
         set(fecha){
             field = fecha.toString()
         }
+
 }
