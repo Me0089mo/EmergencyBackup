@@ -1,58 +1,38 @@
 package com.example.pruebascifrado
 
-import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Activity
-import android.app.Instrumentation
-import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.database.Cursor
-import android.net.Uri
 import android.os.Build
-import android.os.Build.VERSION_CODES.M
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Environment
-import android.provider.DocumentsContract
-import android.provider.OpenableColumns
 import android.util.Log
-import android.widget.Button
-import androidx.activity.result.ActivityResult
-import androidx.activity.result.ActivityResultCallback
-import androidx.activity.result.ActivityResultRegistry
 import androidx.annotation.RequiresApi
-import androidx.core.app.ActivityCompat
-import androidx.core.app.ActivityCompat.startActivityForResult
-import androidx.core.content.ContextCompat
-import androidx.core.net.toFile
-import androidx.core.net.toUri
 import androidx.documentfile.provider.DocumentFile
 import java.io.*
-import java.net.URI
+import java.lang.ref.Reference
 import java.security.*
-import javax.crypto.Cipher
-import javax.crypto.KeyGenerator
-import javax.crypto.SecretKey
 
 class MainActivity : AppCompatActivity() {
 
-    /*private var fileData: ByteArray? = null
-    private var encryptedData: ByteArray? = null
-    private var decryptedData: ByteArray? = null*/
     private var cipheredDataPath = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         /*Security.getAlgorithms("Cipher").forEach {alg :String ->
-            println(alg)
+            if(alg.startsWith("AES") || alg.startsWith("DESEDE"))
+                println(alg)
         }*/
 
-        //Creating file for ciphered data
-        val uri = Uri.parse(cipheredDataPath)
-        val f = File(Environment.getDataDirectory().name + "/CipheredData")
-        if(f.mkdir()) println("Correctly created")
-        cipheredDataPath = f.toUri().toString()
+        //Creating directory for ciphered data
+       val cipherDataDirectory = File(applicationContext.filesDir, "CipheredData")
+        if(cipherDataDirectory.mkdir())
+            //println("Directory correctly created")
+            cipheredDataPath = cipherDataDirectory.absolutePath
+        //println("Data path: $cipheredDataPath")
+
+
         //Creating document picker
         val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE).apply {
             flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
@@ -60,6 +40,7 @@ class MainActivity : AppCompatActivity() {
         startActivityForResult(intent, 42)
     }
 
+    @SuppressLint("LongLogTag")
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -67,27 +48,29 @@ class MainActivity : AppCompatActivity() {
             data?.data.also { uri ->
                 uri?.let {
                     val f = DocumentFile.fromTreeUri(this, it)
-                    if(f?.isDirectory!!){
-                        f.listFiles().forEach { documentFile ->
-                            var auxNewName: String? = documentFile.name
-                            var cipheredName:String = ""
-                            if(auxNewName != null)
-                                cipheredName = generateNewName(auxNewName)
-                            var plainData = readFile(documentFile.uri)
-                            var cipherData = plainData?.let { it1 -> cipherFile(it1) }
-                            var cipheredFile = File(cipheredDataPath + "/" + cipheredName)
-                            cipheredFile.mkdir()
-                            if (cipherData != null) {
-                                cipheredFile.writeBytes(cipherData)
-                            }
-                        }
+                    if(f != null){
+                        Log.d("Started AES_CBC free storage: ", "${applicationContext.filesDir.freeSpace}")
+                        File(cipheredDataPath, "AES CBC").mkdir()
+                        readCipherDirectory(f, "$cipheredDataPath/AES CBC", "AESCBC")
+                        Log.d("Ended AES_CBC free storage: ", "${applicationContext.filesDir.freeSpace}")
+                        Log.d("Started AES_CTR free storage: ", "${applicationContext.filesDir.freeSpace}")
+                        File(cipheredDataPath, "AES CTR").mkdir()
+                        readCipherDirectory(f, "$cipheredDataPath/AES CTR", "AESCTR")
+                        Log.d("Ended AES_CTR free storage: ", "${applicationContext.filesDir.freeSpace}")
+                        Log.d("Started AES_GCM free storage: ", "${applicationContext.filesDir.freeSpace}")
+                        File(cipheredDataPath, "AES GCM").mkdir()
+                        readCipherDirectory(f, "$cipheredDataPath/AES GCM", "AESGCM")
+                        Log.d("Ended AES_GCM free storage: ", "${applicationContext.filesDir.freeSpace}")
+                        Log.d("Started DESede_CBC free storage: ", "${applicationContext.filesDir.freeSpace}")
+                        File(cipheredDataPath, "DESede CBC").mkdir()
+                        readCipherDirectory(f, "$cipheredDataPath/DESede CBCB", "DESCBC")
                     }
                 }
             }
         }
     }
 
-    fun analyzeDirectory(uri:Uri){
+    /*fun analyzeDirectory(uri:Uri){
         val cursor: Cursor? = applicationContext.contentResolver.query(uri, null, null, null, null, null)
         cursor?.use {
             println("Analizing directory")
@@ -96,31 +79,37 @@ class MainActivity : AppCompatActivity() {
                 println(name)
             }
         }
-    }
+    }*/
 
-    @Throws(IOException::class)
-    fun readFile(path: Uri): ByteArray? {
-        var data: ByteArray? = null
-        println(path.path)
-        contentResolver.openInputStream(path)?.use { reader ->
-            val byte_arr = BufferedInputStream(reader).readBytes()
-            data = ByteArray(byte_arr.size)
-            data = byte_arr.clone()
-            println("\tSize: ${byte_arr.size}")
+    fun readCipherDirectory(f:DocumentFile, cipheredDataPath:String, algoritmo:String){
+        if(f.isDirectory!!){
+            f.listFiles().forEach { documentFile ->
+                //println(documentFile.name)
+                if(documentFile.isDirectory) {
+                    File(cipheredDataPath, documentFile.name).mkdir()
+                    readCipherDirectory(documentFile, "$cipheredDataPath/${documentFile.name}", algoritmo)
+                }
+                else {
+                    var auxNewName: String? = documentFile.name
+                    var cipheredName: String = ""
+                    if (auxNewName != null)
+                        cipheredName = generateNewName(auxNewName)
+                    var cifrador:Cifrador?
+                    if(algoritmo.contentEquals("AESCBC"))
+                        cifrador = AES128_CBC(documentFile.uri, applicationContext)
+                    else if(algoritmo.contentEquals("AESCTR"))
+                        cifrador = AES128_CTR(documentFile.uri, applicationContext)
+                    else if(algoritmo.contentEquals("AESGCM"))
+                        cifrador = AES128_GCM(documentFile.uri, applicationContext)
+                    else
+                        cifrador = DESede_CBC(documentFile.uri, applicationContext)
+                    cifrador.readFile()
+                    val cipheredData = cifrador.cipherData()
+                    var cipheredFile = File("$cipheredDataPath/$cipheredName")
+                    cipheredFile.writeBytes(cipheredData)
+                }
+            }
         }
-        return data
-    }
-
-    fun cipherFile(data:ByteArray):ByteArray{
-        val keygen = KeyGenerator.getInstance("AES")
-        keygen.init(256)
-        val key: SecretKey = keygen.generateKey()
-        val cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING")
-        cipher.init(Cipher.ENCRYPT_MODE, key)
-        val ciphertext: ByteArray = cipher.doFinal(data)
-        val iv: ByteArray = cipher.iv
-        println(iv)
-        return ciphertext
     }
 
     fun generateNewName(name:String):String{
@@ -135,12 +124,3 @@ class MainActivity : AppCompatActivity() {
         return newName
     }
 }
-
-/*val plaintext: ByteArray =
-        val keygen = KeyGenerator.getInstance("AES")
-        keygen.init(256)
-        val key: SecretKey = keygen.generateKey()
-        val cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING")
-        cipher.init(Cipher.ENCRYPT_MODE, key)
-        val ciphertext: ByteArray = cipher.doFinal(plaintext)
-        val iv: ByteArray = cipher.iv*/
