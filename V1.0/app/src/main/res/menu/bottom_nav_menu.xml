@@ -1,18 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
+
     <item
-            android:id="@+id/navigation_ajustes"
-            android:icon="@drawable/ic_settings_24px"
-            android:title="@string/title_ajustes"/>
+            android:id="@+id/navigation_restore"
+            android:icon="@drawable/ic_get_app_24px"
+            android:title="@string/title_respaldo" />
 
     <item
             android:id="@+id/navigation_home"
             android:icon="@drawable/ic_home_black_24dp"
-            android:title="@string/title_inicio"/>
+            android:title="@string/title_inicio" />
+
     <item
-            android:id="@+id/navigation_notifications"
-            android:icon="@drawable/ic_get_app_24px"
-            android:title="@string/title_respaldo"/>
+            android:id="@+id/navigation_ajustes"
+            android:icon="@drawable/ic_settings_24px"
+            android:title="@string/title_ajustes" />
+
 
 </menu>

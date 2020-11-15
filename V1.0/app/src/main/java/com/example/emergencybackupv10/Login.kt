@@ -21,7 +21,6 @@ class Login : AppCompatActivity() {
 
     public fun logIn(view:View){
         val correctCreds = true
-        Log.i("Login", "Login started")
         if(correctCreds){
             val intent = Intent(this, Home::class.java)
             startActivity(intent)

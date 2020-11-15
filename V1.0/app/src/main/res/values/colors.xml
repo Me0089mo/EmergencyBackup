@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorForeground">#083AAf</color>
-    <color name="colorBackground">#000000</color>
-    <color name="colorAccent">#775fe3</color>
+    <color name="nav_active">#464646</color>
+    <color name="nav_inactive">#AAAAAA</color>
+    <color name="button_background">#2196F3</color>
+    <color name="background">#444</color>
 </resources>

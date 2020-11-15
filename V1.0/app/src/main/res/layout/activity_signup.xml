@@ -3,13 +3,8 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorBackground"
+        android:background="@color/background"
         android:baselineAligned="false" android:orientation="horizontal">
-
-    <RelativeLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight=".15"></RelativeLayout>
 
     <RelativeLayout
             android:layout_width="0dp"
@@ -20,11 +15,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
-
-            <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight=".15"></RelativeLayout>
 
             <RelativeLayout
                     android:layout_width="match_parent"
@@ -45,7 +35,7 @@
                             xmlns:app="http://schemas.android.com/apk/res-auto"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:background="@color/colorForeground"
+                            android:background="@color/background"
                             android:baselineAligned="false" android:orientation="horizontal">
 
                         <RelativeLayout
@@ -85,37 +75,45 @@
                                                         android:text="@string/necessaryData" />
 
                                                 <EditText
+                                                        android:layout_marginTop="20dp"
                                                         android:id="@+id/editText"
                                                         android:inputType="phone"
                                                         android:layout_height="wrap_content"
                                                         android:layout_width="match_parent"
                                                         android:hint="@string/celular" />
                                                 <TextView
+                                                        android:layout_marginTop="20dp"
                                                         android:layout_height="wrap_content"
                                                         android:layout_width="match_parent"
                                                         android:text="@string/securityQuestion"
                                                          />
 
                                                 <TextView
+                                                        android:layout_marginTop="20dp"
                                                         android:layout_height="wrap_content"
                                                         android:layout_width="match_parent"
                                                         android:text="@string/sqInfo" />
 
                                                 <Spinner
+                                                        android:layout_marginTop="20dp"
                                                         android:id="@+id/spinner"
                                                         android:layout_height="wrap_content"
                                                         android:layout_width="match_parent" />
+
                                                 <EditText
+                                                        android:layout_marginTop="20dp"
                                                         android:id="@+id/answer"
                                                         android:inputType="text"
                                                         android:layout_height="wrap_content"
                                                         android:layout_width="match_parent"
-                                                        android:hint="respuesta"/>
+                                                        android:hint="Respuesta"/>
                                                 <Button
+                                                        android:layout_marginTop="20dp"
                                                         android:id="@+id/signup_complete_bttn"
                                                         android:layout_width="match_parent"
                                                         android:layout_height="wrap_content"
                                                         android:text="@string/signup"
+                                                        android:background="@drawable/custom_button"
                                                         android:onClick="signUp"/>
                                             </LinearLayout>
                                 </RelativeLayout>
@@ -135,17 +133,9 @@
                 </androidx.cardview.widget.CardView>
             </RelativeLayout>
 
-            <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight=".15"></RelativeLayout>
         </LinearLayout>
     </RelativeLayout>
 
-    <RelativeLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight=".15"></RelativeLayout>
 </LinearLayout>
 
 

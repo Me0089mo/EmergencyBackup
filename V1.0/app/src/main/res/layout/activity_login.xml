@@ -3,15 +3,8 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorBackground"
         android:baselineAligned="false"
         android:orientation="horizontal">
-
-    <RelativeLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight=".10
-"></RelativeLayout>
 
     <RelativeLayout
             android:layout_width="0dp"
@@ -26,17 +19,12 @@
             <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight=".10
-"></RelativeLayout>
-
-            <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
                     android:layout_weight=".80">
 
                 <androidx.cardview.widget.CardView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        app:cardBackgroundColor="@color/background"
                         app:cardCornerRadius="10dp">
 
                     <FrameLayout
@@ -48,7 +36,6 @@
                             xmlns:app="http://schemas.android.com/apk/res-auto"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:background="@color/colorForeground"
                             android:baselineAligned="false"
                             android:orientation="horizontal">
 
@@ -70,14 +57,8 @@
                                 <RelativeLayout
                                         android:layout_width="match_parent"
                                         android:layout_height="0dp"
-                                        android:layout_weight=".10
-"></RelativeLayout>
-
-                                <RelativeLayout
-                                        android:layout_width="match_parent"
-                                        android:layout_height="0dp"
                                         android:layout_weight=".70"
-                                        android:gravity="center">
+                                        android:gravity="bottom">
 
                                     <LinearLayout
                                             android:layout_width="match_parent"
@@ -91,12 +72,14 @@
                                                 app:srcCompat="@drawable/ic_person_24px" />
 
                                         <EditText
+                                                android:layout_marginTop="20dp"
                                                 android:layout_width="match_parent"
                                                 android:layout_height="wrap_content"
                                                 android:hint="@string/email"
                                                 android:inputType="textEmailAddress" />
 
                                         <EditText
+                                                android:layout_marginTop="20dp"
                                                 android:layout_width="match_parent"
                                                 android:layout_height="wrap_content"
                                                 android:hint="@string/contraseña"
@@ -106,26 +89,22 @@
                                                 android:id="@+id/loginbttn"
                                                 android:layout_width="match_parent"
                                                 android:layout_height="wrap_content"
-                                                android:background="@color/colorAccent"
+                                                android:background="@drawable/custom_button"
                                                 android:onClick="logIn"
+                                                android:layout_marginTop="20dp"
                                                 android:text="@string/login" />
 
                                         <Button
+                                                android:layout_marginTop="20dp"
                                                 android:id="@+id/logintosignupbttn"
                                                 android:layout_width="match_parent"
                                                 android:layout_height="wrap_content"
-                                                android:background="@color/colorAccent"
+                                                android:background="@drawable/custom_button"
                                                 android:onClick="signUp"
-                                                android:paddingVertical="10dp"
                                                 android:text="@string/signup" />
                                     </LinearLayout>
                                 </RelativeLayout>
 
-                                <RelativeLayout
-                                        android:layout_width="match_parent"
-                                        android:layout_height="0dp"
-                                        android:layout_weight=".10
-"></RelativeLayout>
                             </LinearLayout>
                         </RelativeLayout>
 
@@ -138,17 +117,7 @@
                 </androidx.cardview.widget.CardView>
             </RelativeLayout>
 
-            <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight=".10
-"></RelativeLayout>
         </LinearLayout>
     </RelativeLayout>
 
-    <RelativeLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight=".10
-"></RelativeLayout>
 </LinearLayout>

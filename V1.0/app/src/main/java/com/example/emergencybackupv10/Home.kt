@@ -36,10 +36,10 @@ class Home : AppCompatActivity() {
     }
 
     private fun changeFragment(fragment:Fragment){
-
-//        fragment.arguments = bundleOf(
-//            ARG_BU_AVAILABLE to backUpOnCloud
-//        )
+        Log.i("test",fragment.toString())
+        fragment.arguments = bundleOf(
+            ARG_BU_AVAILABLE to backUpOnCloud
+        )
         supportFragmentManager.beginTransaction().apply {
             replace(R.id.nav_host_fragment,fragment)
             commit()
