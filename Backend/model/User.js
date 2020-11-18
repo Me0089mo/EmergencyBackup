@@ -1,4 +1,4 @@
-const { string } = require("joi");
+const { string, bool, boolean } = require("joi");
 const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema(
@@ -20,14 +20,10 @@ const userSchema = new mongoose.Schema(
       min: 6,
       max: 255,
     },
-    securityQuestion: {
-      type: String,
-      required: true,
-    },
-    answer: {
-      type: String,
-      required: true,
-    },
+    hasBackup:{
+      type:Boolean,
+      require:true
+    }
   },
   { collection: "Usrs" }
 );
