@@ -17,15 +17,6 @@ class SignUp : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_signup)
 
-        //Agregar valores al spinner desde el res/values/questions.xml
-        val spinner:Spinner = findViewById<Spinner>(R.id.spinner);
-        ArrayAdapter.createFromResource(this,
-            R.array.questions_arr,
-            android.R.layout.simple_spinner_item
-        ).also { adapter ->
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_item)
-            spinner.adapter = adapter
-        }
     }
 
     fun signUp(view:View){

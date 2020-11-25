@@ -72,45 +72,78 @@
                                                 <TextView
                                                         android:layout_height="wrap_content"
                                                         android:layout_width="match_parent"
-                                                        android:text="@string/necessaryData" />
+                                                        android:text="¿Cómo deberiamos llamarte?" />
 
                                                 <EditText
                                                         android:layout_marginTop="20dp"
-                                                        android:id="@+id/editText"
-                                                        android:inputType="phone"
+                                                        android:id="@+id/name_input"
+                                                        android:inputType="textEmailAddress"
                                                         android:layout_height="wrap_content"
                                                         android:layout_width="match_parent"
-                                                        android:hint="@string/celular" />
-                                                <TextView
-                                                        android:layout_marginTop="20dp"
-                                                        android:layout_height="wrap_content"
-                                                        android:layout_width="match_parent"
-                                                        android:text="@string/securityQuestion"
-                                                         />
+                                                        android:hint="Nombre de usuario" />
 
                                                 <TextView
                                                         android:layout_marginTop="20dp"
                                                         android:layout_height="wrap_content"
                                                         android:layout_width="match_parent"
-                                                        android:text="@string/sqInfo" />
+                                                        android:text="¿Cuál es tu correo electrónico?" />
 
-                                                <Spinner
-                                                        android:layout_marginTop="20dp"
-                                                        android:id="@+id/spinner"
-                                                        android:layout_height="wrap_content"
-                                                        android:layout_width="match_parent" />
+
 
                                                 <EditText
                                                         android:layout_marginTop="20dp"
-                                                        android:id="@+id/answer"
-                                                        android:inputType="text"
+                                                        android:id="@+id/email_input"
+                                                        android:inputType="textEmailAddress"
                                                         android:layout_height="wrap_content"
                                                         android:layout_width="match_parent"
-                                                        android:hint="Respuesta"/>
+                                                        android:hint="Introduce tu correo electrónico" />
+
+                                                <TextView
+                                                        android:layout_marginTop="20dp"
+                                                        android:layout_height="wrap_content"
+                                                        android:layout_width="match_parent"
+                                                        android:text="Confirma el correo electrónico" />
+
+                                                <EditText
+                                                        android:layout_marginTop="20dp"
+                                                        android:id="@+id/email_confirm"
+                                                        android:inputType="textEmailAddress"
+                                                        android:layout_height="wrap_content"
+                                                        android:layout_width="match_parent"
+                                                        android:hint="Vuelve a introducir tu correo electrónico" />
+
+                                                <TextView
+                                                        android:layout_marginTop="20dp"
+                                                        android:layout_height="wrap_content"
+                                                        android:layout_width="match_parent"
+                                                        android:text="Crea una contraseña" />
+
+                                                <EditText
+                                                        android:layout_marginTop="20dp"
+                                                        android:id="@+id/passord_input"
+                                                        android:inputType="textEmailAddress"
+                                                        android:layout_height="wrap_content"
+                                                        android:layout_width="match_parent"
+                                                        android:hint="Introduce tu contraseña" />
+                                                <TextView
+                                                        android:layout_marginTop="20dp"
+                                                        android:layout_height="wrap_content"
+                                                        android:layout_width="match_parent"
+                                                        android:text="Confirma tu contraseña" />
+
+                                                <EditText
+                                                        android:layout_marginTop="20dp"
+                                                        android:id="@+id/password_confirm"
+                                                        android:inputType="textEmailAddress"
+                                                        android:layout_height="wrap_content"
+                                                        android:layout_width="match_parent"
+                                                        android:hint="Vuelve a introducir tu contraseña" />
+
                                                 <Button
                                                         android:layout_marginTop="20dp"
                                                         android:id="@+id/signup_complete_bttn"
                                                         android:layout_width="match_parent"
+                                                        android:textColor="@color/button_font"
                                                         android:layout_height="wrap_content"
                                                         android:text="@string/signup"
                                                         android:background="@drawable/custom_button"

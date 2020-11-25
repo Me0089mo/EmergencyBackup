@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="host_url">http://10.0.2.2:5000</string>
+    <string name="api_register">/api/users/register</string>
+    <string name="api_login">/api/users/login/</string>
+</resources>

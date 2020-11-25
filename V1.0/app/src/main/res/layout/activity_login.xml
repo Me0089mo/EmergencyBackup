@@ -72,16 +72,22 @@
                                                 app:srcCompat="@drawable/ic_person_24px" />
 
                                         <EditText
+                                                android:id="@+id/login_email"
                                                 android:layout_marginTop="20dp"
                                                 android:layout_width="match_parent"
+                                                android:textColor="@color/nav_active"
+                                                android:textColorHint="@color/nav_inactive"
                                                 android:layout_height="wrap_content"
                                                 android:hint="@string/email"
                                                 android:inputType="textEmailAddress" />
 
                                         <EditText
+                                                android:id="@+id/login_password"
                                                 android:layout_marginTop="20dp"
+                                                android:textColor="@color/nav_active"
                                                 android:layout_width="match_parent"
                                                 android:layout_height="wrap_content"
+                                                android:textColorHint="@color/nav_inactive"
                                                 android:hint="@string/contraseña"
                                                 android:inputType="textPassword" />
 
@@ -89,6 +95,7 @@
                                                 android:id="@+id/loginbttn"
                                                 android:layout_width="match_parent"
                                                 android:layout_height="wrap_content"
+                                                android:textColor="@color/button_font"
                                                 android:background="@drawable/custom_button"
                                                 android:onClick="logIn"
                                                 android:layout_marginTop="20dp"
@@ -99,6 +106,7 @@
                                                 android:id="@+id/logintosignupbttn"
                                                 android:layout_width="match_parent"
                                                 android:layout_height="wrap_content"
+                                                android:textColor="@color/button_font"
                                                 android:background="@drawable/custom_button"
                                                 android:onClick="signUp"
                                                 android:text="@string/signup" />

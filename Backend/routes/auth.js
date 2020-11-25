@@ -25,6 +25,8 @@ router.post("/register", async (req, res) => {
     const savedUser =  await user.save();
     res.send('Success on register');
   } catch (err) {
+    console.log(req)
+    console.log(err)
     res.status(400).send(err);
   }
 });
@@ -33,15 +35,17 @@ router.post("/register", async (req, res) => {
 
 // So For secure authentication and authorization process we should use POST method.
 router.post("/login", async (req, res) => {
+  console.log('login attempt')
+  console.log(req.body);
   //Data Validation
   const {error} = loginValidation(req.body);
-  if (error)return res.status(400).send(error.details[0].message);
+  if (error)return res.send(error.details[0].message);
   //Check if registered
   const user = await User.findOne({email:req.body.email})
-  if(!user) return res.status(400).send('User not found');
+  if(!user) return res.send('User not found');
   // Check password
   const passCorrect = await bcrypt.compare(req.body.password,user.password);
-  if(!passCorrect) return res.status(400).send('Invalid password');
+  if(!passCorrect) return res.send('Invalid password');
   const token  = jwt.sign({_id:user._id,name:user.name, hasBackup:user.hasBackup},process.env.PRIVATE_KEY)
   return res.header('auth-token',token).send(token);
 });
