@@ -3,28 +3,59 @@ package com.example.pruebascifrado
 import android.content.Context
 import android.net.Uri
 import java.io.BufferedInputStream
+import java.io.ByteArrayOutputStream
+import java.util.zip.ZipEntry
+import java.util.zip.ZipOutputStream
 import javax.crypto.Cipher
 import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
 
-class AES128_CTR(override val path: Uri, override val contentContext: Context):Cifrador {
+class AES128_CTR(override val contentContext: Context):Cifrador {
 
+    override val cipher:Cipher = Cipher.getInstance("AES/CTR/NOPADDING")
+    override val keyGenerator = KeyGenerator.getInstance("AES")
     override var data:ByteArray? = null
+    override var cipherText:ByteArray? = null
 
-    override fun readFile(){
+    override fun readFile(path : Uri, fileSize : Long){
         contentContext.contentResolver.openInputStream(path)?.use { reader ->
-            data = BufferedInputStream(reader).readBytes()
+            val inputStream = BufferedInputStream(reader)
+            val byteOutStream = ByteArrayOutputStream()
+            val zipOutStream = ZipOutputStream(byteOutStream)
+            val zipEntry = ZipEntry(path.path)
+            zipOutStream.putNextEntry(zipEntry)
+            val readingArray = ByteArray(1024)
+            var long:Int
+            var cipherOffset = 0
+            initializeCipher(fileSize)
+            do{
+                long = inputStream.read(readingArray)
+                if(long == -1) break
+                zipOutStream.write(readingArray, 0, long)
+                cipherData(byteOutStream.toByteArray(), cipherOffset, long)
+                cipherOffset += long
+                byteOutStream.reset()
+            }while (long >= 0)
+            finalizeCipher(cipherOffset)
+            zipOutStream.close()
+            byteOutStream.close()
         }
     }
 
-    override fun cipherData(): ByteArray{
-        val keygen = KeyGenerator.getInstance("AES")
-        keygen.init(128)
-        val key: SecretKey = keygen.generateKey()
-        val cipher = Cipher.getInstance("AES/CTR/NOPADDING")
+    override fun initializeCipher(fileSize : Long){
+        keyGenerator.init(128)
+        val key: SecretKey = keyGenerator.generateKey()
         cipher.init(Cipher.ENCRYPT_MODE, key)
-        val ciphertext: ByteArray = cipher.doFinal(data)
+        cipherText = ByteArray(cipher.getOutputSize(fileSize.toInt()))
+    }
+
+    override fun cipherData(data : ByteArray, cipherOffset : Int, inputLen : Int){
+        //println("Available: ${getAvailableMemory().availMem}\tThreshold: ${getAvailableMemory().threshold}")
+        cipher.update(data, 0, inputLen, cipherText, cipherOffset)
+    }
+
+    override fun finalizeCipher(cipherOffset: Int){
+        cipher.doFinal(cipherText, cipherOffset)
         //val iv: ByteArray = cipher.iv
-        return ciphertext
     }
 }

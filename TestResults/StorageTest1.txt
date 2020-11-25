@@ -1,0 +1,94 @@
+11/20 15:44:27: Launching 'PruebasCifrado.app' on Pixel 3 API 24.
+$ adb shell am start -n "com.example.pruebascifrado/com.example.pruebascifrado.MainActivity" -a android.intent.action.MAIN -c android.intent.category.LAUNCHER
+Connected to process 5497 on device 'Pixel_3_API_24 [emulator-5554]'.
+Capturing and displaying logcat messages from application. This behavior can be disabled in the "Logcat output" section of the "Debugger" settings page.
+W/System: ClassLoader referenced unknown path: /data/app/com.example.pruebascifrado-2/lib/x86
+W/art: Before Android 4.1, method android.graphics.PorterDuffColorFilter androidx.vectordrawable.graphics.drawable.VectorDrawableCompat.updateTintFilter(android.graphics.PorterDuffColorFilter, android.content.res.ColorStateList, android.graphics.PorterDuff$Mode) would have incorrectly overridden the package-private method in android.graphics.drawable.Drawable
+I/art: Rejecting re-init on previously-failed class java.lang.Class<androidx.core.view.ViewCompat$2>: java.lang.NoClassDefFoundError: Failed resolution of: Landroid/view/View$OnUnhandledKeyEventListener;
+        at void androidx.core.view.ViewCompat.setBackground(android.view.View, android.graphics.drawable.Drawable) (ViewCompat.java:2559)
+        at void androidx.appcompat.widget.ActionBarContainer.<init>(android.content.Context, android.util.AttributeSet) (ActionBarContainer.java:62)
+        at java.lang.Object java.lang.reflect.Constructor.newInstance0!(java.lang.Object[]) (Constructor.java:-2)
+        at java.lang.Object java.lang.reflect.Constructor.newInstance(java.lang.Object[]) (Constructor.java:430)
+        at android.view.View android.view.LayoutInflater.createView(java.lang.String, java.lang.String, android.util.AttributeSet) (LayoutInflater.java:645)
+        at android.view.View android.view.LayoutInflater.createViewFromTag(android.view.View, java.lang.String, android.content.Context, android.util.AttributeSet, boolean) (LayoutInflater.java:787)
+        at android.view.View android.view.LayoutInflater.createViewFromTag(android.view.View, java.lang.String, android.content.Context, android.util.AttributeSet) (LayoutInflater.java:727)
+        at void android.view.LayoutInflater.rInflate(org.xmlpull.v1.XmlPullParser, android.view.View, android.content.Context, android.util.AttributeSet, boolean) (LayoutInflater.java:858)
+        at void android.view.LayoutInflater.rInflateChildren(org.xmlpull.v1.XmlPullParser, android.view.View, android.util.AttributeSet, boolean) (LayoutInflater.java:821)
+        at android.view.View android.view.LayoutInflater.inflate(org.xmlpull.v1.XmlPullParser, android.view.ViewGroup, boolean) (LayoutInflater.java:518)
+        at android.view.View android.view.LayoutInflater.inflate(int, android.view.ViewGroup, boolean) (LayoutInflater.java:426)
+        at android.view.View android.view.LayoutInflater.inflate(int, android.view.ViewGroup) (LayoutInflater.java:377)
+        at android.view.ViewGroup androidx.appcompat.app.AppCompatDelegateImpl.createSubDecor() (AppCompatDelegateImpl.java:607)
+        at void androidx.appcompat.app.AppCompatDelegateImpl.ensureSubDecor() (AppCompatDelegateImpl.java:518)
+        at void androidx.appcompat.app.AppCompatDelegateImpl.setContentView(int) (AppCompatDelegateImpl.java:466)
+        at void androidx.appcompat.app.AppCompatActivity.setContentView(int) (AppCompatActivity.java:140)
+        at void com.example.pruebascifrado.MainActivity.onCreate(android.os.Bundle) (MainActivity.kt:22)
+        at void android.app.Activity.performCreate(android.os.Bundle) (Activity.java:6662)
+        at void android.app.Instrumentation.callActivityOnCreate(android.app.Activity, android.os.Bundle) (Instrumentation.java:1118)
+        at android.app.Activity android.app.ActivityThread.performLaunchActivity(android.app.ActivityThread$ActivityClientRecord, android.content.Intent) (ActivityThread.java:2599)
+        at void android.app.ActivityThread.handleLaunchActivity(android.app.ActivityThread$ActivityClientRecord, android.content.Intent, java.lang.String) (ActivityThread.java:2707)
+I/art:     at void android.app.ActivityThread.-wrap12(android.app.ActivityThread, android.app.ActivityThread$ActivityClientRecord, android.content.Intent, java.lang.String) (ActivityThread.java:-1)
+        at void android.app.ActivityThread$H.handleMessage(android.os.Message) (ActivityThread.java:1460)
+        at void android.os.Handler.dispatchMessage(android.os.Message) (Handler.java:102)
+        at void android.os.Looper.loop() (Looper.java:154)
+        at void android.app.ActivityThread.main(java.lang.String[]) (ActivityThread.java:6077)
+        at java.lang.Object java.lang.reflect.Method.invoke!(java.lang.Object, java.lang.Object[]) (Method.java:-2)
+        at void com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run() (ZygoteInit.java:866)
+        at void com.android.internal.os.ZygoteInit.main(java.lang.String[]) (ZygoteInit.java:756)
+    Caused by: java.lang.ClassNotFoundException: Didn't find class "android.view.View$OnUnhandledKeyEventListener" on path: DexPathList[[zip file "/data/app/com.example.pruebascifrado-2/base.apk"],nativeLibraryDirectories=[/data/app/com.example.pruebascifrado-2/lib/x86, /system/lib, /vendor/lib]]
+        at java.lang.Class dalvik.system.BaseDexClassLoader.findClass(java.lang.String) (BaseDexClassLoader.java:56)
+        at java.lang.Class java.lang.ClassLoader.loadClass(java.lang.String, boolean) (ClassLoader.java:380)
+        at java.lang.Class java.lang.ClassLoader.loadClass(java.lang.String) (ClassLoader.java:312)
+        at void androidx.core.view.ViewCompat.setBackground(android.view.View, android.graphics.drawable.Drawable) (ViewCompat.java:2559)
+        at void androidx.appcompat.widget.ActionBarContainer.<init>(android.content.Context, android.util.AttributeSet) (ActionBarContainer.java:62)
+        at java.lang.Object java.lang.reflect.Constructor.newInstance0!(java.lang.Object[]) (Constructor.java:-2)
+        at java.lang.Object java.lang.reflect.Constructor.newInstance(java.lang.Object[]) (Constructor.java:430)
+        at android.view.View android.view.LayoutInflater.createView(java.lang.String, java.lang.String, android.util.AttributeSet) (LayoutInflater.java:645)
+        at android.view.View android.view.LayoutInflater.createViewFromTag(android.view.View, java.lang.String, android.content.Context, android.util.AttributeSet, boolean) (LayoutInflater.java:787)
+        at android.view.View android.view.LayoutInflater.createViewFromTag(android.view.View, java.lang.String, android.content.Context, android.util.AttributeSet) (LayoutInflater.java:727)
+        at void android.view.LayoutInflater.rInflate(org.xmlpull.v1.XmlPullParser, android.view.View, android.content.Context, android.util.AttributeSet, boolean) (LayoutInflater.java:858)
+        at void android.view.LayoutInflater.rInflateChildren(org.xmlpull.v1.XmlPullParser, android.view.View, android.util.AttributeSet, boolean) (LayoutInflater.java:821)
+        at android.view.View android.view.LayoutInflater.inflate(org.xmlpull.v1.XmlPullParser, android.view.ViewGroup, boolean) (LayoutInflater.java:518)
+        at android.view.View android.view.LayoutInflater.inflate(int, android.view.ViewGroup, boolean) (LayoutInflater.java:426)
+        at android.view.View android.view.LayoutInflater.inflate(int, android.view.ViewGroup) (LayoutInflater.java:377)
+        at android.view.ViewGroup androidx.appcompat.app.AppCompatDelegateImpl.createSubDecor() (AppCompatDelegateImpl.java:607)
+        at void androidx.appcompat.app.AppCompatDelegateImpl.ensureSubDecor() (AppCompatDelegateImpl.java:518)
+        at void androidx.appcompat.app.AppCompatDelegateImpl.setContentView(int) (AppCompatDelegateImpl.java:466)
+        at void androidx.appcompat.app.AppCompatActivity.setContentView(int) (AppCompatActivity.java:140)
+        at void com.example.pruebascifrado.MainActivity.onCreate(android.os.Bundle) (MainActivity.kt:22)
+        at void android.app.Activity.performCreate(android.os.Bundle) (Activity.java:6662)
+        at void android.app.Instrumentation.callActivityOnCreate(android.app.Activity, android.os.Bundle) (Instrumentation.java:1118)
+        at android.app.Activity android.app.ActivityThread.performLaunchActivity(android.app.ActivityThread$ActivityClientRecord, android.content.Intent) (ActivityThread.java:2599)
+        at void android.app.ActivityThread.handleLaunchActivity(android.app.ActivityThread$ActivityClientRecord, android.content.Intent, java.lang.String) (ActivityThread.java:2707)
+        at void android.app.ActivityThread.-wrap12(android.app.ActivityThread, android.app.ActivityThread$ActivityClientRecord, android.content.Intent, java.lang.String) (ActivityThread.java:-1)
+I/art:     at void android.app.ActivityThread$H.handleMessage(android.os.Message) (ActivityThread.java:1460)
+        at void android.os.Handler.dispatchMessage(android.os.Message) (Handler.java:102)
+        at void android.os.Looper.loop() (Looper.java:154)
+        at void android.app.ActivityThread.main(java.lang.String[]) (ActivityThread.java:6077)
+        at java.lang.Object java.lang.reflect.Method.invoke!(java.lang.Object, java.lang.Object[]) (Method.java:-2)
+        at void com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run() (ZygoteInit.java:866)
+        at void com.android.internal.os.ZygoteInit.main(java.lang.String[]) (ZygoteInit.java:756)
+I/art: Enabling alloc tracker (524288 entries of 16 frames, taking up to 84MB)
+I/art: Starting a blocking GC Instrumentation
+
+D/Started AES_CBC free storage:: 4929490944
+D/Ended AES_CBC free storage:: 4066729984
+
+D/Started AES_CTR free storage:: 4066729984
+D/Ended AES_CTR free storage:: 3203964928
+
+D/Started AES_GCM free storage:: 3203964928
+D/Ended AES_GCM free storage:: 2341208064
+
+D/Started DESede_CBC free storage:: 2341208064
+D/Ended DESede_CBC free storage:: 1478488064
+
+Space used by AES_CBC: 862,760,960 = 822.79 MB
+Space used by AES_CTR: 862,765,056 = 822.80 MB
+Space used by AES_GCM: 862,756,864 = 822.79 MB
+Space used by DESede_CBC: 862,720,000 = 822.75 MB
+
+Usemos la mediana entre los 4 algoritmos como referencia = 822.79 MB 
+
+Original folder size: 1.02 GB
+Size reduced: 197.21 MB
+Compress percentage: 19.33%
