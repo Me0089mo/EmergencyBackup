@@ -7,10 +7,10 @@ const {registerValidation, loginValidation} = require("../validation")
 router.post("/register", async (req, res) => {
   //Data Validation
   const {error} = registerValidation(req.body);
-  if (error)return res.status(400).send(error.details[0].message);
+  if (error) return res.status(400).send(error.details[0].message);
   //Check already registered
   const usrExist = await User.findOne({email:req.body.email})
-  if(usrExist) return res.status(400).send('User already exists');
+  if(usrExist) return res.status(406).send('User already exists');
   //Salt and Hash
   const salt = await bcrypt.genSalt(10);
   const hashed_password = await bcrypt.hash(req.body.password,salt);
@@ -25,9 +25,7 @@ router.post("/register", async (req, res) => {
     const savedUser =  await user.save();
     res.send('Success on register');
   } catch (err) {
-    console.log(req)
-    console.log(err)
-    res.status(400).send(err);
+    res.status(500).send(err);
   }
 });
 
@@ -35,17 +33,17 @@ router.post("/register", async (req, res) => {
 
 // So For secure authentication and authorization process we should use POST method.
 router.post("/login", async (req, res) => {
-  console.log('login attempt')
-  console.log(req.body);
   //Data Validation
   const {error} = loginValidation(req.body);
-  if (error)return res.send(error.details[0].message);
+  if (error)return res.status(400).send(error.details[0].message);
+
   //Check if registered
   const user = await User.findOne({email:req.body.email})
-  if(!user) return res.send('User not found');
+  if(!user) return res.status(401).send('User not found');
   // Check password
   const passCorrect = await bcrypt.compare(req.body.password,user.password);
-  if(!passCorrect) return res.send('Invalid password');
+  if(!passCorrect) return res.status(401).send('Invalid password');
+  
   const token  = jwt.sign({_id:user._id,name:user.name, hasBackup:user.hasBackup},process.env.PRIVATE_KEY)
   return res.header('auth-token',token).send(token);
 });

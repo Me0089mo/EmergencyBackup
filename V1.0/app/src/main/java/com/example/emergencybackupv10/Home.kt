@@ -11,10 +11,11 @@ import com.example.emergencybackupv10.fragments.RestoreFragment
 import com.example.emergencybackupv10.fragments.SettingsFragment
 import kotlinx.android.synthetic.main.activity_home.*
 
-private const val ARG_BU_AVAILABLE = "backUpAvailable"
 
 class Home : AppCompatActivity() {
     private var backUpOnCloud: Boolean = false;
+    private var username: String? = ""
+    private var id: String? = ""
     private val homeFragment = HomeFragment()
     private val restoreFragment = RestoreFragment()
     private val settingsFragment = SettingsFragment()
@@ -22,26 +23,30 @@ class Home : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
+        backUpOnCloud = intent.getBooleanExtra(R.string.ARG_BU_AVAILABLE.toString(), false)
+        username = intent.getStringExtra(R.string.ARG_NAME.toString())
+        id = intent.getStringExtra(R.string.ARG_ID.toString())
         changeFragment(homeFragment)
         bottom_nav.selectedItemId = R.id.navigation_home
         bottom_nav.setOnNavigationItemSelectedListener {
-            when(it.itemId){
-                R.id.navigation_home-> changeFragment(homeFragment)
-                R.id.navigation_ajustes-> changeFragment(settingsFragment)
-                R.id.navigation_restore-> changeFragment(restoreFragment)
+            when (it.itemId) {
+                R.id.navigation_home -> changeFragment(homeFragment)
+                R.id.navigation_ajustes -> changeFragment(settingsFragment)
+                R.id.navigation_restore -> changeFragment(restoreFragment)
             }
             true
         }
-
     }
 
-    private fun changeFragment(fragment:Fragment){
-        Log.i("test",fragment.toString())
+    private fun changeFragment(fragment: Fragment) {
         fragment.arguments = bundleOf(
-            ARG_BU_AVAILABLE to backUpOnCloud
+            R.string.ARG_BU_AVAILABLE.toString() to backUpOnCloud,
+            R.string.ARG_NAME.toString() to username,
+            R.string.ARG_ID.toString() to id
+
         )
         supportFragmentManager.beginTransaction().apply {
-            replace(R.id.nav_host_fragment,fragment)
+            replace(R.id.nav_host_fragment, fragment)
             commit()
         }
 
@@ -57,9 +62,10 @@ class Home : AppCompatActivity() {
 
     private fun sendDataToFrags(navHostFragment: NavHostFragment) {
         var bundle: Bundle = bundleOf(
-            "backUpOnCloud" to backUpOnCloud
+            R.string.ARG_BU_AVAILABLE.toString() to backUpOnCloud,
+            R.string.ARG_NAME.toString() to username,
+            R.string.ARG_ID.toString() to id
         )
-
         navHostFragment.arguments = bundle
     }
 

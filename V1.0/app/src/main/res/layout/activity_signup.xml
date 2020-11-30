@@ -76,7 +76,7 @@
 
                                                 <EditText
                                                         android:layout_marginTop="20dp"
-                                                        android:id="@+id/name_input"
+                                                        android:id="@+id/signup_name_input"
                                                         android:inputType="textEmailAddress"
                                                         android:layout_height="wrap_content"
                                                         android:layout_width="match_parent"
@@ -92,7 +92,7 @@
 
                                                 <EditText
                                                         android:layout_marginTop="20dp"
-                                                        android:id="@+id/email_input"
+                                                        android:id="@+id/signup_email_input"
                                                         android:inputType="textEmailAddress"
                                                         android:layout_height="wrap_content"
                                                         android:layout_width="match_parent"
@@ -106,7 +106,7 @@
 
                                                 <EditText
                                                         android:layout_marginTop="20dp"
-                                                        android:id="@+id/email_confirm"
+                                                        android:id="@+id/signup_email_confirm"
                                                         android:inputType="textEmailAddress"
                                                         android:layout_height="wrap_content"
                                                         android:layout_width="match_parent"
@@ -120,7 +120,7 @@
 
                                                 <EditText
                                                         android:layout_marginTop="20dp"
-                                                        android:id="@+id/passord_input"
+                                                        android:id="@+id/signup_password_input"
                                                         android:inputType="textEmailAddress"
                                                         android:layout_height="wrap_content"
                                                         android:layout_width="match_parent"
@@ -133,7 +133,7 @@
 
                                                 <EditText
                                                         android:layout_marginTop="20dp"
-                                                        android:id="@+id/password_confirm"
+                                                        android:id="@+id/signup_password_confirm"
                                                         android:inputType="textEmailAddress"
                                                         android:layout_height="wrap_content"
                                                         android:layout_width="match_parent"
