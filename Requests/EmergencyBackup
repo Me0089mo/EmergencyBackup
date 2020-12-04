@@ -1,0 +1,85 @@
+{
+	"info": {
+		"_postman_id": "c5bbf97c-f93c-4c88-95a3-3685b0efaa61",
+		"name": "EmergencyBackup",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "register",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": ""
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\":\"asdf1234damian@gmail.com\",\r\n    \"password\":\"password\"\r\n}"
+				},
+				"url": {
+					"raw": "{{protocol}}://{{host}}:{{port}}/api/users/login",
+					"protocol": "{{protocol}}",
+					"host": [
+						"{{host}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"api",
+						"users",
+						"login"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "959df366-371e-4b65-8a07-422844d9a742",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "f9af6d87-bdc0-4b33-8098-d12f0209fe5f",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "3acfde52-1b35-4447-af1d-1bc42164551e",
+			"key": "host",
+			"value": "host"
+		},
+		{
+			"id": "009e4fcd-a46c-4549-a97e-822c74d969eb",
+			"key": "protocol",
+			"value": "protocol"
+		},
+		{
+			"id": "7edd18cd-e89c-4995-93f4-ee062c9736b1",
+			"key": "port",
+			"value": "port"
+		}
+	],
+	"protocolProfileBehavior": {}
+}
