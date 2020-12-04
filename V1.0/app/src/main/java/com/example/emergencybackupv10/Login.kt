@@ -70,6 +70,8 @@ class Login : AppCompatActivity() {
 
         }
         HttpQ.getInstance(this).addToRequestQueue(postRequest)
+        val intent = Intent(this, Home::class.java)
+        startActivity(intent)
     }
 
     fun isValidEmail(target: CharSequence?): Boolean {

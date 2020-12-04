@@ -1,6 +1,5 @@
 package com.example.pruebascifrado
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.ActivityManager
 import android.content.Context
@@ -41,42 +40,31 @@ class MainActivity : AppCompatActivity() {
                 uri?.let {
                     val f = DocumentFile.fromTreeUri(this, it)
                     if(f != null){
-                        Log.d("Started AES_CBC free storage: ", "${applicationContext.filesDir.freeSpace}")
+                        /*Log.d("Started AES_CBC free storage: ", "${applicationContext.filesDir.freeSpace}")
                         File(cipheredDataPath, "AES CBC").mkdir()
-                        var cifrador = AES128_CBC(applicationContext)
-                        readCipherDirectory(f, "$cipheredDataPath/AES CBC", cifrador)
+                        var aescbc = AES128_CBC(applicationContext)
+                        readCipherDirectory(f, "$cipheredDataPath/AES CBC", aescbc)
                         Log.d("Ended AES_CBC free storage: ", "${applicationContext.filesDir.freeSpace}")
                         Log.d("Started AES_CTR free storage: ", "${applicationContext.filesDir.freeSpace}")
                         File(cipheredDataPath, "AES CTR").mkdir()
-                        cifrador = AES128_CBC(applicationContext)
-                        readCipherDirectory(f, "$cipheredDataPath/AES CTR", cifrador)
+                        var aesctr = AES128_CTR(applicationContext)
+                        readCipherDirectory(f, "$cipheredDataPath/AES CTR", aesctr)
                         Log.d("Ended AES_CTR free storage: ", "${applicationContext.filesDir.freeSpace}")
-                        Log.d("Started AES_GCM free storage: ", "${applicationContext.filesDir.freeSpace}")
+                        Log.d("Started AES_GCM free storage: ", "${applicationContext.filesDir.freeSpace}")*/
                         File(cipheredDataPath, "AES GCM").mkdir()
-                        cifrador = AES128_CBC(applicationContext)
-                        readCipherDirectory(f, "$cipheredDataPath/AES GCM", cifrador)
+                        var aesgcm = AES128_GCM(applicationContext)
+                        readCipherDirectory(f, "$cipheredDataPath/AES GCM", aesgcm)
                         Log.d("Ended AES_GCM free storage: ", "${applicationContext.filesDir.freeSpace}")
-                        Log.d("Started DESede_CBC free storage: ", "${applicationContext.filesDir.freeSpace}")
+                        /*Log.d("Started DESede_CBC free storage: ", "${applicationContext.filesDir.freeSpace}")
                         File(cipheredDataPath, "DESede CBC").mkdir()
                         cifrador = AES128_CBC(applicationContext)
                         readCipherDirectory(f, "$cipheredDataPath/DESede CBC", cifrador)
-                        Log.d("Ended DESede_CBC free storage: ", "${applicationContext.filesDir.freeSpace}")
+                        Log.d("Ended DESede_CBC free storage: ", "${applicationContext.filesDir.freeSpace}")*/
                     }
                 }
             }
         }
     }
-
-    /*fun analyzeDirectory(uri:Uri){
-        val cursor: Cursor? = applicationContext.contentResolver.query(uri, null, null, null, null, null)
-        cursor?.use {
-            println("Analizing directory")
-            if(it.moveToFirst()){
-                val name = it.getString(it.getColumnIndex(OpenableColumns.DISPLAY_NAME))
-                println(name)
-            }
-        }
-    }*/
 
     fun readCipherDirectory(f:DocumentFile, cipheredDataPath:String, cifrador:Cifrador){
         if(f.isDirectory){
@@ -89,18 +77,9 @@ class MainActivity : AppCompatActivity() {
                 else {
                     val cipheredName = generateNewName(documentFile.name!!)
                     println(documentFile.name)
-                    cifrador.readFile(documentFile.uri, documentFile.length())
-                    val cipheredFile = File("$cipheredDataPath/$cipheredName")
-                    cifrador.cipherText?.let { cipheredFile.writeBytes(it) }
+                    cifrador.readFile(documentFile.uri, cipheredDataPath, documentFile.name!!)
                 }
             }
-        }
-    }
-
-    private fun getAvailableMemory(): ActivityManager.MemoryInfo {
-        val activityManager = getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
-        return ActivityManager.MemoryInfo().also { memoryInfo ->
-            activityManager.getMemoryInfo(memoryInfo)
         }
     }
 

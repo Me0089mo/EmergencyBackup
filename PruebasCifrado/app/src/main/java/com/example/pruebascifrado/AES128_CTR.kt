@@ -4,9 +4,12 @@ import android.content.Context
 import android.net.Uri
 import java.io.BufferedInputStream
 import java.io.ByteArrayOutputStream
+import java.io.File
+import java.io.FileOutputStream
 import java.util.zip.ZipEntry
 import java.util.zip.ZipOutputStream
 import javax.crypto.Cipher
+import javax.crypto.CipherOutputStream
 import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
 
@@ -16,8 +19,11 @@ class AES128_CTR(override val contentContext: Context):Cifrador {
     override val keyGenerator = KeyGenerator.getInstance("AES")
     override var data:ByteArray? = null
     override var cipherText:ByteArray? = null
+    var cipheredFile:File? = null
+    var cipheredOutput:CipherOutputStream? = null
 
-    override fun readFile(path : Uri, fileSize : Long){
+    override fun readFile(path : Uri, cipheredDataPath : String, fileName : String){
+        createDestinationFile(cipheredDataPath, fileName)
         contentContext.contentResolver.openInputStream(path)?.use { reader ->
             val inputStream = BufferedInputStream(reader)
             val byteOutStream = ByteArrayOutputStream()
@@ -25,37 +31,51 @@ class AES128_CTR(override val contentContext: Context):Cifrador {
             val zipEntry = ZipEntry(path.path)
             zipOutStream.putNextEntry(zipEntry)
             val readingArray = ByteArray(1024)
-            var long:Int
+            var readLong:Int
+            var byteOutStreamConv:ByteArray
             var cipherOffset = 0
-            initializeCipher(fileSize)
+
+            initializeCipher()
             do{
-                long = inputStream.read(readingArray)
-                if(long == -1) break
-                zipOutStream.write(readingArray, 0, long)
-                cipherData(byteOutStream.toByteArray(), cipherOffset, long)
-                cipherOffset += long
+                readLong = inputStream.read(readingArray)
+                if(readLong == -1) break
+                zipOutStream.write(readingArray, 0, readLong)
+                byteOutStreamConv = byteOutStream.toByteArray()
+                if(byteOutStreamConv.isNotEmpty()) {
+                    cipherData(byteOutStreamConv)
+                    cipherOffset += byteOutStreamConv.size
+                }
                 byteOutStream.reset()
-            }while (long >= 0)
-            finalizeCipher(cipherOffset)
+            }while(readLong >= 0)
+            finalizeCipher()
+
             zipOutStream.close()
             byteOutStream.close()
         }
     }
 
-    override fun initializeCipher(fileSize : Long){
+    override fun initializeCipher(){
         keyGenerator.init(128)
         val key: SecretKey = keyGenerator.generateKey()
         cipher.init(Cipher.ENCRYPT_MODE, key)
-        cipherText = ByteArray(cipher.getOutputSize(fileSize.toInt()))
     }
 
-    override fun cipherData(data : ByteArray, cipherOffset : Int, inputLen : Int){
-        //println("Available: ${getAvailableMemory().availMem}\tThreshold: ${getAvailableMemory().threshold}")
-        cipher.update(data, 0, inputLen, cipherText, cipherOffset)
+    override fun cipherData(data : ByteArray){
+        cipheredOutput?.write(data)
     }
 
-    override fun finalizeCipher(cipherOffset: Int){
-        cipher.doFinal(cipherText, cipherOffset)
-        //val iv: ByteArray = cipher.iv
+    override fun finalizeCipher(){
+        cipheredOutput?.close()
+    }
+
+    fun createDestinationFile(path : String, fileName : String){
+        cipheredFile = File("$path/$fileName")
+        val fos = FileOutputStream(cipheredFile)
+        cipheredOutput = CipherOutputStream(fos, cipher)
+    }
+
+    fun writeToFile(){
+        val fos = FileOutputStream(cipheredFile)
+        fos.write(cipherText)
     }
 }

@@ -11,8 +11,8 @@ interface Cifrador {
         val keyGenerator : KeyGenerator
         var data : ByteArray?
         var cipherText : ByteArray?
-        fun readFile(path : Uri, fileSize : Long)
-        fun cipherData(data : ByteArray, cipherOffset: Int, inputLen : Int)
-        fun initializeCipher(fileSize : Long)
-        fun finalizeCipher(cipherOffset: Int)
+        fun readFile(path : Uri, cipheredDataPath : String, fileName : String)
+        fun cipherData(data : ByteArray)
+        fun initializeCipher()
+        fun finalizeCipher()
 }
