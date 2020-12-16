@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="host_url">http://10.0.2.2:5000</string>
+    <string name="host_url">http://52.136.121.142:8080</string>
     <string name="api_register">/api/users/register</string>
     <string name="api_login">/api/users/login/</string>
-    <string name="ARG_BU_AVAILABLE">hasBackup</string>
-    <string name="ARG_ID">_id</string>
-    <string name="ARG_NAME">name</string>
+
 </resources>

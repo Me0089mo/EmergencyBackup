@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ARG_BU_AVAILABLE">hasBackup</string>
+    <string name="ARG_ID">_id</string>
+    <string name="ARG_NAME">name</string>
+    <string name="CONFIG_TOKEN">CONFIG_TOKEN</string>
+    <string name="CONFIG_WAS_LOGED_IN">logedIn</string>
+</resources>
