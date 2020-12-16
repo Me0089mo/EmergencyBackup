@@ -23,7 +23,6 @@ private const val ARG_BU_AVAILABLE = "backUpAvailable"
 class HomeFragment : Fragment() {
 
     private var backUpOnCloud: Boolean = false
-    private var cipheredDataPath: String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -43,25 +42,6 @@ class HomeFragment : Fragment() {
     override fun onStart() {
         super.onStart()
         setText()
-        btnSelect.setOnClickListener { v: View? ->
-            //Creating directory for ciphered data
-            val cipherDataDirectory = File(this.context?.filesDir, "CipheredData")
-            if(cipherDataDirectory.mkdir())
-                cipheredDataPath = cipherDataDirectory.absolutePath
-
-            //Creating document picker
-            val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE).apply {
-                flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
-            }
-            startActivityForResult(intent, 42)
-        }
-
-        btnCifrar.setOnClickListener { v: View? ->
-            val createBackup = Backup(this.requireContext().applicationContext, cipheredDataPath!!)
-            createBackup.readConfiguration()
-            createBackup.readAll()
-        }
-
     }
 
     private fun setText() {
@@ -71,6 +51,8 @@ class HomeFragment : Fragment() {
             text_home.text = "No hay un respaldo pendiente\n Hurray?"
         }
     }
+
+
 
     companion object {
         @JvmStatic
@@ -82,15 +64,5 @@ class HomeFragment : Fragment() {
             }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?){
-        super.onActivityResult(requestCode, resultCode, data)
-        if(requestCode == 42 && resultCode == Activity.RESULT_OK) {
-            data?.data.also { uri ->
-                uri?.let {
-                    val newBackup = Backup(this.requireContext().applicationContext, cipheredDataPath!!)
-                    newBackup.createConfiguration(it)
-                }
-            }
-        }
-    }
+
 }

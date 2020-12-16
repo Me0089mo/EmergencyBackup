@@ -2,8 +2,11 @@ package com.example.emergencybackupv10
 
 import HttpQ
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
+import androidx.preference.PreferenceManager
 import android.text.TextUtils
+import android.util.Log
 import android.util.Patterns
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -12,18 +15,33 @@ import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import com.auth0.android.jwt.JWT
 import kotlinx.android.synthetic.main.activity_login.*
+import kotlin.reflect.typeOf
 
 
 class Login : AppCompatActivity() {
     private lateinit var queue: RequestQueue;
     private lateinit var url: String;
     private val alertUtils: AlertUtils = AlertUtils();
+    private lateinit var sharedPreferences:SharedPreferences;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this );
         queue = HttpQ.getInstance(this.applicationContext).requestQueue
         url = getString(R.string.host_url) + getString(R.string.api_login)
+        checkForToken();
+    }
+
+    public fun  checkForToken(){
+        val t = sharedPreferences.getString(getString(R.string.CONFIG_TOKEN),null)
+        if (t != null){
+            val intent = Intent(this, Home::class.java)
+            intent.putExtra(
+                    getString(R.string.CONFIG_WAS_LOGED_IN),true
+            )
+            startActivity(intent)
+        }
     }
 
     public fun signUp(view: View) {
@@ -32,33 +50,45 @@ class Login : AppCompatActivity() {
     }
 
     public fun logIn(view: View) {
+
         if (!isValidEmail(login_email.text.toString())) {
             alertUtils.topToast(this, "Dirección de correo invalida")
             return
         }
-        var token: String = "";
         val postRequest: StringRequest = object : StringRequest(
             Method.POST, url,
             Response.Listener { response ->
-                token = response.toString()
+                var token = response.toString()
+                //Save the token to local storage
+                with (sharedPreferences.edit()) {
+                    putString(getString(R.string.CONFIG_TOKEN), token)
+                    apply()
+                }
+
+                //Parse the token as parameter to teh next activity
                 val jwt = JWT(token)
                 val intent = Intent(this, Home::class.java)
                 intent.putExtra(
-                    R.string.ARG_BU_AVAILABLE.toString(),
-                    jwt.getClaim(R.string.ARG_BU_AVAILABLE.toString()).asBoolean()
+                    getString(R.string.CONFIG_WAS_LOGED_IN),false
                 )
                 intent.putExtra(
-                    R.string.ARG_NAME.toString(),
-                    jwt.getClaim(R.string.ARG_NAME.toString()).asString()
-                )
+                    getString(R.string.ARG_BU_AVAILABLE),
+                    jwt.getClaim(getString(R.string.ARG_BU_AVAILABLE)).asBoolean()
+                );
                 intent.putExtra(
-                    R.string.ARG_ID.toString(),
-                    jwt.getClaim(R.string.ARG_ID.toString()).asString()
-                )
-                startActivity(intent)
+                    getString(R.string.ARG_NAME),
+                    jwt.getClaim(getString(R.string.ARG_NAME)).asString()
+                );
+
+                intent.putExtra(
+                    getString(R.string.ARG_ID),
+                    jwt.getClaim(getString(R.string.ARG_ID)).asString()
+                );
+                startActivity(intent);
             },
             Response.ErrorListener { error ->
-                alertUtils.topToast(this, "Credenciales incorrectas")
+                val msg: String  = HttpQ.getInstance(this).getErrorMsg(error)
+                alertUtils.topToast(this, msg)
             }
         ) {
             override fun getParams(): Map<String, String> {
@@ -70,8 +100,6 @@ class Login : AppCompatActivity() {
 
         }
         HttpQ.getInstance(this).addToRequestQueue(postRequest)
-        val intent = Intent(this, Home::class.java)
-        startActivity(intent)
     }
 
     fun isValidEmail(target: CharSequence?): Boolean {
