@@ -14,13 +14,20 @@
             android:id="@+id/btnSelect"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Button" />
+            android:layout_marginTop="450dp"
+            android:text="@string/button_seleccionar" />
 
         <Button
             android:id="@+id/btnCifrar"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Button" />
+            android:text="@string/button_cifrar" />
+
+        <Button
+            android:id="@+id/btnDescifrar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/button_descifrar" />
     </LinearLayout>
 
     <TextView

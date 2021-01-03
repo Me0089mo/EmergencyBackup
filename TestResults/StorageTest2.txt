@@ -1,0 +1,9 @@
+D/Started AES_CBC free storage:: 4910161920
+D/Ended AES_CBC free storage:: 4048252928
+Storage used for AES_CBC: 861,908,922
+
+D/Started AES_CTR free storage:: 4048252928
+D/Ended AES_CTR free storage:: 3186339840
+Storage used for AES_CTR: 861,913,088
+
+D/Started AES_GCM free storage:: 3186339840

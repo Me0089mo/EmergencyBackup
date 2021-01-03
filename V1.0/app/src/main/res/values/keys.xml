@@ -5,4 +5,6 @@
     <string name="ARG_NAME">name</string>
     <string name="CONFIG_TOKEN">CONFIG_TOKEN</string>
     <string name="CONFIG_WAS_LOGED_IN">logedIn</string>
+    <string name="ARG_PUB_KEY">publicKey</string>
+    <string name="ARG_PRIV_KEY">privateKey</string>
 </resources>

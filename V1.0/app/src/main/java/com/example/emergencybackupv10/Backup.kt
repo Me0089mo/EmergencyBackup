@@ -1,13 +1,10 @@
 package com.example.emergencybackupv10
 
-import android.app.Activity
 import android.content.Context
-import android.content.Intent
 import android.net.Uri
-import androidx.core.app.ActivityCompat.startActivityForResult
-import androidx.core.net.toUri
 import androidx.documentfile.provider.DocumentFile
 import java.io.File
+import java.util.*
 
 class Backup(val applicationContext : Context, val destiny:String) {
 
@@ -16,36 +13,49 @@ class Backup(val applicationContext : Context, val destiny:String) {
 
     fun createConfiguration(treeUri : Uri){
         val configFile = File(destiny, configFileName)
-        if(configFile.createNewFile()) {
-            configFile.writeText(treeUri.toString())
-        }
+        if(configFile.createNewFile())
+            configFile.writeText(treeUri.toString()+"\n")
     }
 
-    fun readConfiguration(){
+    fun modifyConfiguration(treeUri: Uri){
+        val configFile = File(destiny, configFileName)
+        configFile.appendText(treeUri.toString()+"\n")
+    }
+
+    fun existConfiguration(): Boolean {
+        return File(destiny, configFileName).exists()
+    }
+
+    fun readConfiguration() {
         val configFile = File("$destiny/$configFileName")
         selectDir = configFile.readLines()
     }
 
-    fun readAll(){
-        val cifrador = CifradorAESCBC(applicationContext)
-        selectDir.forEach { dir ->
-            val docFile = DocumentFile.fromTreeUri(applicationContext, Uri.parse(dir))
-            println(docFile?.name)
-            readDirectory(docFile!!, destiny, cifrador)
-        }
+    fun testConfigFile(){
+        selectDir.forEach { f -> println(f) }
     }
 
-    private fun readDirectory(f:DocumentFile, cipheredDataPath:String, cifrador:CifradorAESCBC){
+    fun readAll(backupDestiny : String){
+        println("Tiempo de inicio: ${Calendar.getInstance().timeInMillis}")
+        val cifrador = CifradorAES_CFB(applicationContext)
+        selectDir.forEach { dir ->
+            val docFile = DocumentFile.fromTreeUri(applicationContext, Uri.parse(dir))
+            val rootDir = "$backupDestiny/${docFile?.name}"
+            File(rootDir).mkdir()
+            readDirectory(docFile!!, rootDir, cifrador)
+        }
+        println("Tiempo final: ${Calendar.getInstance().timeInMillis}")
+    }
+
+    private fun readDirectory(f:DocumentFile, cipheredDataPath:String, cifrador:CifradorAES_CFB){
         if(f.isDirectory){
             f.listFiles().forEach { documentFile ->
-                println(documentFile.name)
                 if(documentFile.isDirectory) {
                     File(cipheredDataPath, documentFile.name).mkdir()
                     readDirectory(documentFile, "$cipheredDataPath/${documentFile.name}", cifrador)
                 }
-                else cifrador.readFile(documentFile.uri, cipheredDataPath, documentFile.name!!)
+                else cifrador.cipherFile(documentFile.uri, cipheredDataPath, documentFile.name!!)
             }
         }
     }
-
 }

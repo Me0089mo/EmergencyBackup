@@ -22,5 +22,7 @@
     <string name="title_notifications">Notif</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-
+    <string name="button_seleccionar">Seleccionar</string>
+    <string name="button_cifrar">Cifrar</string>
+    <string name="button_descifrar">Descifrar</string>
 </resources>

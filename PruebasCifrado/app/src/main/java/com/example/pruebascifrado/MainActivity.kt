@@ -21,9 +21,10 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         //Creating directory for ciphered data
-        val cipherDataDirectory = File(applicationContext.filesDir, "CipheredData")
-        if(cipherDataDirectory.mkdir())
-            cipheredDataPath = cipherDataDirectory.absolutePath
+        //val cipherDataDirectory = File(applicationContext.filesDir, "CipheredData")
+        cipheredDataPath = applicationContext.filesDir.absolutePath
+        /*if(cipherDataDirectory.mkdir())
+            cipheredDataPath = cipherDataDirectory.absolutePath*/
 
         //Creating document picker
         val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE).apply {
@@ -42,24 +43,19 @@ class MainActivity : AppCompatActivity() {
                     if(f != null){
                         /*Log.d("Started AES_CBC free storage: ", "${applicationContext.filesDir.freeSpace}")
                         File(cipheredDataPath, "AES CBC").mkdir()
-                        var aescbc = AES128_CBC(applicationContext)
+                        val aescbc = AES128_CBC(applicationContext)
                         readCipherDirectory(f, "$cipheredDataPath/AES CBC", aescbc)
                         Log.d("Ended AES_CBC free storage: ", "${applicationContext.filesDir.freeSpace}")
                         Log.d("Started AES_CTR free storage: ", "${applicationContext.filesDir.freeSpace}")
                         File(cipheredDataPath, "AES CTR").mkdir()
                         var aesctr = AES128_CTR(applicationContext)
                         readCipherDirectory(f, "$cipheredDataPath/AES CTR", aesctr)
-                        Log.d("Ended AES_CTR free storage: ", "${applicationContext.filesDir.freeSpace}")
-                        Log.d("Started AES_GCM free storage: ", "${applicationContext.filesDir.freeSpace}")*/
+                        Log.d("Ended AES_CTR free storage: ", "${applicationContext.filesDir.freeSpace}")*/
+                        Log.d("Started AES_GCM free storage: ", "${applicationContext.filesDir.freeSpace}")
                         File(cipheredDataPath, "AES GCM").mkdir()
                         var aesgcm = AES128_GCM(applicationContext)
                         readCipherDirectory(f, "$cipheredDataPath/AES GCM", aesgcm)
                         Log.d("Ended AES_GCM free storage: ", "${applicationContext.filesDir.freeSpace}")
-                        /*Log.d("Started DESede_CBC free storage: ", "${applicationContext.filesDir.freeSpace}")
-                        File(cipheredDataPath, "DESede CBC").mkdir()
-                        cifrador = AES128_CBC(applicationContext)
-                        readCipherDirectory(f, "$cipheredDataPath/DESede CBC", cifrador)
-                        Log.d("Ended DESede_CBC free storage: ", "${applicationContext.filesDir.freeSpace}")*/
                     }
                 }
             }
@@ -69,16 +65,11 @@ class MainActivity : AppCompatActivity() {
     fun readCipherDirectory(f:DocumentFile, cipheredDataPath:String, cifrador:Cifrador){
         if(f.isDirectory){
             f.listFiles().forEach { documentFile ->
-                //println(documentFile.name)
                 if(documentFile.isDirectory) {
                     File(cipheredDataPath, documentFile.name).mkdir()
                     readCipherDirectory(documentFile, "$cipheredDataPath/${documentFile.name}", cifrador)
                 }
-                else {
-                    val cipheredName = generateNewName(documentFile.name!!)
-                    println(documentFile.name)
-                    cifrador.readFile(documentFile.uri, cipheredDataPath, documentFile.name!!)
-                }
+                else cifrador.readFile(documentFile.uri, cipheredDataPath, documentFile.name!!)
             }
         }
     }

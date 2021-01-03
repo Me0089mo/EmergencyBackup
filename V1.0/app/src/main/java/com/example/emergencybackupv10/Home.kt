@@ -28,19 +28,20 @@ class Home : AppCompatActivity() {
     private val homeFragment = HomeFragment()
     private val restoreFragment = RestoreFragment()
     private val settingsFragment = SettingsFragment()
-    private lateinit var cipheredDataPath: String;
     private lateinit var sharedPreferences:SharedPreferences;
+    private var publicKeyFile : String? = ""
+    private var privateKeyFile : String? = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
-        val wasLogedIn =intent.getBooleanExtra(getString(R.string.CONFIG_WAS_LOGED_IN), false)
-
+        //val wasLogedIn =intent.getBooleanExtra(getString(R.string.CONFIG_WAS_LOGED_IN), false)
+        val wasLogedIn = false
         if(wasLogedIn){
             getDataFromServer()
         }else{
-            getDataFromIntent();
+            getDataFromIntent()
         }
 
         changeFragment(homeFragment)
@@ -56,9 +57,11 @@ class Home : AppCompatActivity() {
     }
 
     private fun getDataFromIntent(){
-        backUpOnCloud = intent.getBooleanExtra(getString(R.string.ARG_BU_AVAILABLE), false)
+        /*backUpOnCloud = intent.getBooleanExtra(getString(R.string.ARG_BU_AVAILABLE), false)
         username = intent.getStringExtra(getString(R.string.ARG_NAME))
-        id = intent.getStringExtra(getString(R.string.ARG_ID))
+        id = intent.getStringExtra(getString(R.string.ARG_ID))*/
+        publicKeyFile = intent.getStringExtra(getString(R.string.ARG_PUB_KEY))
+        privateKeyFile = intent.getStringExtra(getString(R.string.ARG_PRIV_KEY))
     }
 
     private fun getDataFromServer(){
@@ -71,11 +74,13 @@ class Home : AppCompatActivity() {
 
     private fun changeFragment(fragment: Fragment) {
         fragment.arguments = bundleOf(
-            R.string.ARG_BU_AVAILABLE.toString() to backUpOnCloud,
+            /*R.string.ARG_BU_AVAILABLE.toString() to backUpOnCloud,
             R.string.ARG_NAME.toString() to username,
-            R.string.ARG_ID.toString() to id
-
+            R.string.ARG_ID.toString() to id,*/
+            getString(R.string.ARG_PUB_KEY) to publicKeyFile,
+            getString(R.string.ARG_PRIV_KEY) to privateKeyFile
         )
+
         supportFragmentManager.beginTransaction().apply {
             replace(R.id.nav_host_fragment, fragment)
             commit()

@@ -15,7 +15,7 @@ import javax.crypto.SecretKey
 
 class AES128_GCM(override val contentContext: Context):Cifrador {
 
-    override val cipher:Cipher = Cipher.getInstance("AES/GCM/NOPADDING")
+    override val cipher:Cipher = Cipher.getInstance("AES/CFB/PKCS5PADDING")
     override val keyGenerator = KeyGenerator.getInstance("AES")
     override var data:ByteArray? = null
     override var cipherText:ByteArray? = null
@@ -53,24 +53,25 @@ class AES128_GCM(override val contentContext: Context):Cifrador {
             byteOutStream.close()
         }
     }
-    var key : SecretKey? = null
+
     override fun initializeCipher(){
         keyGenerator.init(128)
-        key /*: SecretKey*/ = keyGenerator.generateKey()
-
+        val key : SecretKey = keyGenerator.generateKey()
         cipher.init(Cipher.ENCRYPT_MODE, key)
     }
 
     override fun cipherData(data : ByteArray){
         cipheredOutput?.write(data)
+        cipheredOutput?.flush()
     }
 
     override fun finalizeCipher(){
         cipheredOutput?.close()
-
     }
 
     fun createDestinationFile(path : String, fileName : String){
         cipheredFile = File("$path/$fileName")
+        val fos = FileOutputStream(cipheredFile)
+        cipheredOutput = CipherOutputStream(fos, cipher)
     }
 }
