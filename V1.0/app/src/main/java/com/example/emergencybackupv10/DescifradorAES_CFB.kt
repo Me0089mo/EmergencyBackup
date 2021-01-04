@@ -10,10 +10,7 @@ import java.security.spec.AlgorithmParameterSpec
 import java.security.spec.PKCS8EncodedKeySpec
 import java.security.spec.X509EncodedKeySpec
 import java.util.zip.*
-import javax.crypto.Cipher
-import javax.crypto.CipherOutputStream
-import javax.crypto.KeyGenerator
-import javax.crypto.SecretKey
+import javax.crypto.*
 import javax.crypto.spec.IvParameterSpec
 import javax.crypto.spec.SecretKeySpec
 
@@ -39,6 +36,7 @@ class DescifradorAES_CFB(val contentContext : Context, val pubkDirectory: String
     fun decipherFile(path : String, decipheredDataPath : String, fileName : String){
         createDestinationFile(decipheredDataPath, fileName)
         val fileInput = FileInputStream(path)
+
         //Reading key mac and tag
         val cipheredKeyMac = ByteArray(128)
         macTag = ByteArray(32)
@@ -49,27 +47,26 @@ class DescifradorAES_CFB(val contentContext : Context, val pubkDirectory: String
         val iv = ByteArray(16)
         fileInput.read(cipheredKey)
         fileInput.read(iv)
-        val zipInputStream = ZipInputStream(fileInput)
+        initializeCipher(cipheredKey, iv, cipheredKeyMac)
+
+        val bufInputStream = BufferedInputStream(fileInput)
+        //val cipherInputStream = CipherInputStream(bufInputStream, cipher)
+        var zipInputStream = ZipInputStream(fileInput)
         val entry = zipInputStream.nextEntry
         if(entry == null) println("Null Zip Entry")
         else println("Size: ${entry.compressedSize}, Name: ${entry.name}")
 
         val byteOutReadStream = ByteArrayOutputStream()
-        val readingArray = ByteArray(10240)
+        val readingArray = ByteArray(1024)
         var readLong:Int
-        var byteOutStreamConv:ByteArray
-        var cipherOffset = 0
 
-        initializeCipher(cipheredKey, iv, cipheredKeyMac)
         do{
-            readLong = zipInputStream.read(readingArray)
+            readLong = fileInput.read(readingArray)
             println("Read bytes: $readLong")
             if(readLong == -1) break
             if(readingArray.isNotEmpty()) {
                 decipherData(readingArray)
-                cipherOffset += readingArray.size
             }
-            byteOutReadStream.reset()
         }while(readLong >= 0)
         finalizeCipher()
 
@@ -81,7 +78,7 @@ class DescifradorAES_CFB(val contentContext : Context, val pubkDirectory: String
         key = SecretKeySpec(decipherKey(userPrivateKey, cipheredKey), "AES")
         cipher.init(Cipher.DECRYPT_MODE, key, IvParameterSpec(iv))
         val keyMac = SecretKeySpec(decipherKey(userPrivateKey, cipheredKeyMac), "HMAC")
-        print("Recovered tag: ")
+        /*print("Recovered tag: ")
         macTag.forEach { b -> print("$b, ") }
         print("\nRecovered mac key: ")
         keyMac.encoded.forEach { b -> print("$b, ") }
@@ -89,7 +86,7 @@ class DescifradorAES_CFB(val contentContext : Context, val pubkDirectory: String
         key.encoded.forEach { b -> print("$b, ") }
         print("\nRecovered iv: ")
         iv.forEach { b -> print("$b, ") }
-        print("\n")
+        print("\n")*/
         mac = HMAC(keyMac)
         mac.initializeMac()
     }
@@ -97,7 +94,9 @@ class DescifradorAES_CFB(val contentContext : Context, val pubkDirectory: String
     private fun decipherData(data : ByteArray){
         cipheredOutput.write(data)
         val aux = byteOutStream.toByteArray()
-        mac.calculateMac(aux!!)
+        mac.calculateMac(data)
+        aux.forEach { b -> print("$b ") }
+        print("\n")
         decompressData(aux)
         byteOutStream.reset()
     }
@@ -122,9 +121,16 @@ class DescifradorAES_CFB(val contentContext : Context, val pubkDirectory: String
         cipheredOutput = CipherOutputStream(byteOutStream, cipher)
     }
 
-    private fun decompressData(compressData : ByteArray){
-        println("Before compression: ${compressData.size}")
-        inflaterOutStream.write(compressData)
+    private fun decompressData(compressedData: ByteArray){
+        //println("Before compression: ${compressData.size}")
+        compressedData.forEach { b -> print("$b ") }
+        print("\n")
+        val decompressor = Inflater()
+        val decompressedData = ByteArray(2048)
+        decompressor.setInput(compressedData, 0,compressedData.size)
+        decompressor.inflate(decompressedData)
+        decompressor.end()
+        fileOutStream.write(decompressedData)
     }
 
     private fun decipherKey(cipherKey : Key, data : ByteArray) : ByteArray{

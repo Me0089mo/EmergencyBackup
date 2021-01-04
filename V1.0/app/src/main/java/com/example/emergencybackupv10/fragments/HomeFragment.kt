@@ -34,15 +34,17 @@ class HomeFragment : Fragment() {
             backUpOnCloud = it.getBoolean(ARG_BU_AVAILABLE)
             publicKeyFile = it.getString(getString(R.string.ARG_PUB_KEY))
             privateKeyFile = it.getString(getString(R.string.ARG_PRIV_KEY))
+            println("Llave publica: ${publicKeyFile}")
+            println("Llave privada: ${privateKeyFile}")
         }
 
         //Creating directories for ciphered and deciphered data
-        val cipherDataDirectory = File(this.requireContext().filesDir, "CipheredData")
+        /*val cipherDataDirectory = File(this.requireContext().filesDir, "CipheredData")
         val decipheredDataDirectory = File(this.requireContext().filesDir, "DecipheredData")
         if(cipherDataDirectory.exists() || cipherDataDirectory.mkdir())
             cipheredDataPath = cipherDataDirectory.absolutePath
         if(decipheredDataDirectory.exists() || decipheredDataDirectory.mkdir())
-            decipheredDataPath = decipheredDataDirectory.absolutePath
+            decipheredDataPath = decipheredDataDirectory.absolutePath*/
     }
 
     override fun onCreateView(
@@ -57,7 +59,7 @@ class HomeFragment : Fragment() {
     override fun onStart() {
         super.onStart()
         setText()
-        btnSelect.setOnClickListener { v: View? ->
+        /*btnSelect.setOnClickListener { v: View? ->
             //Creating document picker
             val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE).apply {
                 flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
@@ -77,7 +79,7 @@ class HomeFragment : Fragment() {
             decipher.recoverKeys()
             val cipheredFiles = File(cipheredDataPath!!)
             readDirectory(cipheredFiles, decipheredDataPath!!, decipher)
-        }
+        }*/
     }
 
     private fun readDirectory(f: File, decipheredDataPath: String, descifrador: DescifradorAES_CFB){
@@ -100,7 +102,7 @@ class HomeFragment : Fragment() {
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?){
+    /*override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?){
         super.onActivityResult(requestCode, resultCode, data)
         if(requestCode == 42 && resultCode == Activity.RESULT_OK) {
             data?.data.also { uri ->
@@ -113,7 +115,7 @@ class HomeFragment : Fragment() {
                 }
             }
         }
-    }
+    }*/
 
     companion object {
         @JvmStatic

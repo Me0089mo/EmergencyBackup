@@ -4,8 +4,8 @@ import HttpQ
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.preference.PreferenceManager
-//import androidx.preference.PreferenceManager
+//import android.preference.PreferenceManager
+import androidx.preference.PreferenceManager
 import android.text.TextUtils
 import android.util.Log
 import android.util.Patterns
@@ -35,9 +35,9 @@ class Login : AppCompatActivity() {
         assKeyGen.savePrivateKey()
         userKeysFiles = assKeyGen.getKeysDirectories()
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        /*queue = HttpQ.getInstance(this.applicationContext).requestQueue
+        queue = HttpQ.getInstance(this.applicationContext).requestQueue
         url = getString(R.string.host_url) + getString(R.string.api_login)
-        checkForToken();*/
+        checkForToken();
     }
 
     public fun checkForToken(){
@@ -58,7 +58,7 @@ class Login : AppCompatActivity() {
 
     public fun logIn(view: View) {
 
-        /*if (!isValidEmail(login_email.text.toString())) {
+        if (!isValidEmail(login_email.text.toString())) {
             alertUtils.topToast(this, "Dirección de correo invalida")
             return
         }
@@ -73,7 +73,7 @@ class Login : AppCompatActivity() {
                 }
 
                 //Parse the token as parameter to teh next activity
-                val jwt = JWT(token)*/
+                val jwt = JWT(token)
                 val intent = Intent(this, Home::class.java)
                 intent.putExtra(getString(R.string.ARG_PUB_KEY), userKeysFiles[0])
                 intent.putExtra(getString(R.string.ARG_PRIV_KEY), userKeysFiles[1])
@@ -89,14 +89,14 @@ class Login : AppCompatActivity() {
                 intent.putExtra(
                     getString(R.string.ARG_NAME),
                     jwt.getClaim(getString(R.string.ARG_NAME)).asString()
-                );
+                )
 
                 intent.putExtra(
                     getString(R.string.ARG_ID),
                     jwt.getClaim(getString(R.string.ARG_ID)).asString()
-                );*/
+                )
                 startActivity(intent);
-            /*},
+            },
             Response.ErrorListener { error ->
                 val msg: String  = HttpQ.getInstance(this).getErrorMsg(error)
                 alertUtils.topToast(this, msg)
@@ -110,7 +110,7 @@ class Login : AppCompatActivity() {
             }
 
         }
-        HttpQ.getInstance(this).addToRequestQueue(postRequest)*/
+        HttpQ.getInstance(this).addToRequestQueue(postRequest)
     }
 
     fun isValidEmail(target: CharSequence?): Boolean {

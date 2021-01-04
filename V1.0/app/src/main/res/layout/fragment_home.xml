@@ -22,12 +22,14 @@
             android:id="@+id/btnCifrar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:onClick="startBackup"
             android:text="@string/button_cifrar" />
 
         <Button
             android:id="@+id/btnDescifrar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:onClick="decipherData"
             android:text="@string/button_descifrar" />
     </LinearLayout>
 

@@ -12,12 +12,12 @@ import java.io.File
 import java.util.*
 
 class Backup(val applicationContext : Context, val dirList:MutableSet<String>) {
-    private val cifrador = CifradorAESCBC(applicationContext)
+    private val cifrador = CifradorAES_CFB(applicationContext)
 
     fun create(){
         dirList.forEach { dir ->
             val docFile = DocumentFile.fromTreeUri(applicationContext, Uri.parse(dir))
-            if (docFile!!.isDirectory){
+            if (docFile!!.exists() && docFile!!.isDirectory){
                 encryptDir(docFile!!)
             }
         }
@@ -30,7 +30,7 @@ class Backup(val applicationContext : Context, val dirList:MutableSet<String>) {
                     File(applicationContext.filesDir, file.name!!).mkdir()
                     encryptDir(file)
                 } else {
-                    cifrador.readFile(file.uri, file.name!!)
+                    cifrador.cipherFile(file.uri, file.name!!)
                 }
             }
     }

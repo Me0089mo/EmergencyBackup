@@ -32,6 +32,8 @@ class Home : AppCompatActivity() {
     private lateinit var sharedPreferences:SharedPreferences;
     private var publicKeyFile : String? = ""
     private var privateKeyFile : String? = ""
+    private var cipheredDataPath: String? = null
+    private var decipheredDataPath : String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,9 +59,9 @@ class Home : AppCompatActivity() {
     }
 
     private fun getDataFromIntent(){
-        /*backUpOnCloud = intent.getBooleanExtra(getString(R.string.ARG_BU_AVAILABLE), false)
+        backUpOnCloud = intent.getBooleanExtra(getString(R.string.ARG_BU_AVAILABLE), false)
         username = intent.getStringExtra(getString(R.string.ARG_NAME))
-        id = intent.getStringExtra(getString(R.string.ARG_ID))*/
+        id = intent.getStringExtra(getString(R.string.ARG_ID))
         publicKeyFile = intent.getStringExtra(getString(R.string.ARG_PUB_KEY))
         privateKeyFile = intent.getStringExtra(getString(R.string.ARG_PRIV_KEY))
     }
@@ -74,9 +76,9 @@ class Home : AppCompatActivity() {
 
     private fun changeFragment(fragment: Fragment) {
         fragment.arguments = bundleOf(
-            /*R.string.ARG_BU_AVAILABLE.toString() to backUpOnCloud,
+            R.string.ARG_BU_AVAILABLE.toString() to backUpOnCloud,
             R.string.ARG_NAME.toString() to username,
-            R.string.ARG_ID.toString() to id,*/
+            R.string.ARG_ID.toString() to id,
             getString(R.string.ARG_PUB_KEY) to publicKeyFile,
             getString(R.string.ARG_PRIV_KEY) to privateKeyFile
         )
@@ -112,8 +114,11 @@ class Home : AppCompatActivity() {
 
     public fun pickDir(v:View){
         val cipherDataDirectory = File(this.filesDir, "CipheredData")
-        if(cipherDataDirectory.mkdir())
+        val decipheredDataDirectory = File(this.filesDir, "DecipheredData")
+        if(decipheredDataDirectory.exists() || cipherDataDirectory.mkdir())
             cipheredDataPath = cipherDataDirectory.absolutePath
+        if(decipheredDataDirectory.exists() || decipheredDataDirectory.mkdir())
+            decipheredDataPath = decipheredDataDirectory.absolutePath
 
         //Creating document picker
         val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE).apply {
@@ -125,6 +130,25 @@ class Home : AppCompatActivity() {
     public fun startBackup(v:View){
         val createBackup = Backup(this, getDirList())
         createBackup.create()
+    }
+
+    public fun decipherData(v: View){
+        val decipher = DescifradorAES_CFB(this, publicKeyFile!!, privateKeyFile!!)
+        decipher.recoverKeys()
+        val cipheredFiles = File(cipheredDataPath!!)
+        readDirectory(cipheredFiles, decipheredDataPath!!, decipher)
+    }
+
+    private fun readDirectory(f: File, decipheredDataPath: String, descifrador: DescifradorAES_CFB){
+        if(f.isDirectory){
+            f.listFiles()?.forEach { documentFile ->
+                if(documentFile.isDirectory) {
+                    File(decipheredDataPath, documentFile.name).mkdir()
+                    readDirectory(documentFile, "$decipheredDataPath/${documentFile.name}", descifrador)
+                }
+                else descifrador.decipherFile(documentFile.absolutePath, decipheredDataPath, documentFile.name)
+            }
+        }
     }
 
 
