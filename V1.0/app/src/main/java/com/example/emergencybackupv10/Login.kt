@@ -77,13 +77,15 @@ class Login : AppCompatActivity() {
                 val intent = Intent(this, Home::class.java)
                 intent.putExtra(getString(R.string.ARG_PUB_KEY), userKeysFiles[0])
                 intent.putExtra(getString(R.string.ARG_PRIV_KEY), userKeysFiles[1])
-                /*intent.putExtra(
+                intent.putExtra(
                     getString(R.string.CONFIG_WAS_LOGED_IN),false
                 )
+
                 intent.putExtra(
                     getString(R.string.ARG_BU_AVAILABLE),
                     jwt.getClaim(getString(R.string.ARG_BU_AVAILABLE)).asBoolean()
-                );
+                )
+
                 intent.putExtra(
                     getString(R.string.ARG_NAME),
                     jwt.getClaim(getString(R.string.ARG_NAME)).asString()

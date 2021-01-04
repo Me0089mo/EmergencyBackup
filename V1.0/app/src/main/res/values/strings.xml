@@ -10,6 +10,8 @@
     <string name="sqInfo">Selecciona una de las siguientes. No olvides tu respuesta, en caso de ser necesario se
         te pedirá que la ingreses exactamente como lo hayas escrito la primera vez.
     </string>
+    <string name="dir_isnt_set"></string>
+    <string name="dir_is_set"></string>
     <string name="login">Iniciar sesión</string>
     <string name="arg_backuponcloud">backuponclound</string>
     <string name="signup">Registrarse</string>

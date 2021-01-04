@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
+import android.provider.DocumentsContract
 import androidx.preference.PreferenceManager
 import android.util.Log
 import android.view.View
@@ -36,8 +37,7 @@ class Home : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
-        //val wasLogedIn =intent.getBooleanExtra(getString(R.string.CONFIG_WAS_LOGED_IN), false)
-        val wasLogedIn = false
+        val wasLogedIn =intent.getBooleanExtra(getString(R.string.CONFIG_WAS_LOGED_IN), false)
         if(wasLogedIn){
             getDataFromServer()
         }else{
@@ -85,10 +85,9 @@ class Home : AppCompatActivity() {
             replace(R.id.nav_host_fragment, fragment)
             commit()
         }
-
     }
 
-    //Check if theres any back up in the server
+    //Check if there's any back up in the server
     private fun checkForBackUp() {
         if (true) {
             backUpOnCloud = true
@@ -96,13 +95,50 @@ class Home : AppCompatActivity() {
         backUpOnCloud = false
     }
 
-    private fun sendDataToFrags(navHostFragment: NavHostFragment) {
-        var bundle: Bundle = bundleOf(
-            R.string.ARG_BU_AVAILABLE.toString() to backUpOnCloud,
-            R.string.ARG_NAME.toString() to username,
-            R.string.ARG_ID.toString() to id
-        )
-        navHostFragment.arguments = bundle
+    private  fun getDirList():MutableSet<String>{
+        var dirList = sharedPreferences.getStringSet(getString(R.string.CONFIG_DIR_SET),null)
+        if (dirList==null) {
+            dirList = mutableSetOf<String>()
+        }
+        return dirList;
+    }
+
+    private fun saveDirList(dl : MutableSet<String>){
+        with (sharedPreferences.edit()) {
+            putStringSet(getString(R.string.CONFIG_DIR_SET),dl)
+            apply()
+        }
+    }
+
+    public fun pickDir(v:View){
+        val cipherDataDirectory = File(this.filesDir, "CipheredData")
+        if(cipherDataDirectory.mkdir())
+            cipheredDataPath = cipherDataDirectory.absolutePath
+
+        //Creating document picker
+        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE).apply {
+            flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+        }
+        startActivityForResult(intent, 42)
+    }
+
+    public fun startBackup(v:View){
+        val createBackup = Backup(this, getDirList())
+        createBackup.create()
+    }
+
+
+    override fun onActivityResult(
+            requestCode: Int, resultCode: Int, resultData: Intent?) {
+        super.onActivityResult(requestCode, resultCode, resultData)
+        var dirList = getDirList()
+        if (requestCode == 42
+                && resultCode == Activity.RESULT_OK) {
+            resultData?.data?.also { uri ->
+                dirList.add(uri.toString())
+                saveDirList(dirList)
+            }
+        }
     }
 
     fun logOut(v: View){

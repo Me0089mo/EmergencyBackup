@@ -41,22 +41,12 @@
                         <RelativeLayout
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
-                                android:layout_weight=".10"></RelativeLayout>
-
-                        <RelativeLayout
-                                android:layout_width="0dp"
-                                android:layout_height="match_parent"
                                 android:layout_weight=".80">
 
                             <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:orientation="vertical">
-
-                                <RelativeLayout
-                                        android:layout_width="match_parent"
-                                        android:layout_height="0dp"
-                                        android:layout_weight=".05"></RelativeLayout>
 
                                 <RelativeLayout
                                         android:layout_width="match_parent"
@@ -151,17 +141,9 @@
                                             </LinearLayout>
                                 </RelativeLayout>
 
-                                <RelativeLayout
-                                        android:layout_width="match_parent"
-                                        android:layout_height="0dp"
-                                        android:layout_weight=".05"></RelativeLayout>
                             </LinearLayout>
                         </RelativeLayout>
 
-                        <RelativeLayout
-                                android:layout_width="0dp"
-                                android:layout_height="match_parent"
-                                android:layout_weight=".10"></RelativeLayout>
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
             </RelativeLayout>
