@@ -17,8 +17,8 @@ class Backup(val applicationContext : Context, val dirList:MutableSet<String>) {
     fun create(){
         dirList.forEach { dir ->
             val docFile = DocumentFile.fromTreeUri(applicationContext, Uri.parse(dir))
-            if (docFile!!.exists() && docFile!!.isDirectory){
-                encryptDir(docFile!!)
+            if (docFile!!.exists() && docFile.isDirectory){
+                encryptDir(docFile)
             }
         }
         println("Tiempo final: ${Calendar.getInstance().timeInMillis}")

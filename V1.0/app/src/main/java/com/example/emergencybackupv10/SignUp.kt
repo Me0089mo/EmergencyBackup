@@ -1,11 +1,12 @@
 package com.example.emergencybackupv10
 
-import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
+import HttpQ
 import android.os.Bundle
 import android.text.TextUtils
+import android.util.Log
 import android.util.Patterns
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import com.android.volley.RequestQueue
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
@@ -15,16 +16,21 @@ import kotlinx.android.synthetic.main.activity_signup.*
 class SignUp : AppCompatActivity() {
     private lateinit var queue: RequestQueue;
     private lateinit var url: String;
+    private lateinit var pubKey: String;
+    private lateinit var userKeysFiles : ArrayList<String>
     private val alertUtils: AlertUtils = AlertUtils();
+    private lateinit var keyMan:KeyManager;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_signup)
         queue = HttpQ.getInstance(this.applicationContext).requestQueue
         url = getString(R.string.host_url) + getString(R.string.api_register)
+        keyMan = KeyManager(this.applicationContext)
     }
 
     fun signUp(view: View) {
+
         if (!confirmEmail()) {
             alertUtils.topToast(this, "Las direcciones de correo no coinciden")
             return;
@@ -33,16 +39,23 @@ class SignUp : AppCompatActivity() {
             alertUtils.topToast(this, "Las contraseñas no coinciden")
             return;
         }
+        //Generate keys
+        keyMan.generateKeys()
+        pubKey = keyMan.getPubKeyAsString()
+        userKeysFiles = keyMan.getKeysDirectories()
 
         val postRequest: StringRequest = object : StringRequest(
             Method.POST, url,
             Response.Listener { response ->
-//                TODO change to success screen
-                val intent = Intent(this, Login::class.java)
-                startActivity(intent)
+                Log.i("debug response",response.toString())
+//                val intent = Intent(this, RegistrationSuccess::class.java)
+//                intent.putExtra(getString(R.string.ARG_PUB_KEY), userKeysFiles[0])
+//                intent.putExtra(getString(R.string.ARG_PRIV_KEY), userKeysFiles[1])
+//                startActivity(intent)
             },
             Response.ErrorListener { error ->
-                alertUtils.topToast(this, "Hubo un error en el proceso de registro")
+                val msg: String  = HttpQ.getInstance(this).getErrorMsg(error)
+                alertUtils.topToast(this, msg)
             }
         ) {
             override fun getParams(): Map<String, String> {
@@ -50,6 +63,7 @@ class SignUp : AppCompatActivity() {
                 params["email"] = signup_email_input.text.toString()
                 params["password"] = signup_password_input.text.toString()
                 params["name"] = signup_name_input.text.toString()
+                params["pub_key"] = pubKey
                 return params
             }
 

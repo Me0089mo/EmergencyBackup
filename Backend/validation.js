@@ -1,14 +1,12 @@
 const Joi = require("joi");
 
 const registerValidation = (data) => {
-  console.log(data);
   const schema = Joi.object({
     name: Joi.string().min(2).required(),
     email: Joi.string().email().required(),
     pub_key: Joi.string().required(),
     password: Joi.string().min(6).max(255).required(),
   });
-  console.log('Valida:'+schema.validate(data));
   return schema.validate(data);
 };
 

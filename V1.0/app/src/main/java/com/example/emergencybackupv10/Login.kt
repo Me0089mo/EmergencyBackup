@@ -24,20 +24,15 @@ class Login : AppCompatActivity() {
     private lateinit var url: String;
     private val alertUtils: AlertUtils = AlertUtils();
     private lateinit var sharedPreferences:SharedPreferences;
-    private lateinit var userKeysFiles : ArrayList<String>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
-        val assKeyGen = AsymmetricKeyGenerator(this.applicationContext)
-        assKeyGen.generateKeys()
-        assKeyGen.savePublicKey()
-        assKeyGen.savePrivateKey()
-        userKeysFiles = assKeyGen.getKeysDirectories()
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         queue = HttpQ.getInstance(this.applicationContext).requestQueue
         url = getString(R.string.host_url) + getString(R.string.api_login)
         checkForToken();
+
     }
 
     public fun checkForToken(){
@@ -75,8 +70,6 @@ class Login : AppCompatActivity() {
                 //Parse the token as parameter to teh next activity
                 val jwt = JWT(token)
                 val intent = Intent(this, Home::class.java)
-                intent.putExtra(getString(R.string.ARG_PUB_KEY), userKeysFiles[0])
-                intent.putExtra(getString(R.string.ARG_PRIV_KEY), userKeysFiles[1])
                 intent.putExtra(
                     getString(R.string.CONFIG_WAS_LOGED_IN),false
                 )
@@ -117,7 +110,7 @@ class Login : AppCompatActivity() {
         return if (TextUtils.isEmpty(target)) {
             false
         } else {
-            Patterns.EMAIL_ADDRESS.matcher(target).matches()
+            Patterns.EMAIL_ADDRESS.matcher(target!!).matches()
         }
     }
 
