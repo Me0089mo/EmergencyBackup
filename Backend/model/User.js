@@ -23,6 +23,10 @@ const userSchema = new mongoose.Schema(
     hasBackup:{
       type:Boolean,
       require:true
+    },
+    pub_key:{
+      type:String,
+      require:true
     }
   },
   { collection: "Users" }

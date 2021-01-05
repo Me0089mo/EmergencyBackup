@@ -19,6 +19,7 @@ router.post("/register", async (req, res) => {
     name:req.body.name,
     email:req.body.email,
     password:hashed_password,
+    pub_key:req.body.pub_key,
     hasBackup:false
   });
   try {
@@ -44,7 +45,13 @@ router.post("/login", async (req, res) => {
   const passCorrect = await bcrypt.compare(req.body.password,user.password);
   if(!passCorrect) return res.status(401).send('Invalid password');
   
-  const token  = jwt.sign({_id:user._id,name:user.name, hasBackup:user.hasBackup},process.env.PRIVATE_KEY)
+  const token  = jwt.sign({
+    _id:user._id,
+    name:user.name,
+    user_pub_key:user.pub_key,
+    server_pub_key:env.PUBLIC_KEY,
+    hasBackup:user.hasBackup
+  },process.env.PRIVATE_KEY)
   return res.header('auth-token',token).send(token);
 });
 
