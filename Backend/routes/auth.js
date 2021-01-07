@@ -15,7 +15,7 @@ router.post("/register", async (req, res) => {
   const salt = await bcrypt.genSalt(10);
   const hashed_password = await bcrypt.hash(req.body.password,salt);
   //Creating user
-  const user = new User({
+  const new_user = new User({
     name:req.body.name,
     email:req.body.email,
     password:hashed_password,
@@ -23,7 +23,7 @@ router.post("/register", async (req, res) => {
     hasBackup:false
   });
   try {
-    await user.save();
+    await new_user.save();
   } catch (err) {
     return res.status(500).send(err);
   }
@@ -32,7 +32,7 @@ router.post("/register", async (req, res) => {
       _id:user._id,
       name:user.name,
       user_pub_key:user.pub_key,
-      server_pub_key:env.PUBLIC_KEY,
+      server_pub_key:process.env.PUBLIC_KEY,
       hasBackup:user.hasBackup
     },process.env.PRIVATE_KEY)
   return res.header('auth-token',token).send(token);
@@ -56,7 +56,7 @@ router.post("/login", async (req, res) => {
     _id:user._id,
     name:user.name,
     user_pub_key:user.pub_key,
-    server_pub_key:env.PUBLIC_KEY,
+    server_pub_key:process.env.PUBLIC_KEY,
     hasBackup:user.hasBackup
   },process.env.PRIVATE_KEY)
   return res.header('auth-token',token).send(token);
