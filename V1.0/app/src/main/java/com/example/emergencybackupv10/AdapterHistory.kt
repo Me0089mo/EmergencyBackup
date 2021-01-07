@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.cards_list.view.*
 
 class AdapterHistory() : RecyclerView.Adapter<AdapterHistory.ViewHolderHistory>() {
-    val ListaElementos = ArrayList<UserActivity>()
+    val ListaElementos = ArrayList<String>()/*ArrayList<UserActivity>()*/
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderHistory {
         val view:View = LayoutInflater.from(parent.context).inflate(R.layout.cards_list, null, false)
@@ -31,10 +31,10 @@ class AdapterHistory() : RecyclerView.Adapter<AdapterHistory.ViewHolderHistory>(
         val tiempo:TextView = itemView.findViewById(R.id.txtTiempo)
         val detalles:TextView = itemView.findViewById(R.id.txtDetalles)
 
-        fun asignarDatos(elemento:UserActivity){
-            descripcion.text = elemento.descripcion
+        fun asignarDatos(elemento:String/*UserActivity*/){
+            /*descripcion.text = elemento.descripcion
             tiempo.text = elemento.tiempo
-            detalles.text = elemento.detalles
+            detalles.text = elemento.detalles*/
         }
     }
 }

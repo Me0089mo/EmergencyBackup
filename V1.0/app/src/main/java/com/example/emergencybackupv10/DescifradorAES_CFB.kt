@@ -20,9 +20,10 @@ import javax.crypto.spec.SecretKeySpec
     Tag size = 32 bytes
     128+32 = 160
  */
-class DescifradorAES_CFB(val contentContext : Context, val pubkDirectory: String, val pkDirectory: String) {
+class DescifradorAES_CFB(val contentContext : Context, val pkDirectory: String) {
     private val cipher:Cipher = Cipher.getInstance("AES/CFB/PKCS5PADDING")
     private val keyCipher = Cipher.getInstance("RSA/ECB/OAEPPADDING")
+    private val keyManager = KeyManager(contentContext)
     private lateinit var cipheredFile : File
     private lateinit var cipheredOutput : CipherOutputStream
     private lateinit var fileOutStream : FileOutputStream
@@ -30,8 +31,12 @@ class DescifradorAES_CFB(val contentContext : Context, val pubkDirectory: String
     private lateinit var inflaterOutStream : InflaterOutputStream
     private lateinit var mac : HMAC
     private lateinit var macTag : ByteArray
-    private lateinit var userPrivateKey : PrivateKey
+    private var userPrivateKey : PrivateKey
     private lateinit var key : SecretKey
+
+    init {
+        userPrivateKey = keyManager.recoverPrivateKey(pkDirectory)
+    }
 
     fun decipherFile(path : String, decipheredDataPath : String, fileName : String){
         createDestinationFile(decipheredDataPath, fileName)

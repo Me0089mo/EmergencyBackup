@@ -133,7 +133,7 @@ class Home : AppCompatActivity() {
     }
 
     public fun decipherData(v: View){
-        val decipher = DescifradorAES_CFB(this, publicKeyFile!!, privateKeyFile!!)
+        val decipher = DescifradorAES_CFB(this, privateKeyFile!!)
         decipher.recoverKeys()
         val cipheredFiles = File(cipheredDataPath!!)
         readDirectory(cipheredFiles, decipheredDataPath!!, decipher)

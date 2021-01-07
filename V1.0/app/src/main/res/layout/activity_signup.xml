@@ -111,7 +111,7 @@
                                                 <EditText
                                                         android:layout_marginTop="20dp"
                                                         android:id="@+id/signup_password_input"
-                                                        android:inputType="textEmailAddress"
+                                                        android:inputType="textPassword"
                                                         android:layout_height="wrap_content"
                                                         android:layout_width="match_parent"
                                                         android:hint="Introduce tu contraseña" />
@@ -124,7 +124,7 @@
                                                 <EditText
                                                         android:layout_marginTop="20dp"
                                                         android:id="@+id/signup_password_confirm"
-                                                        android:inputType="textEmailAddress"
+                                                        android:inputType="textPassword"
                                                         android:layout_height="wrap_content"
                                                         android:layout_width="match_parent"
                                                         android:hint="Vuelve a introducir tu contraseña" />

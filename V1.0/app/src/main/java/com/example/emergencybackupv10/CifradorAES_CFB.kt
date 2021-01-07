@@ -14,7 +14,6 @@ class CifradorAES_CFB(val applicationContext: Context) {
     private val cipher:Cipher = Cipher.getInstance("AES/CFB/PKCS5PADDING")
     private val keyGenerator = KeyGenerator.getInstance("AES")
     private val keyCipher = Cipher.getInstance("RSA/ECB/OAEPPADDING")
-    private lateinit var cipheredFile : File
     private lateinit var cipheredOutput : CipherOutputStream
     private lateinit var fileOutStream : FileOutputStream
     private lateinit var byteOutStream : ByteArrayOutputStream
@@ -30,7 +29,7 @@ class CifradorAES_CFB(val applicationContext: Context) {
             val inputStream = BufferedInputStream(reader)
             val byteOutReadStream = ByteArrayOutputStream()
             val zipOutStream = ZipOutputStream(byteOutReadStream)
-            val zipEntry = ZipEntry(fileName)//path.path)
+            val zipEntry = ZipEntry(fileName)
             zipOutStream.putNextEntry(zipEntry)
             val readingArray = ByteArray(1024)
             var readLong:Int
@@ -106,7 +105,7 @@ class CifradorAES_CFB(val applicationContext: Context) {
     }
 
     private fun createDestinationFile(path : String, fileName : String){
-        cipheredFile = File("$path/$fileName")
+        val cipheredFile = File("$path/$fileName")
         fileOutStream = FileOutputStream(cipheredFile)
         fileOutStream.channel.position(160)
         byteOutStream = ByteArrayOutputStream()

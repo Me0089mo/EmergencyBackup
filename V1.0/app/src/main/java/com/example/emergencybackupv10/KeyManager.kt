@@ -5,6 +5,8 @@ import android.os.Environment
 import android.util.Base64
 import java.io.File
 import java.security.*
+import java.security.spec.PKCS8EncodedKeySpec
+import java.security.spec.X509EncodedKeySpec
 
 class KeyManager(val context : Context) {
     private var public : PublicKey? = null
@@ -42,5 +44,24 @@ class KeyManager(val context : Context) {
         directories.add(publicDirectory)
         directories.add(privateDirectory)
         return directories
+    }
+
+    fun recoverPublicKeys(): ArrayList<PublicKey>{
+        var keys = ArrayList<PublicKey>()
+        val keyFac = KeyFactory.getInstance("RSA")
+        val user = File(context.filesDir, "userPubKey.pk").readBytes()
+        val pubKeyU = X509EncodedKeySpec(user)
+        keys.add(keyFac.generatePublic(pubKeyU))
+        val server = File(context.filesDir, "userPubKey.pk").readBytes()
+        val pubKeyS = X509EncodedKeySpec(server)
+        keys.add(keyFac.generatePublic(pubKeyS))
+        return keys
+    }
+
+    fun recoverPrivateKey(location: String): PrivateKey{
+        val keyFac = KeyFactory.getInstance("RSA")
+        val user = File(location).readBytes()
+        val privKeyU = PKCS8EncodedKeySpec(user)
+        return keyFac.generatePrivate(privKeyU)
     }
 }
