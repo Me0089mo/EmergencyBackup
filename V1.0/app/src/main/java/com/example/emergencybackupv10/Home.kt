@@ -67,7 +67,12 @@ class Home : AppCompatActivity() {
     }
 
     private fun getDataFromServer(){
-        val t = sharedPreferences.getString(getString(R.string.CONFIG_TOKEN),null)!!
+        val t = sharedPreferences.getString(getString(R.string.CONFIG_TOKEN),null)
+        if (t==null){
+            logOut();
+            return;
+        }
+        Log.i("debug",t.toString())
         val jwt = JWT(t)
         username = jwt.getClaim(getString(R.string.ARG_NAME)).asString()
         id = jwt.getClaim(getString(R.string.ARG_ID)).asString()
@@ -173,4 +178,14 @@ class Home : AppCompatActivity() {
         val intent = Intent(this, Login::class.java)
         startActivity(intent)
     }
+
+    private fun logOut(){
+        with (sharedPreferences.edit()) {
+            remove(getString(com.example.emergencybackupv10.R.string.CONFIG_TOKEN))
+            apply()
+        }
+        val intent = Intent(this, Login::class.java)
+        startActivity(intent)
+    }
+}
 }
