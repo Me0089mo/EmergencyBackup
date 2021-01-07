@@ -1,4 +1,4 @@
-package com.example.emergencybackupv10
+package com.example.emergencybackupv10.utils
 
 import android.content.Context
 import android.view.Gravity

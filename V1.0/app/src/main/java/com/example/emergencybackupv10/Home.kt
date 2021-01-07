@@ -1,5 +1,5 @@
 package com.example.emergencybackupv10
-
+import Upload
 import android.app.Activity
 import android.content.Intent
 import android.content.SharedPreferences
@@ -17,8 +17,14 @@ import com.auth0.android.jwt.JWT
 import com.example.emergencybackupv10.fragments.HomeFragment
 import com.example.emergencybackupv10.fragments.RestoreFragment
 import com.example.emergencybackupv10.fragments.SettingsFragment
+import com.example.emergencybackupv10.networking.Customresponse
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.fragment_settings.*
+import okhttp3.MediaType
+import okhttp3.RequestBody
+import retrofit2.Call
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import java.io.File
 
 
@@ -136,6 +142,51 @@ class Home : AppCompatActivity() {
         val createBackup = Backup(this, getDirList())
         createBackup.create()
     }
+
+    public fun uploadBackup(v: View){
+        val cipherDataFile = File(applicationContext.filesDir.absolutePath, "CipheredData")
+        Log.i("debug files=", cipherDataFile.absolutePath)
+        cipherDataFile.listFiles().forEach { file ->
+            uploadFile(file)
+        }
+        Log.i("debug files=", "done!")
+    }
+
+    public fun uploadFile(file: File){
+        Log.i("debug upload", "uploading ${file.name}")
+        val fbody =  RequestBody.create(
+                MediaType.parse("image/*"),
+                file
+        )
+
+        val name: RequestBody = RequestBody.create(
+                MediaType.parse("text/plain"),
+                file.name
+        )
+
+        val id: RequestBody = RequestBody.create(
+                MediaType.parse("text/plain"),
+                "supposedly an ID"
+        )
+
+        val url = getString(R.string.host_url)
+
+        Log.i("debug url",url)
+        val retrofit = Retrofit.Builder()
+                .baseUrl(url)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+
+        var service: Upload = retrofit.create(Upload::class.java)
+
+        val call: Call<Customresponse> = service.upload(
+                sharedPreferences.getString(getString(R.string.CONFIG_TOKEN), null)!!,
+                fbody,
+                name,
+                id
+        )
+    }
+
 
     public fun decipherData(v: View){
         val decipher = DescifradorAES_CFB(this, privateKeyFile!!)

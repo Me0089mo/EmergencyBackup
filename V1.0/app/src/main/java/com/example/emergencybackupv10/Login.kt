@@ -4,10 +4,8 @@ import HttpQ
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
-//import android.preference.PreferenceManager
 import androidx.preference.PreferenceManager
 import android.text.TextUtils
-import android.util.Log
 import android.util.Patterns
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -15,8 +13,8 @@ import com.android.volley.RequestQueue
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import com.auth0.android.jwt.JWT
+import com.example.emergencybackupv10.utils.AlertUtils
 import kotlinx.android.synthetic.main.activity_login.*
-import kotlin.reflect.typeOf
 
 
 class Login : AppCompatActivity() {
@@ -51,12 +49,12 @@ class Login : AppCompatActivity() {
         startActivity(intent)
     }
 
-    public fun logIn(view: View) {
-
-        /*if (!isValidEmail(login_email.text.toString())) {
+    public fun logIn( view: View) {
+        if (!isValidEmail(login_email.text.toString())) {
             alertUtils.topToast(this, "Dirección de correo invalida")
             return
         }
+
         val postRequest: StringRequest = object : StringRequest(
             Method.POST, url,
             Response.Listener { response ->
@@ -68,9 +66,9 @@ class Login : AppCompatActivity() {
                 }
 
                 //Parse the token as parameter to teh next activity
-                val jwt = JWT(token)*/
+                val jwt = JWT(token)
                 val intent = Intent(this, Home::class.java)
-                /*intent.putExtra(
+                intent.putExtra(
                     getString(R.string.CONFIG_WAS_LOGED_IN),false
                 )
 
@@ -87,9 +85,9 @@ class Login : AppCompatActivity() {
                 intent.putExtra(
                     getString(R.string.ARG_ID),
                     jwt.getClaim(getString(R.string.ARG_ID)).asString()
-                )*/
+                )
                 startActivity(intent);
-            /*},
+            },
             Response.ErrorListener { error ->
                 val msg: String  = HttpQ.getInstance(this).getErrorMsg(error)
                 alertUtils.topToast(this, msg)
@@ -103,7 +101,7 @@ class Login : AppCompatActivity() {
             }
 
         }
-        HttpQ.getInstance(this).addToRequestQueue(postRequest)*/
+        HttpQ.getInstance(this).addToRequestQueue(postRequest)
     }
 
     fun isValidEmail(target: CharSequence?): Boolean {

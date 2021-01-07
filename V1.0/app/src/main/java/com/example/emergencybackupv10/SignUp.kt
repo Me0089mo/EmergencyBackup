@@ -5,7 +5,6 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.TextUtils
-import android.util.Log
 import android.util.Patterns
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -13,8 +12,7 @@ import androidx.preference.PreferenceManager
 import com.android.volley.RequestQueue
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
-import com.auth0.android.jwt.JWT
-import kotlinx.android.synthetic.main.activity_login.*
+import com.example.emergencybackupv10.utils.AlertUtils
 import kotlinx.android.synthetic.main.activity_signup.*
 
 
