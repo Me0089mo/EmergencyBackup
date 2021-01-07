@@ -1,156 +1,100 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:baselineAligned="false"
+    android:orientation="horizontal">
+
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/background"
-        android:baselineAligned="false" android:orientation="horizontal">
+        android:gravity="center"
+        android:orientation="vertical">
 
-    <RelativeLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight=".70">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="¿Cómo deberiamos llamarte?" />
 
-        <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+        <EditText
+            android:id="@+id/signup_name_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:hint="Nombre de usuario"
+            android:inputType="textEmailAddress" />
 
-            <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight=".70">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="¿Cuál es tu correo electrónico?" />
 
-                <androidx.cardview.widget.CardView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        app:cardCornerRadius="10dp">
-
-                    <FrameLayout
-                            android:id="@+id/fl_fragment"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent" />
-
-                    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                            xmlns:app="http://schemas.android.com/apk/res-auto"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:background="@color/background"
-                            android:baselineAligned="false" android:orientation="horizontal">
-
-                        <RelativeLayout
-                                android:layout_width="0dp"
-                                android:layout_height="match_parent"
-                                android:layout_weight=".80">
-
-                            <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:orientation="vertical">
-
-                                <RelativeLayout
-                                        android:layout_width="match_parent"
-                                        android:layout_height="0dp"
-                                        android:layout_weight=".70">
-
-                                            <LinearLayout
-                                                    android:layout_height="match_parent"
-                                                    android:layout_width="match_parent"
-                                                    android:orientation="vertical"
-                                                    android:gravity="center">
-
-                                                <TextView
-                                                        android:layout_height="wrap_content"
-                                                        android:layout_width="match_parent"
-                                                        android:text="¿Cómo deberiamos llamarte?" />
-
-                                                <EditText
-                                                        android:layout_marginTop="20dp"
-                                                        android:id="@+id/signup_name_input"
-                                                        android:inputType="textEmailAddress"
-                                                        android:layout_height="wrap_content"
-                                                        android:layout_width="match_parent"
-                                                        android:hint="Nombre de usuario" />
-
-                                                <TextView
-                                                        android:layout_marginTop="20dp"
-                                                        android:layout_height="wrap_content"
-                                                        android:layout_width="match_parent"
-                                                        android:text="¿Cuál es tu correo electrónico?" />
+        <EditText
+            android:id="@+id/signup_email_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:hint="Introduce tu correo electrónico"
+            android:inputType="textEmailAddress" />
 
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Confirma el correo electrónico" />
 
-                                                <EditText
-                                                        android:layout_marginTop="20dp"
-                                                        android:id="@+id/signup_email_input"
-                                                        android:inputType="textEmailAddress"
-                                                        android:layout_height="wrap_content"
-                                                        android:layout_width="match_parent"
-                                                        android:hint="Introduce tu correo electrónico" />
+        <EditText
+            android:id="@+id/signup_email_confirm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:hint="Vuelve a introducir tu correo electrónico"
+            android:inputType="textEmailAddress" />
 
-                                                <TextView
-                                                        android:layout_marginTop="20dp"
-                                                        android:layout_height="wrap_content"
-                                                        android:layout_width="match_parent"
-                                                        android:text="Confirma el correo electrónico" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Crea una contraseña" />
 
-                                                <EditText
-                                                        android:layout_marginTop="20dp"
-                                                        android:id="@+id/signup_email_confirm"
-                                                        android:inputType="textEmailAddress"
-                                                        android:layout_height="wrap_content"
-                                                        android:layout_width="match_parent"
-                                                        android:hint="Vuelve a introducir tu correo electrónico" />
+        <EditText
+            android:id="@+id/signup_password_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:hint="Introduce tu contraseña"
+            android:inputType="textEmailAddress" />
 
-                                                <TextView
-                                                        android:layout_marginTop="20dp"
-                                                        android:layout_height="wrap_content"
-                                                        android:layout_width="match_parent"
-                                                        android:text="Crea una contraseña" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Confirma tu contraseña" />
 
-                                                <EditText
-                                                        android:layout_marginTop="20dp"
-                                                        android:id="@+id/signup_password_input"
-                                                        android:inputType="textEmailAddress"
-                                                        android:layout_height="wrap_content"
-                                                        android:layout_width="match_parent"
-                                                        android:hint="Introduce tu contraseña" />
-                                                <TextView
-                                                        android:layout_marginTop="20dp"
-                                                        android:layout_height="wrap_content"
-                                                        android:layout_width="match_parent"
-                                                        android:text="Confirma tu contraseña" />
+        <EditText
+            android:id="@+id/signup_password_confirm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:hint="Vuelve a introducir tu contraseña"
+            android:inputType="textEmailAddress" />
 
-                                                <EditText
-                                                        android:layout_marginTop="20dp"
-                                                        android:id="@+id/signup_password_confirm"
-                                                        android:inputType="textEmailAddress"
-                                                        android:layout_height="wrap_content"
-                                                        android:layout_width="match_parent"
-                                                        android:hint="Vuelve a introducir tu contraseña" />
 
-                                                <Button
-                                                        android:layout_marginTop="20dp"
-                                                        android:id="@+id/signup_complete_bttn"
-                                                        android:layout_width="match_parent"
-                                                        android:textColor="@color/button_font"
-                                                        android:layout_height="wrap_content"
-                                                        android:text="@string/signup"
-                                                        android:background="@drawable/custom_button"
-                                                        android:onClick="signUp"/>
-                                            </LinearLayout>
-                                </RelativeLayout>
-
-                            </LinearLayout>
-                        </RelativeLayout>
-
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
-            </RelativeLayout>
-
-        </LinearLayout>
-    </RelativeLayout>
-
+        <Button
+            android:id="@+id/signup_complete_bttn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/custom_button"
+            android:onClick="signUp"
+            android:text="@string/signup"
+            android:textColor="@color/button_font" />
+    </LinearLayout>
 </LinearLayout>
 
 

@@ -1,15 +1,20 @@
 package com.example.emergencybackupv10
 
 import HttpQ
+import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
 import android.util.Patterns
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.preference.PreferenceManager
 import com.android.volley.RequestQueue
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
+import com.auth0.android.jwt.JWT
+import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.activity_signup.*
 
 
@@ -20,10 +25,12 @@ class SignUp : AppCompatActivity() {
     private lateinit var userKeysFiles : ArrayList<String>
     private val alertUtils: AlertUtils = AlertUtils();
     private lateinit var keyMan:KeyManager;
+    private lateinit var sharedPreferences:SharedPreferences;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_signup)
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         queue = HttpQ.getInstance(this.applicationContext).requestQueue
         url = getString(R.string.host_url) + getString(R.string.api_register)
         keyMan = KeyManager(this.applicationContext)
@@ -47,11 +54,14 @@ class SignUp : AppCompatActivity() {
         val postRequest: StringRequest = object : StringRequest(
             Method.POST, url,
             Response.Listener { response ->
-                Log.i("debug response",response.toString())
-//                val intent = Intent(this, RegistrationSuccess::class.java)
-//                intent.putExtra(getString(R.string.ARG_PUB_KEY), userKeysFiles[0])
-//                intent.putExtra(getString(R.string.ARG_PRIV_KEY), userKeysFiles[1])
-//                startActivity(intent)
+                var token = response.toString()
+                //Save the token to local storage
+                with (sharedPreferences.edit()) {
+                    putString(getString(R.string.CONFIG_TOKEN), token)
+                    apply()
+                }
+                val intent = Intent(this, RegistrationSuccess::class.java)
+                startActivity(intent);
             },
             Response.ErrorListener { error ->
                 val msg: String  = HttpQ.getInstance(this).getErrorMsg(error)
@@ -89,6 +99,4 @@ class SignUp : AppCompatActivity() {
             Patterns.EMAIL_ADDRESS.matcher(target).matches()
         }
     }
-
-
 }

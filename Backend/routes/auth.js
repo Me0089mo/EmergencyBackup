@@ -23,15 +23,21 @@ router.post("/register", async (req, res) => {
     hasBackup:false
   });
   try {
-    const savedUser =  await user.save();
-    res.send('Success on register');
+    const user =  await user.save();
+    const token  = jwt.sign({
+      _id:user._id,
+      name:user.name,
+      user_pub_key:user.pub_key,
+      server_pub_key:env.PUBLIC_KEY,
+      hasBackup:user.hasBackup
+    },process.env.PRIVATE_KEY)
+    return res.header('auth-token',token).send(token);
   } catch (err) {
     res.status(500).send(err);
   }
 });
 
 // For login request we should use POST method. Because our login data is secure which needs security. When use POST method the data is sent to server in a bundle. But in GET method data is sent to the server followed by the url like append with url request which will be seen to everyone.
-
 // So For secure authentication and authorization process we should use POST method.
 router.post("/login", async (req, res) => {
   //Data Validation

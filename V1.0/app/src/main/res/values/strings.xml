@@ -3,6 +3,7 @@
     <string name="email">E-mail</string>
     <string name="contraseña">Contraseña</string>
     <string name="siguiente">Siguiente</string>
+    <string name="importante">IMPORTANTE</string>
     <string name="celular">Celular</string>
     <string name="necessaryData">Los siguientes datos son necesarios para garantizar la seguridad de tu información
     </string>
@@ -10,11 +11,15 @@
     <string name="sqInfo">Selecciona una de las siguientes. No olvides tu respuesta, en caso de ser necesario se
         te pedirá que la ingreses exactamente como lo hayas escrito la primera vez.
     </string>
-    <string name="dir_isnt_set"></string>
-    <string name="dir_is_set"></string>
+
+    <string name="key_generated">Se ha generado una llave con la cual podrás descifrar tus archivos al momento de reestablecer un respaldo.
+
+Guárdala en un lugar seguro que no sea en tu teléfono y no la pierdas. Sin ella no podrás recuperar la información respaldada.
+    </string>
     <string name="login">Iniciar sesión</string>
     <string name="arg_backuponcloud">backuponclound</string>
     <string name="signup">Registrarse</string>
+    <string name="entendido">Entendido</string>
     <string name="title_activity_home">Home</string>
     <string name="title_inicio">Inicio</string>
     <string name="title_ajustes">Ajustes</string>
