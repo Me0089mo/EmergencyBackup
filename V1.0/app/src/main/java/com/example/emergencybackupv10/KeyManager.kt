@@ -21,7 +21,7 @@ class KeyManager(val context : Context) {
         //Save public key///////////////////////////////////////////////////////////////////////////
         val pubFile = File(context.filesDir, "userPubKey.pk")
         publicDirectory = pubFile.absolutePath
-        pubFile.writeBytes(keys.public.encoded)
+            pubFile.writeBytes(keys.public.encoded)
         //Save private key//////////////////////////////////////////////////////////////////////////
         var parentFile : File?
         if(Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED)
