@@ -49,11 +49,11 @@ class AEScfbCipher(val applicationContext: Context) : CipherFactory(){
                 if(dataRead == -1) break
                 compressedData = compressor.compressData(readingArray)
                 if(compressedData.isNotEmpty()) {
-                        if(band == 1){
+                        /*if(band == 1){
                         compressedData.forEach { b -> print("$b ") }
                         print("\n")
                         band = 0
-                    }
+                    }*/
                     processData(compressedData)
                 }
             }while(dataRead >= 0)
