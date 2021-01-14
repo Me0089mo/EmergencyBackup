@@ -29,5 +29,5 @@ console.log('File being uploaded from:'+userID)
 
 //console.log(req.file.buffer.toString("utf-8", 0, 32))
 //console.log(req.file.buffer.toString("utf-8",0,33))
-}
+});
 module.exports = router
