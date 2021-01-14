@@ -1,31 +1,35 @@
 package com.example.emergencybackupv10
+
 import Upload
 import android.app.Activity
 import android.content.Intent
 import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
-import android.provider.DocumentsContract
+import android.os.FileUtils
 import androidx.preference.PreferenceManager
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.net.toUri
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.NavHostFragment
 import com.auth0.android.jwt.JWT
 import com.example.emergencybackupv10.fragments.HomeFragment
 import com.example.emergencybackupv10.fragments.RestoreFragment
 import com.example.emergencybackupv10.fragments.SettingsFragment
-import com.example.emergencybackupv10.networking.Customresponse
+import com.example.emergencybackupv10.networking.UploadResponse
 import kotlinx.android.synthetic.main.activity_home.*
-import kotlinx.android.synthetic.main.fragment_settings.*
 import okhttp3.MediaType
+import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.File
+import java.net.URI
 
 
 class Home : AppCompatActivity() {
@@ -35,20 +39,22 @@ class Home : AppCompatActivity() {
     private val homeFragment = HomeFragment()
     private val restoreFragment = RestoreFragment()
     private val settingsFragment = SettingsFragment()
-    private lateinit var sharedPreferences:SharedPreferences;
-    private var publicKeyFile : String? = ""
-    private var privateKeyFile : String? = ""
+    private lateinit var sharedPreferences: SharedPreferences;
+    private var publicKeyFile: String? = ""
+    private var privateKeyFile: String? = ""
     private var cipheredDataPath: String? = null
-    private var decipheredDataPath : String? = null
+    private var decipheredDataPath: String? = null
+    private lateinit var  url:String;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
-        val wasLogedIn =intent.getBooleanExtra(getString(R.string.CONFIG_WAS_LOGED_IN), false)
-        if(wasLogedIn){
+        url = getString(R.string.host_url)
+        val wasLogedIn = intent.getBooleanExtra(getString(R.string.CONFIG_WAS_LOGED_IN), false)
+        if (wasLogedIn) {
             getDataFromServer()
-        }else{
+        } else {
             getDataFromIntent()
         }
 
@@ -64,7 +70,7 @@ class Home : AppCompatActivity() {
         }
     }
 
-    private fun getDataFromIntent(){
+    private fun getDataFromIntent() {
         backUpOnCloud = intent.getBooleanExtra(getString(R.string.ARG_BU_AVAILABLE), false)
         username = intent.getStringExtra(getString(R.string.ARG_NAME))
         id = intent.getStringExtra(getString(R.string.ARG_ID))
@@ -72,13 +78,13 @@ class Home : AppCompatActivity() {
         privateKeyFile = intent.getStringExtra(getString(R.string.ARG_PRIV_KEY))
     }
 
-    private fun getDataFromServer(){
-        val t = sharedPreferences.getString(getString(R.string.CONFIG_TOKEN),null)
-        if (t==null){
+    private fun getDataFromServer() {
+        val t = sharedPreferences.getString(getString(R.string.CONFIG_TOKEN), null)
+        if (t == null) {
             logOut();
             return;
         }
-        Log.i("debug",t.toString())
+        Log.i("debug", t.toString())
         val jwt = JWT(t)
         username = jwt.getClaim(getString(R.string.ARG_NAME)).asString()
         id = jwt.getClaim(getString(R.string.ARG_ID)).asString()
@@ -87,11 +93,11 @@ class Home : AppCompatActivity() {
 
     private fun changeFragment(fragment: Fragment) {
         fragment.arguments = bundleOf(
-            R.string.ARG_BU_AVAILABLE.toString() to backUpOnCloud,
-            R.string.ARG_NAME.toString() to username,
-            R.string.ARG_ID.toString() to id,
-            getString(R.string.ARG_PUB_KEY) to publicKeyFile,
-            getString(R.string.ARG_PRIV_KEY) to privateKeyFile
+                R.string.ARG_BU_AVAILABLE.toString() to backUpOnCloud,
+                R.string.ARG_NAME.toString() to username,
+                R.string.ARG_ID.toString() to id,
+                getString(R.string.ARG_PUB_KEY) to publicKeyFile,
+                getString(R.string.ARG_PRIV_KEY) to privateKeyFile
         )
 
         supportFragmentManager.beginTransaction().apply {
@@ -108,27 +114,27 @@ class Home : AppCompatActivity() {
         backUpOnCloud = false
     }
 
-    private  fun getDirList():MutableSet<String>{
-        var dirList = sharedPreferences.getStringSet(getString(R.string.CONFIG_DIR_SET),null)
-        if (dirList==null) {
+    private fun getDirList(): MutableSet<String> {
+        var dirList = sharedPreferences.getStringSet(getString(R.string.CONFIG_DIR_SET), null)
+        if (dirList == null) {
             dirList = mutableSetOf<String>()
         }
         return dirList;
     }
 
-    private fun saveDirList(dl : MutableSet<String>){
-        with (sharedPreferences.edit()) {
-            putStringSet(getString(R.string.CONFIG_DIR_SET),dl)
+    private fun saveDirList(dl: MutableSet<String>) {
+        with(sharedPreferences.edit()) {
+            putStringSet(getString(R.string.CONFIG_DIR_SET), dl)
             apply()
         }
     }
 
-    public fun pickDir(v:View){
+    public fun pickDir(v: View) {
         val cipherDataDirectory = File(this.filesDir, "CipheredData")
         val decipheredDataDirectory = File(this.filesDir, "DecipheredData")
-        if(decipheredDataDirectory.exists() || cipherDataDirectory.mkdir())
+        if (decipheredDataDirectory.exists() || cipherDataDirectory.mkdir())
             cipheredDataPath = cipherDataDirectory.absolutePath
-        if(decipheredDataDirectory.exists() || decipheredDataDirectory.mkdir())
+        if (decipheredDataDirectory.exists() || decipheredDataDirectory.mkdir())
             decipheredDataPath = decipheredDataDirectory.absolutePath
 
         //Creating document picker
@@ -138,71 +144,82 @@ class Home : AppCompatActivity() {
         startActivityForResult(intent, 42)
     }
 
-    public fun startBackup(v:View){
+    public fun startBackup(v: View) {
         val createBackup = Backup(this, getDirList())
         createBackup.create()
     }
 
-    public fun uploadBackup(v: View){
+    public fun uploadBackup(v: View) {
         val cipherDataFile = File(applicationContext.filesDir.absolutePath, "CipheredData")
-        Log.i("debug files=", cipherDataFile.absolutePath)
         cipherDataFile.listFiles().forEach { file ->
             uploadFile(file)
         }
         Log.i("debug files=", "done!")
     }
 
-    public fun uploadFile(file: File){
+    public fun uploadFile(file:File) {
         Log.i("debug upload", "uploading ${file.name}")
-        val fbody =  RequestBody.create(
-                MediaType.parse("image/*"),
+        val fileURI = Uri.fromFile(file)
+        Log.i("debug upload", "URI: ${fileURI.toString()}")
+
+        val reqFilePart = RequestBody.create(
+                MediaType.parse("file"),
                 file
         )
 
-        val name: RequestBody = RequestBody.create(
-                MediaType.parse("text/plain"),
-                file.name
+        val multipartFile :MultipartBody.Part = MultipartBody.Part.createFormData(
+                "file",
+                file.name,
+                reqFilePart
         )
 
-        val id: RequestBody = RequestBody.create(
-                MediaType.parse("text/plain"),
-                "supposedly an ID"
+        val authPart :RequestBody = RequestBody.create(
+                MultipartBody.FORM,
+                sharedPreferences.getString(getString(R.string.CONFIG_TOKEN), null)!!
         )
 
-        val url = getString(R.string.host_url)
-
-        Log.i("debug url",url)
+//        Create retrofit instance
         val retrofit = Retrofit.Builder()
                 .baseUrl(url)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
 
-        var service: Upload = retrofit.create(Upload::class.java)
+//      Get service and call objectts
 
-        val call: Call<Customresponse> = service.upload(
-                sharedPreferences.getString(getString(R.string.CONFIG_TOKEN), null)!!,
-                fbody,
-                name,
-                id
+        val uploadService : Upload = retrofit.create(Upload::class.java)
+
+        val call: Call<UploadResponse> = uploadService.upload(
+                authPart,
+                multipartFile
         )
+
+        call.enqueue(object : Callback<UploadResponse> {
+            override fun onFailure(call: Call<UploadResponse>?, t: Throwable?) {
+                Log.i("retrofit fail ", "call failed")
+            }
+
+            override fun onResponse(call: Call<UploadResponse>?, response: Response<UploadResponse>?) {
+                Log.i("retrofit response", response.toString())
+            }
+        }
+        );
     }
 
 
-    public fun decipherData(v: View){
+    public fun decipherData(v: View) {
         val decipher = DescifradorAES_CFB(this, privateKeyFile!!)
         decipher.recoverKeys()
         val cipheredFiles = File(cipheredDataPath!!)
         readDirectory(cipheredFiles, decipheredDataPath!!, decipher)
     }
 
-    private fun readDirectory(f: File, decipheredDataPath: String, descifrador: DescifradorAES_CFB){
-        if(f.isDirectory){
+    private fun readDirectory(f: File, decipheredDataPath: String, descifrador: DescifradorAES_CFB) {
+        if (f.isDirectory) {
             f.listFiles()?.forEach { documentFile ->
-                if(documentFile.isDirectory) {
+                if (documentFile.isDirectory) {
                     File(decipheredDataPath, documentFile.name).mkdir()
                     readDirectory(documentFile, "$decipheredDataPath/${documentFile.name}", descifrador)
-                }
-                else descifrador.decipherFile(documentFile.absolutePath, decipheredDataPath, documentFile.name)
+                } else descifrador.decipherFile(documentFile.absolutePath, decipheredDataPath, documentFile.name)
             }
         }
     }
@@ -221,8 +238,8 @@ class Home : AppCompatActivity() {
         }
     }
 
-    fun logOut(v: View){
-        with (sharedPreferences.edit()) {
+    fun logOut(v: View) {
+        with(sharedPreferences.edit()) {
             remove(getString(com.example.emergencybackupv10.R.string.CONFIG_TOKEN))
             apply()
         }
@@ -230,8 +247,8 @@ class Home : AppCompatActivity() {
         startActivity(intent)
     }
 
-    private fun logOut(){
-        with (sharedPreferences.edit()) {
+    private fun logOut() {
+        with(sharedPreferences.edit()) {
             remove(getString(com.example.emergencybackupv10.R.string.CONFIG_TOKEN))
             apply()
         }

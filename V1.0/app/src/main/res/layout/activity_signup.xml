@@ -68,7 +68,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:hint="Introduce tu contraseña"
-            android:inputType="textEmailAddress" />
+            android:inputType="textPassword" />
 
         <TextView
             android:layout_width="match_parent"
@@ -82,7 +82,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:hint="Vuelve a introducir tu contraseña"
-            android:inputType="textEmailAddress" />
+            android:inputType="textPassword" />
 
 
         <Button

@@ -12,7 +12,7 @@ import java.io.File
 import java.util.*
 
 class Backup(val applicationContext : Context, val dirList:MutableSet<String>) {
-    private val cifrador = CifradorAES_CFB(applicationContext)
+    private val cifrador = AEScfbCipher(applicationContext)
 
     fun create(){
         dirList.forEach { dir ->
@@ -30,7 +30,7 @@ class Backup(val applicationContext : Context, val dirList:MutableSet<String>) {
                     File(applicationContext.filesDir, file.name!!).mkdir()
                     encryptDir(file)
                 } else {
-                    cifrador.cipherFile(file.uri, file.name!!)
+                    cifrador.processFile(file.uri, file.name!!)
                 }
             }
     }
