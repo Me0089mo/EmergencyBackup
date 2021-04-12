@@ -45,6 +45,7 @@
       <div style="display: flex; justify-content: center">
         <button
           mat-raised-button
+          disabled="{{fromSmartphone}}"
           (click)="login()"
           class="login_button"
           [style.display]="showSpinner ? 'none' : 'block'"

@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { HostListener } from '@angular/core';
 
 @Component({
   selector: 'app-root',
@@ -14,12 +15,21 @@ export class AppComponent {
   username = 'asdf1234damian@gmail.com';
   password = 'passw0rd';
   showSpinner = false;
-  constructor(public snackBar: MatSnackBar, private http: HttpClient) {}
+  screenSize = [0,0];
+  fromSmartphone = false;
+  constructor(public snackBar: MatSnackBar, private http: HttpClient) {
+    this.getScreenSize();
+    if(this.screenSize[0] < 500){
+      this.fromSmartphone = true;
+      this.openBrowserWarning();
+    }
+  }
 
   handleError() {}
 
   login() {
     this.showSpinner = true;
+
     this.http
       .post(
         environment.host_url + environment.api_login,
@@ -47,12 +57,26 @@ export class AppComponent {
       });
   }
 
+  getScreenSize() {
+    this.screenSize[0] = window.screen.width;
+    this.screenSize[1] = window.screen.height;
+    console.log(this.screenSize);
+  }
+
   openErrorDialog() {
     let snackBarRef = this.snackBar.open(
       'Usuario o contraseña incorrectos',
       'Ok',
       { duration: 3000 }
     );
+  }
+
+  openBrowserWarning(){
+    let snackBarRef2 = this.snackBar.open(
+      'Para restablecer tu respaldo directo del celular debes ingresar a la App móvil o descarga el respaldo desde tu computadora',
+      'OK',
+      {duration: 5000}
+    )
   }
 
   download() {
