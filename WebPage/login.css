@@ -1,0 +1,35 @@
+body{
+    background-color: #ffffff;
+}
+
+button{
+    background-color: #343534;
+    border: 30%;
+    padding: 10px 30px;
+}
+
+#login{
+    background-color: #585A58;
+    margin-left: 35%;
+    margin-right: 35%;
+    margin-top: 10%;
+    margin-bottom: 10%;
+    border: 30px;
+    border-radius: 20px;
+    padding-top: 50px;
+    padding-bottom: 70px;
+    padding-left: 80px;
+    padding-right: 80px;
+}
+
+.labels{
+    color: #000000;
+    font-size: 6mm;
+}
+
+.user-icon{
+    padding-left: 100px;
+    border-left: 100px;
+    margin-left: 100px;
+    align-items: center;
+}

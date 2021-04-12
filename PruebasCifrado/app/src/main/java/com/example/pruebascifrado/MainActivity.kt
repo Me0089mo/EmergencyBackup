@@ -45,17 +45,17 @@ class MainActivity : AppCompatActivity() {
                         File(cipheredDataPath, "AES CBC").mkdir()
                         val aescbc = AES128_CBC(applicationContext)
                         readCipherDirectory(f, "$cipheredDataPath/AES CBC", aescbc)
-                        Log.d("Ended AES_CBC free storage: ", "${applicationContext.filesDir.freeSpace}")
+                        Log.d("Ended AES_CBC free storage: ", "${applicationContext.filesDir.freeSpace}")*/
                         Log.d("Started AES_CTR free storage: ", "${applicationContext.filesDir.freeSpace}")
                         File(cipheredDataPath, "AES CTR").mkdir()
                         var aesctr = AES128_CTR(applicationContext)
                         readCipherDirectory(f, "$cipheredDataPath/AES CTR", aesctr)
-                        Log.d("Ended AES_CTR free storage: ", "${applicationContext.filesDir.freeSpace}")*/
-                        Log.d("Started AES_GCM free storage: ", "${applicationContext.filesDir.freeSpace}")
+                        Log.d("Ended AES_CTR free storage: ", "${applicationContext.filesDir.freeSpace}")
+                        /*Log.d("Started AES_GCM free storage: ", "${applicationContext.filesDir.freeSpace}")
                         File(cipheredDataPath, "AES GCM").mkdir()
                         var aesgcm = AES128_GCM(applicationContext)
                         readCipherDirectory(f, "$cipheredDataPath/AES GCM", aesgcm)
-                        Log.d("Ended AES_GCM free storage: ", "${applicationContext.filesDir.freeSpace}")
+                        Log.d("Ended AES_GCM free storage: ", "${applicationContext.filesDir.freeSpace}")*/
                     }
                 }
             }
