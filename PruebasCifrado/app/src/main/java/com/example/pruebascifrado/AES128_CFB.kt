@@ -13,7 +13,7 @@ import javax.crypto.CipherOutputStream
 import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
 
-class AES128_GCM(override val contentContext: Context):Cifrador {
+class AES128_CFB(override val contentContext: Context):Cifrador {
 
     override val cipher:Cipher = Cipher.getInstance("AES/CFB/PKCS5PADDING")
     override val keyGenerator = KeyGenerator.getInstance("AES")
