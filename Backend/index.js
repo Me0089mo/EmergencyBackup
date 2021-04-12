@@ -5,6 +5,8 @@ const fs = require('fs')
 const path = require('path')
 const cors = require("cors");
 const morgan = require('morgan')
+//Enable CORS
+app.use(cors())
 
 //Logs
 const accesLogStream = fs.createWriteStream(path.join(__dirname,'access.log'),{flags:'a'})
@@ -29,12 +31,14 @@ db.once("open", function() {
 
 //Import routes 
 const authRoute = require('./routes/auth');
+const downloadsRoute = require('./routes/download');
+const uploadsRoute = require('./routes/uploads');
 const { required } = require("joi");
 //Middleware
 app.use(express.json());
 //Route middleware
 app.use('/api/users',authRoute);
-
+app.use('/api/upload',uploadsRoute);
 
 const port = process.env.PORT || 5000;
 app.listen(port, () => {
