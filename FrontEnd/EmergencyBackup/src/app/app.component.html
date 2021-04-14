@@ -1,4 +1,19 @@
-<div class="main_div">
+<div class="top-pane">
+  <p id="header">Recupera tus archivos generados recientemente</p>
+  <br><br>
+  <p id="title">Emergency Backup</p>
+  <br><br>
+  <p id="info">¡No pierdas tu información! Con esta aplicación podrás realizar un respaldo de emergencia de los últimos archivos generado en tu celular.</p>
+</div>
+<div id="login" style="display: flex; justify-content: center">
+  <button
+    mat-raised-button
+    (click)="showLogin()"
+  >
+    Ingresar
+  </button>
+</div>
+<div *ngIf="loginCardVisible">
   <mat-card class="login_card">
     <div style="display: flex; justify-content: center">
       <img src="../assets/person.svg" stype />

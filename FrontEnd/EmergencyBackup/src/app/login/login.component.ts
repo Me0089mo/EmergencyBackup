@@ -2,14 +2,13 @@ import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { MatSnackBar } from '@angular/material/snack-bar';
-//import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss'],
+  selector: 'app-login',
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.scss'],
 })
-export class AppComponent {
+export class LoginComponent {
   private user_token: any = null;
   title = 'EmergencyBackup';
   username = 'asdf1234damian@gmail.com';
@@ -17,7 +16,6 @@ export class AppComponent {
   showSpinner = false;
   screenSize = [0,0];
   fromSmartphone = false;
-  loginCardVisible = false;
   constructor(public snackBar: MatSnackBar, private http: HttpClient) {
     this.getScreenSize();
     if(this.screenSize[0] < 500){
@@ -27,10 +25,6 @@ export class AppComponent {
   }
 
   handleError() {}
-
-  showLogin(){
-    this.loginCardVisible = true;
-  }
 
   login() {
     this.showSpinner = true;
