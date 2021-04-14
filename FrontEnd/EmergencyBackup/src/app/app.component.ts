@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { MatSnackBar } from '@angular/material/snack-bar';
-//import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-root',
@@ -16,25 +16,21 @@ export class AppComponent {
   password = 'passw0rd';
   showSpinner = false;
   screenSize = [0,0];
-  fromSmartphone = false;
+  fromSmartphone = true;
   loginCardVisible = false;
-  constructor(public snackBar: MatSnackBar, private http: HttpClient) {
-    this.getScreenSize();
-    if(this.screenSize[0] < 500){
-      this.fromSmartphone = true;
-      this.openBrowserWarning();
-    }
-  }
+  constructor(public snackBar: MatSnackBar, private http: HttpClient, private modalService: NgbModal) {}
 
   handleError() {}
 
-  showLogin(){
-    this.loginCardVisible = true;
+  open(content: any) {
+    this.modalService.open(content, {centered: true}).result.then((result) => {
+      this.login();
+    }, (reason) => {});
   }
+  
 
   login() {
     this.showSpinner = true;
-
     this.http
       .post(
         environment.host_url + environment.api_login,
@@ -51,7 +47,11 @@ export class AppComponent {
         next: (res) => {
           this.user_token = res;
           console.log(res);
-          this.download();
+          this.getScreenSize();
+          if(this.screenSize[0] < 500)
+            this.openBrowserWarning();
+          else
+            this.fromSmartphone = false;
           this.showSpinner = false;
         },
         error: (err) => {
@@ -65,7 +65,6 @@ export class AppComponent {
   getScreenSize() {
     this.screenSize[0] = window.screen.width;
     this.screenSize[1] = window.screen.height;
-    console.log(this.screenSize);
   }
 
   openErrorDialog() {

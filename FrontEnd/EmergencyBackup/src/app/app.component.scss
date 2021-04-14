@@ -9,11 +9,23 @@ p {
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 
+a {
+  color: black;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
 #header {font-size: 16pt;}
 #title {font-size: 42pt;}
-#info {font-size: 14pt;}
+#info-top {font-size: 14pt;}
 
-button{
+.info {
+  padding-top: 8%;
+  font-size: 14pt;
+  text-align: center;
+  justify-content: center;
+}
+
+.btn-main{
   background-color: #343534;
   border: 30%;
   padding: 10px 30px;
@@ -22,7 +34,11 @@ button{
 
 #login{
   align-items: center;
-  padding: 15%;
+  padding: 6%;
+}
+
+#btn-download {
+  padding-left: 15%;
 }
 
 .login_card {
@@ -32,14 +48,29 @@ button{
   color: white;
 }
 
-.labels{
-  color: #000000;
-  font-size: 6mm;
+.user-icon{
+  filter: invert(100%);
+  width: 150px;
+  height: 150px;
+  align-items: center;
 }
 
-.user-icon{
-  padding-left: 100px;
-  border-left: 100px;
-  margin-left: 100px;
+.main_div {
+  background: #585A58;
+  /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  //height: 100vh;
+  //display: flex;
+  justify-content: center;
   align-items: center;
+  border-radius: 20px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.login_button {
+  width: 40%;
+  color: white;
+  background-color: #585A58;
 }

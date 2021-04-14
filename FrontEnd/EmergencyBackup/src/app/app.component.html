@@ -3,20 +3,30 @@
   <br><br>
   <p id="title">Emergency Backup</p>
   <br><br>
-  <p id="info">¡No pierdas tu información! Con esta aplicación podrás realizar un respaldo de emergencia de los últimos archivos generado en tu celular.</p>
+  <p id="info-top">¡No pierdas tu información! Con esta aplicación podrás realizar un respaldo de emergencia de los últimos archivos generado en tu celular.</p>
+</div>
+<div class="info">
+  <a>¿Ya has realizado algún respaldo?</a><br><br>
+  <a>Inicia sesión y descárgalo aquí</a>
 </div>
 <div id="login" style="display: flex; justify-content: center">
-  <button
-    mat-raised-button
-    (click)="showLogin()"
-  >
+  <div><button mat-raised-button class="btn-main" (click)="open(content)">
     Ingresar
-  </button>
+  </button></div>
+  <div id="btn-download">
+    <button 
+    mat-raised-button 
+    class="btn-main"
+    disabled="{{fromSmartphone}}" 
+    (click)="download()">
+    Descargar
+  </button></div>
 </div>
-<div *ngIf="loginCardVisible">
+
+<ng-template #content let-modal>
   <mat-card class="login_card">
     <div style="display: flex; justify-content: center">
-      <img src="../assets/person.svg" stype />
+      <img class="user-icon" src="../assets/person-24px.svg" stype />
     </div>
     <mat-card-content>
       <form class="example-form">
@@ -60,8 +70,7 @@
       <div style="display: flex; justify-content: center">
         <button
           mat-raised-button
-          disabled="{{fromSmartphone}}"
-          (click)="login()"
+          (click)="modal.close()"
           class="login_button"
           [style.display]="showSpinner ? 'none' : 'block'"
         >
@@ -70,4 +79,5 @@
       </div>
     </mat-card-actions>
   </mat-card>
-</div>
+
+</ng-template>
