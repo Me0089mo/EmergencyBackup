@@ -1,8 +1,10 @@
 package com.example.emergencybackupv10.fragments
 
 import android.app.Activity
+import android.app.Instrumentation
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -12,6 +14,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.documentfile.provider.DocumentFile
+import androidx.preference.PreferenceManager
 import com.example.emergencybackupv10.Backup
 import com.example.emergencybackupv10.DescifradorAES_CFB
 import com.example.emergencybackupv10.R
@@ -27,12 +30,14 @@ class HomeFragment : Fragment() {
     private var decipheredDataPath : String? = null
     private var publicKeyFile : String? = ""
     private var privateKeyFile : String? = ""
+    private var sharedPreferences : SharedPreferences? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
             backUpOnCloud = it.getBoolean(ARG_BU_AVAILABLE)
             publicKeyFile = it.getString(getString(R.string.ARG_PUB_KEY))
             privateKeyFile = it.getString(getString(R.string.ARG_PRIV_KEY))
+            //sharedPreferences = it.get("ARG_PREFERENCES") as SharedPreferences?
             println("Llave publica: ${publicKeyFile}")
             println("Llave privada: ${privateKeyFile}")
         }
@@ -51,21 +56,36 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_home, container, false)
-
     }
 
-    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
-    override fun onStart() {
-        super.onStart()
-        setText()
-        /*btnSelect.setOnClickListener { v: View? ->
+    /*override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        btnSelect.setOnClickListener { v: View? ->
+            println("Shared Proferences: ${sharedPreferences?.getStringSet(R.string.CONFIG_DIR_SET.toString(), null)}")
             //Creating document picker
             val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE).apply {
                 flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
             }
             startActivityForResult(intent, 42)
         }
+    }*/
 
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+    override fun onStart() {
+        super.onStart()
+        setText()
+        //sharedPreferences = activity?.applicationContext?.getSharedPreferences(getString(R.string.CONFIG_DIR_SET), Context.MODE_PRIVATE)
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(activity?.applicationContext)
+        btnSelect.setOnClickListener { v: View? ->
+            //Creating document picker
+            println("After: ${sharedPreferences?.getStringSet(getString(R.string.CONFIG_DIR_SET), null)}")
+            val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE).apply {
+                flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+            }
+            startActivityForResult(intent, 42)
+            println("Before: ${sharedPreferences?.getStringSet(getString(R.string.CONFIG_DIR_SET), null)}")
+        }
+        /*
         btnCifrar.setOnClickListener { v: View? ->
             val createBackup = Backup(this.requireContext().applicationContext, this.requireContext().filesDir.absolutePath)
             createBackup.readConfiguration()
@@ -81,17 +101,6 @@ class HomeFragment : Fragment() {
         }*/
     }
 
-    private fun readDirectory(f: File, decipheredDataPath: String, descifrador: DescifradorAES_CFB){
-        if(f.isDirectory){
-            f.listFiles()?.forEach { documentFile ->
-                if(documentFile.isDirectory) {
-                    File(decipheredDataPath, documentFile.name).mkdir()
-                    readDirectory(documentFile, "$decipheredDataPath/${documentFile.name}", descifrador)
-                }
-                else descifrador.decipherFile(documentFile.absolutePath, decipheredDataPath, documentFile.name)
-            }
-        }
-    }
 
     private fun setText() {
         if(backUpOnCloud){
