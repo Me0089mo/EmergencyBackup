@@ -7,7 +7,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.emergencybackupv10.R
 
-class AdapterHistory() : RecyclerView.Adapter<AdapterHistory.ViewHolderHistory>() {
+class AdapterFiles() : RecyclerView.Adapter<AdapterFiles.ViewHolderHistory>() {
     val ListaElementos = ArrayList<UserActivity>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderHistory {

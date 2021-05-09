@@ -3,6 +3,9 @@
     <color name="nav_active">#FFFFFF</color>
     <color name="nav_inactive">#5A5A5A</color>
     <color name="button_font">#181818</color>
+    <color name="button_font_negative">#FFFFFF</color>
     <color name="button_background">#FFFFFF</color>
+    <color name="button_background_negative">#343534</color>
     <color name="background">#282828</color>
+    <color name="background_negative">#FFFFFF</color>
 </resources>

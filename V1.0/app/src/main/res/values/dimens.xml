@@ -7,4 +7,5 @@
     <dimen name="button_h_m">32dp</dimen>
     <dimen name="small_button_h_m">64dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="text_margin">16dp</dimen>
 </resources>

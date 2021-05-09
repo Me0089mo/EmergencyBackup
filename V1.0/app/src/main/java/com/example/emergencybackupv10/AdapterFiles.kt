@@ -1,16 +1,12 @@
 package com.example.emergencybackupv10
 
-import android.os.Parcel
-import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.cards_list.view.*
 
-class AdapterHistory() : RecyclerView.Adapter<AdapterHistory.ViewHolderHistory>() {
+class AdapterFiles() : RecyclerView.Adapter<AdapterFiles.ViewHolderHistory>() {
     val ListaElementos = ArrayList<String>()/*ArrayList<UserActivity>()*/
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderHistory {

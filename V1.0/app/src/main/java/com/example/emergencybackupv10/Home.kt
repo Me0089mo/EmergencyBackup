@@ -20,6 +20,7 @@ import com.example.emergencybackupv10.fragments.RestoreFragment
 import com.example.emergencybackupv10.fragments.SettingsFragment
 import com.example.emergencybackupv10.networking.UploadResponse
 import kotlinx.android.synthetic.main.activity_home.*
+import kotlinx.android.synthetic.main.fragment_home.*
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -39,7 +40,7 @@ class Home : AppCompatActivity() {
     private val homeFragment = HomeFragment()
     private val restoreFragment = RestoreFragment()
     private val settingsFragment = SettingsFragment()
-    private lateinit var sharedPreferences: SharedPreferences;
+    private lateinit var sharedPreferences: SharedPreferences
     private var publicKeyFile: String? = ""
     private var privateKeyFile: String? = ""
     private var cipheredDataPath: String? = null
@@ -57,7 +58,6 @@ class Home : AppCompatActivity() {
         } else {
             getDataFromIntent()
         }
-
         changeFragment(homeFragment)
         bottom_nav.selectedItemId = R.id.navigation_home
         bottom_nav.setOnNavigationItemSelectedListener {
@@ -68,6 +68,11 @@ class Home : AppCompatActivity() {
             }
             true
         }
+        for (mutableEntry in sharedPreferences.all) {
+            println("Preference: ${mutableEntry.key} ${mutableEntry.value}")
+        }
+        val direct = sharedPreferences.getStringSet(getString(R.string.CONFIG_DIR_SET), null)
+        println(direct)
     }
 
     private fun getDataFromIntent() {
@@ -225,7 +230,7 @@ class Home : AppCompatActivity() {
     }
 
 
-    override fun onActivityResult(
+    /*override fun onActivityResult(
             requestCode: Int, resultCode: Int, resultData: Intent?) {
         super.onActivityResult(requestCode, resultCode, resultData)
         var dirList = getDirList()
@@ -236,7 +241,7 @@ class Home : AppCompatActivity() {
                 saveDirList(dirList)
             }
         }
-    }
+    }*/
 
     fun logOut(v: View) {
         with(sharedPreferences.edit()) {
