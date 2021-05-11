@@ -72,7 +72,6 @@ class Home : AppCompatActivity() {
             println("Preference: ${mutableEntry.key} ${mutableEntry.value}")
         }
         val direct = sharedPreferences.getStringSet(getString(R.string.CONFIG_DIR_SET), null)
-        println(direct)
     }
 
     private fun getDataFromIntent() {
@@ -119,7 +118,14 @@ class Home : AppCompatActivity() {
         backUpOnCloud = false
     }
 
-    private fun getDirList(): MutableSet<String> {
+    internal fun addFolderToBackup(){
+        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE).apply {
+            flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+        }
+        startActivityForResult(intent, 42)
+    }
+
+    internal fun getDirList(): MutableSet<String> {
         var dirList = sharedPreferences.getStringSet(getString(R.string.CONFIG_DIR_SET), null)
         if (dirList == null) {
             dirList = mutableSetOf<String>()
@@ -230,18 +236,17 @@ class Home : AppCompatActivity() {
     }
 
 
-    /*override fun onActivityResult(
+    override fun onActivityResult(
             requestCode: Int, resultCode: Int, resultData: Intent?) {
         super.onActivityResult(requestCode, resultCode, resultData)
         var dirList = getDirList()
-        if (requestCode == 42
-                && resultCode == Activity.RESULT_OK) {
+        if (requestCode == 42 && resultCode == Activity.RESULT_OK) {
             resultData?.data?.also { uri ->
                 dirList.add(uri.toString())
                 saveDirList(dirList)
             }
         }
-    }*/
+    }
 
     fun logOut(v: View) {
         with(sharedPreferences.edit()) {
