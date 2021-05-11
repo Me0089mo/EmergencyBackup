@@ -2,8 +2,8 @@ const router = require("express").Router();
 const User = require("../model/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const { registerValidation, loginValidation } = require("../validation");
-const { updatePasswordValidator } = require("../model/validation");
+//const { registerValidation, loginValidation } = require("../validation");
+const { updateEmailValidator,updatePasswordValidator, registerValidation, loginValidation } = require("../model/validation");
 
 router.post("/register", async (req, res) => {
   //Data Validation
@@ -88,18 +88,38 @@ router.put("/update_password", async (req, res) => {
     process.env.PRIVATE_KEY
   );
   
-  const user = await User.findOne({ _id: });
+  const user = await User.findOne({ _id: decoded._id});
   if (!user) return res.status(401).send("User not found");
   
   // Check password
   const passCorrect = await bcrypt.compare(req.body.password, user.password);
-  if (!passCorrect) return res.status(401).send("Invalid password");
+  if (!passCorrect) return res.status(401).send("Wrong password");
   
   console.log(user);
   const salt = await bcrypt.genSalt(10);
-  const hashed_password = await bcrypt.hash(req.body.password, salt);
-  User.update({ _id: decoded._id }, { password: hashed_password })
-  
-  return res.status(200);
+  const hashed_password = await bcrypt.hash(req.body.new_password, salt);
+  user.password=hashed_password
+
+//  await user.updateOne( { password: hashed_password })
+  await user.save()
+  return res.status(200).send('success');
 });
+
+router.put("/update_email", async (req, res) => {
+  const { error } = updateEmailValidator(req.body);
+  if (error) return res.status(400).send(error.details[0].message);
+
+  const decoded = jwt.verify(
+    req.header("authorization"),
+    process.env.PRIVATE_KEY
+  );
+  
+  const user = await User.findOne({ _id: decoded._id});
+  if (!user) return res.status(401).send("User not found");
+  user.email=req.body.email
+  await user.save()
+  return res.status(200).send('success');
+});
+
+
 module.exports = router;
