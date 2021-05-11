@@ -1,115 +1,95 @@
 package com.example.emergencybackupv10.fragments
 
-import android.app.Activity
-import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.FragmentActivity
 import androidx.preference.PreferenceManager
-import com.example.emergencybackupv10.DescifradorAES_CFB
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.emergencybackupv10.Home
 import com.example.emergencybackupv10.R
-import java.io.File
+import kotlinx.android.synthetic.main.fragment_backup_settings.*
+import java.util.*
+import java.util.regex.Pattern
 
-/**
- * A fragment representing a list of Items.
- */
 class BackupSettings : Fragment() {
-
-    private var columnCount = 1
-    private var sharedPreferences : SharedPreferences? = null
+    var namesList = mutableListOf<String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        arguments?.let {
-            columnCount = it.getInt(ARG_COLUMN_COUNT)
-        }
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_backup_settings, container, false)
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(activity?.applicationContext)
-        // Set the adapter
-        val recyclerView = view.findViewById<RecyclerView>(R.id.list)
-        //recyclerView.setHasFixedSize(true);
-        if (recyclerView is RecyclerView) {
-            with(recyclerView) {
-                layoutManager = when {
-                    columnCount <= 1 -> LinearLayoutManager(context)
-                    else -> GridLayoutManager(context, columnCount)
-                }
-                //var dirList = getDirList().toList()
-                //Regex.fromLiteral()
-                //dirList.forEach { str -> str.dropWhile {  } }
-                val testList = mutableListOf<String>()
-                for (i in 0..9)
-                    testList.add("Pais numero $i")
-                adapter = FilesRecyclerViewAdapter(testList)
-            }
+        val dirList = (activity as Home).getDirList()
+        //var namesList = mutableListOf<String>()
+        for (dir in dirList){
+            val ind = dir.indexOfLast { it == '%' }
+            namesList.add(dir.drop(ind+3))
         }
+        val recyclerView = view.findViewById<RecyclerView>(R.id.folder_list)
+        recyclerView.apply {
+            layoutManager = LinearLayoutManager(view.context)
+            adapter = BackupSettingsAdapter(namesList)
+        }
+        ItemTouchHelper(simpleItemTouchCallback).attachToRecyclerView(recyclerView)
         return view
     }
 
+    override fun onStart() {
+        super.onStart()
+        btn_add_folder.setOnClickListener { v ->
+            (activity as Home).addFolderToBackup()
+            val dirList = (activity as Home).getDirList()
+            namesList.clear()
+            for (dir in dirList){
+                val ind = dir.indexOfLast { it == '%' }
+                namesList.add(dir.drop(ind+3))
+            }
+            this.view?.findViewById<RecyclerView>(R.id.folder_list)?.adapter?.notifyDataSetChanged()
+        }
+    }
+
     companion object {
-
-        const val ARG_COLUMN_COUNT = "column-count"
-
         @JvmStatic
-        fun newInstance(columnCount: Int) =
-            BackupSettings().apply {
-                arguments = Bundle().apply {
-                    putInt(ARG_COLUMN_COUNT, columnCount)
-                }
+        fun newInstance() =
+            BackupSettings()
+    }
+
+    val simpleItemTouchCallback =
+        object : ItemTouchHelper.SimpleCallback(
+            ItemTouchHelper.UP or ItemTouchHelper.DOWN,
+            0) {
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                // [3] Do something when an item is moved
+
+                val adapter = recyclerView.adapter
+                val from = viewHolder.adapterPosition
+                val to = target.adapterPosition
+
+                Collections.swap(namesList, from, to)
+                adapter?.notifyItemMoved(from, to)
+                return true
             }
-    }
 
-    override fun onActivityResult(
-        requestCode: Int, resultCode: Int, resultData: Intent?) {
-        super.onActivityResult(requestCode, resultCode, resultData)
-        var dirList = getDirList()
-        if (requestCode == 42 && resultCode == Activity.RESULT_OK) {
-            resultData?.data?.also { uri ->
-                dirList.add(uri.toString())
-                saveDirList(dirList)
-            }
-        }
-    }
+            override fun onSwiped(
+                viewHolder: RecyclerView.ViewHolder,
+                direction: Int
+            ) {
 
-    private fun getDirList(): MutableSet<String> {
-        //println("Entra getDirList")
-        var dirList = sharedPreferences?.getStringSet(getString(R.string.CONFIG_DIR_SET), null)
-        if (dirList == null) {
-            dirList = mutableSetOf<String>()
-        }
-        return dirList;
-    }
-
-    private fun saveDirList(dl: MutableSet<String>) {
-        //print("Entra saveDirList")
-        with(sharedPreferences?.edit()) {
-            this?.putStringSet(getString(R.string.CONFIG_DIR_SET), dl)
-            this?.apply()
-        }
-    }
-
-    private fun readDirectory(f: File, decipheredDataPath: String, descifrador: DescifradorAES_CFB){
-        if(f.isDirectory){
-            f.listFiles()?.forEach { documentFile ->
-                if(documentFile.isDirectory) {
-                    File(decipheredDataPath, documentFile.name).mkdir()
-                    readDirectory(documentFile, "$decipheredDataPath/${documentFile.name}", descifrador)
-                }
-                else descifrador.decipherFile(documentFile.absolutePath, decipheredDataPath, documentFile.name)
             }
         }
-    }
+
 }
