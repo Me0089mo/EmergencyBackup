@@ -87,8 +87,19 @@ router.put("/update_password", async (req, res) => {
     req.header("authorization"),
     process.env.PRIVATE_KEY
   );
-
-  const userID = decoded._id;
-
+  
+  const user = await User.findOne({ _id: });
+  if (!user) return res.status(401).send("User not found");
+  
+  // Check password
+  const passCorrect = await bcrypt.compare(req.body.password, user.password);
+  if (!passCorrect) return res.status(401).send("Invalid password");
+  
+  console.log(user);
+  const salt = await bcrypt.genSalt(10);
+  const hashed_password = await bcrypt.hash(req.body.password, salt);
+  User.update({ _id: decoded._id }, { password: hashed_password })
+  
+  return res.status(200);
 });
 module.exports = router;
