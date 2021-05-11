@@ -54,6 +54,7 @@ console.log(req.get("Authorization"))
 // For login request we should use POST method. Because our login data is secure which needs security. When use POST method the data is sent to server in a bundle. But in GET method data is sent to the server followed by the url like append with url request which will be seen to everyone.
 // So For secure authentication and authorization process we should use POST method.
 router.post("/login", async (req, res) => {
+//console.log(req);
   //Data Validation
   const { error } = loginValidation(req.body);
   if (error) return res.status(400).send(error.details[0].message);
