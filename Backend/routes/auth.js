@@ -82,9 +82,9 @@ router.post("/login", async (req, res) => {
 router.put("/update_password", async (req, res) => {
   const { error } = updatePasswordValidator(req.body);
   if (error) return res.status(400).send(error.details[0].message);
-  console.log(req.header.get("authorization"));
+  console.log(req.header("authorization"));
   const decoded = jwt.verify(
-    req.header.get("Authorization"),
+    req.header("authorization"),
     process.env.PRIVATE_KEY
   );
 
