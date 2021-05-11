@@ -3,6 +3,7 @@ const User = require("../model/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { registerValidation, loginValidation } = require("../validation");
+const { updatePasswordValidator } = require("../model/validation");
 
 router.post("/register", async (req, res) => {
   //Data Validation
@@ -42,19 +43,18 @@ router.post("/register", async (req, res) => {
 });
 
 router.get("/download", async (req, res) => {
-console.log(req.get("Authorization"))
+  console.log(req.get("Authorization"));
   const decoded = jwt.verify(req.get("Authorization"), process.env.PRIVATE_KEY);
 
   const userID = decoded._id;
   const dir = "uploads/" + userID;
   console.log("File being donwloaedd from:" + userID);
-	return  res.download(dir+"/backUpFile");
+  return res.download(dir + "/backUpFile");
 });
 
 // For login request we should use POST method. Because our login data is secure which needs security. When use POST method the data is sent to server in a bundle. But in GET method data is sent to the server followed by the url like append with url request which will be seen to everyone.
 // So For secure authentication and authorization process we should use POST method.
 router.post("/login", async (req, res) => {
-//console.log(req);
   //Data Validation
   const { error } = loginValidation(req.body);
   if (error) return res.status(400).send(error.details[0].message);
@@ -79,4 +79,15 @@ router.post("/login", async (req, res) => {
   return res.header("auth-token", token).send(token);
 });
 
+router.put("/update_password", async (req, res) => {
+  const { error } = updatePasswordValidator(req.body);
+  if (error) return res.status(400).send(error.details[0].message);
+  console.log(req.header.get("authorization"));
+  const decoded = jwt.verify(
+    req.header.get("Authorization"),
+    process.env.PRIVATE_KEY
+  );
+
+  const userID = decoded._id;
+});
 module.exports = router;
