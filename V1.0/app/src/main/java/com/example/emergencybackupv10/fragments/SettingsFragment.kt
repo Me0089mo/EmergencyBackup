@@ -39,13 +39,6 @@ class SettingsFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        val sharedPref = PreferenceManager.getDefaultSharedPreferences(activity?.applicationContext)
-        val dirLst = sharedPref.getStringSet(getString(R.string.CONFIG_DIR_SET),null)
-        if (dirLst != null) {
-            for (dir in dirLst) {
-                print(dir)
-            }
-        }
         change_mail_button.setOnClickListener { v -> changeFragment(changeEmailFragment) }
         change_password_button.setOnClickListener { v -> changeFragment(changePasswordFragment)}
         backup_config_button.setOnClickListener { v -> changeFragment(backupSettingsFragment) }

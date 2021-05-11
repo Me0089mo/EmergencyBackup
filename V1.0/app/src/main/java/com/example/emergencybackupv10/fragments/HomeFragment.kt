@@ -79,10 +79,6 @@ class HomeFragment : Fragment() {
         btnSelect.setOnClickListener { v: View? ->
             //Creating document picker
             println("After: ${sharedPreferences?.getStringSet(getString(R.string.CONFIG_DIR_SET), null)}")
-            val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE).apply {
-                flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
-            }
-            startActivityForResult(intent, 42)
             println("Before: ${sharedPreferences?.getStringSet(getString(R.string.CONFIG_DIR_SET), null)}")
         }
         /*
