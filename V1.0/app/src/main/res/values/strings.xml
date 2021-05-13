@@ -27,7 +27,6 @@ Guárdala en un lugar seguro que no sea en tu teléfono y no la pierdas. Sin ell
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dash</string>
     <string name="title_notifications">Notif</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="button_seleccionar">Seleccionar</string>
     <string name="button_cifrar">Cifrar</string>

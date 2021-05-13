@@ -87,7 +87,8 @@
                                                 android:background="@drawable/custom_button"
                                                 android:onClick="goHome"
                                                 android:text="@string/entendido"
-                                                android:textColor="@color/button_font" />
+                                                android:textColor="@color/button_font"
+                                                app:backgroundTint="#FFFFFF" />
                                         </LinearLayout>
 
                                 </RelativeLayout>

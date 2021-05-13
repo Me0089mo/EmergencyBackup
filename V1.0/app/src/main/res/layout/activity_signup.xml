@@ -93,7 +93,8 @@
             android:background="@drawable/custom_button"
             android:onClick="signUp"
             android:text="@string/signup"
-            android:textColor="@color/button_font" />
+            android:textColor="@color/button_font"
+            app:backgroundTint="#FFFFFF" />
     </LinearLayout>
 </LinearLayout>
 

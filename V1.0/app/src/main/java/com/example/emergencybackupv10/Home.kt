@@ -6,21 +6,18 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
-import android.os.FileUtils
 import androidx.preference.PreferenceManager
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.net.toUri
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import com.auth0.android.jwt.JWT
 import com.example.emergencybackupv10.fragments.HomeFragment
 import com.example.emergencybackupv10.fragments.RestoreFragment
 import com.example.emergencybackupv10.fragments.SettingsFragment
-import com.example.emergencybackupv10.networking.UploadResponse
+import com.example.emergencybackupv10.networking.ServerResponse
 import kotlinx.android.synthetic.main.activity_home.*
-import kotlinx.android.synthetic.main.fragment_home.*
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -199,17 +196,17 @@ class Home : AppCompatActivity() {
 
         val uploadService : Upload = retrofit.create(Upload::class.java)
 
-        val call: Call<UploadResponse> = uploadService.upload(
+        val call: Call<ServerResponse> = uploadService.upload(
                 authPart,
                 multipartFile
         )
 
-        call.enqueue(object : Callback<UploadResponse> {
-            override fun onFailure(call: Call<UploadResponse>?, t: Throwable?) {
+        call.enqueue(object : Callback<ServerResponse> {
+            override fun onFailure(call: Call<ServerResponse>?, t: Throwable?) {
                 Log.i("retrofit fail ", "call failed")
             }
 
-            override fun onResponse(call: Call<UploadResponse>?, response: Response<UploadResponse>?) {
+            override fun onResponse(call: Call<ServerResponse>?, response: Response<ServerResponse>?) {
                 Log.i("retrofit response", response.toString())
             }
         }

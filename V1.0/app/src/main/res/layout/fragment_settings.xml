@@ -1,138 +1,182 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:id="@+id/mainScroll"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:fillViewport="true">
 
-    <LinearLayout
-            android:id="@+id/linearLayout"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="bottom"
-            android:orientation="horizontal"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.05">
+            android:layout_height="wrap_content">
 
-        <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:srcCompat="@drawable/ic_person_24px" />
-
-        <TextView
-                android:id="@+id/dashboard_username"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Username"
-                android:textSize="40sp" />
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:id="@+id/linearLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+                    android:gravity="bottom"
+                    android:orientation="horizontal"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.05">
+
+                    <ImageView
+                        android:layout_width="70sp"
+                        android:layout_height="70sp"
+                        app:srcCompat="@drawable/ic_person_24px" />
+
+                    <TextView
+                        android:id="@+id/dashboard_username"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Username"
+                        android:textSize="40sp" />
 
 
-    </LinearLayout>
-
-    <TextView
-            android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
-            android:id="@+id/dashboard_dir"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
-            android:text="No hay ninguna carpeta seleccionada"
-            android:textSize="20sp"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout"
-            tools:layout_editor_absoluteX="0dp" />
-
-    <Button
-            android:id="@+id/dashboard_dir_button"
-            android:layout_marginHorizontal="@dimen/button_h_m"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/custom_button"
-            android:text="Selecciónar carpeta"
-            android:textColor="@color/button_font"
-            android:onClick="pickDir"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/dashboard_dir" />
-
-    <Button
-        android:id="@+id/change_mail_button"
-        android:layout_marginHorizontal="@dimen/button_h_m"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="70dp"
-        android:background="@drawable/custom_button"
-        android:text="Cambiar correo"
-        android:textColor="@color/button_font"
-        android:onClick="pickDir"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dashboard_dir" />
-
-    <Button
-        android:id="@+id/change_password_button"
-        android:layout_marginHorizontal="@dimen/button_h_m"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="120dp"
-        android:background="@drawable/custom_button"
-        android:text="Cambiar contraseña"
-        android:textColor="@color/button_font"
-        android:onClick="pickDir"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dashboard_dir" />
-
-    <Button
-        android:id="@+id/backup_config_button"
-        android:layout_marginHorizontal="@dimen/button_h_m"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="170dp"
-        android:background="@drawable/custom_button"
-        android:text="Configurar respaldo"
-        android:textColor="@color/button_font"
-        android:onClick="pickDir"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dashboard_dir" />
-
-    <Button
-        android:id="@+id/get_new_key_button"
-        android:layout_marginHorizontal="@dimen/button_h_m"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="220dp"
-        android:background="@drawable/custom_button"
-        android:text="Solicitar nueva llave"
-        android:textColor="@color/button_font"
-        android:onClick="pickDir"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dashboard_dir" />
-
-    <Button
-            android:id="@+id/dashboard_logOut_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/small_button_h_m"
-            android:background="@drawable/custom_button"
-            android:text="Cerrar sesión"
-            android:onClick="logOut"
-            android:textColor="@color/button_font"
-            android:layout_marginBottom="@dimen/activity_vertical_margin"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-             />
+                </LinearLayout>
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+                <Button
+                    android:id="@+id/dashboard_dir_button"
+                    style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/button_h_m"
+                    android:layout_marginTop="64dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:fontFamily="sans-serif-medium"
+                    android:onClick="pickDir"
+                    android:text="Selecciónar carpeta"
+                    android:textAlignment="viewStart"
+                    android:textColor="@color/button_font_negative"
+                    android:textSize="14sp"
+                    app:icon="@drawable/ic_baseline_arrow_forward_ios_24"
+                    app:iconGravity="end"
+                    app:iconTint="@color/button_font_negative"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+                    app:strokeColor="#FFFFFF"
+                    app:strokeWidth="1dp" />
+
+                <Button
+                    android:id="@+id/change_mail_button"
+                    style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/button_h_m"
+                    android:layout_marginTop="2dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:fontFamily="sans-serif-medium"
+                    android:onClick="pickDir"
+                    android:text="Cambiar Correo"
+                    android:textAlignment="viewStart"
+                    android:textColor="@color/button_font_negative"
+                    android:textSize="14sp"
+                    app:icon="@drawable/ic_baseline_arrow_forward_ios_24"
+                    app:iconGravity="end"
+                    app:iconTint="@color/button_font_negative"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/dashboard_dir_button" />
+
+                <Button
+                    android:id="@+id/change_password_button"
+                    style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/button_h_m"
+                    android:layout_marginTop="1dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="Cambiar contraseña"
+                    android:textAlignment="viewStart"
+                    android:textColor="@color/button_font_negative"
+                    android:textSize="14sp"
+                    app:icon="@drawable/ic_baseline_arrow_forward_ios_24"
+                    app:iconGravity="end"
+                    app:iconTint="@color/button_font_negative"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/change_mail_button" />
+
+                <Button
+                    android:id="@+id/backup_config_button"
+                    style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/button_h_m"
+                    android:layout_marginTop="2dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:fontFamily="sans-serif-medium"
+                    android:onClick="pickDir"
+                    android:text="Configurar respaldo"
+                    android:textAlignment="viewStart"
+                    android:textColor="@color/button_font_negative"
+                    android:textSize="14sp"
+                    app:icon="@drawable/ic_baseline_arrow_forward_ios_24"
+                    app:iconGravity="end"
+                    app:iconTint="@color/button_font_negative"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/change_password_button" />
+
+                <Button
+                    android:id="@+id/get_new_key_button"
+                    style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/button_h_m"
+                    android:layout_marginTop="3dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:fontFamily="sans-serif-medium"
+                    android:onClick="pickDir"
+                    android:text="Solicitar nueva llave"
+                    android:textAlignment="viewStart"
+                    android:textColor="@color/button_font_negative"
+                    android:textSize="14sp"
+                    app:icon="@drawable/ic_baseline_arrow_forward_ios_24"
+                    app:iconGravity="end"
+                    app:iconTint="@color/button_font_negative"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/backup_config_button" />
+
+                <Button
+                    android:id="@+id/dashboard_logOut_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/small_button_h_m"
+                    android:layout_marginBottom="@dimen/activity_vertical_margin"
+                    android:background="@drawable/custom_button"
+                    android:onClick="logOut"
+                    android:text="Cerrar sesión"
+                    android:textColor="@color/button_font"
+                    app:backgroundTint="@color/button_font_negative"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </RelativeLayout>
+    </ScrollView>
+</RelativeLayout>

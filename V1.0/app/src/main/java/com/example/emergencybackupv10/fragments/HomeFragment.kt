@@ -76,11 +76,11 @@ class HomeFragment : Fragment() {
         setText()
         //sharedPreferences = activity?.applicationContext?.getSharedPreferences(getString(R.string.CONFIG_DIR_SET), Context.MODE_PRIVATE)
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(activity?.applicationContext)
-        btnSelect.setOnClickListener { v: View? ->
-            //Creating document picker
-            println("After: ${sharedPreferences?.getStringSet(getString(R.string.CONFIG_DIR_SET), null)}")
-            println("Before: ${sharedPreferences?.getStringSet(getString(R.string.CONFIG_DIR_SET), null)}")
-        }
+//        btnSelect.setOnClickListener { v: View? ->
+//            //Creating document picker
+//            println("After: ${sharedPreferences?.getStringSet(getString(R.string.CONFIG_DIR_SET), null)}")
+//            println("Before: ${sharedPreferences?.getStringSet(getString(R.string.CONFIG_DIR_SET), null)}")
+//        }
         /*
         btnCifrar.setOnClickListener { v: View? ->
             val createBackup = Backup(this.requireContext().applicationContext, this.requireContext().filesDir.absolutePath)

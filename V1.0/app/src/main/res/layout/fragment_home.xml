@@ -8,36 +8,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <Button
-            android:id="@+id/btnSelect"
-            android:onClick="pickDir"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/button_seleccionar" />
-
-        <Button
-            android:id="@+id/btnCifrar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="startBackup"
-            android:text="@string/button_cifrar" />
-
-        <Button
-            android:id="@+id/btnDescifrar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="decipherData"
-            android:text="@string/button_descifrar" />
-
-        <Button
-            android:id="@+id/btnUpload"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="uploadBackup"
-            android:text="Upload" />
-    </LinearLayout>
+        android:orientation="vertical"/>
 
     <TextView
         android:id="@+id/text_home"

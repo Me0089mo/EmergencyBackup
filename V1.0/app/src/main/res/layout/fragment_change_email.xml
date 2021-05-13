@@ -1,52 +1,50 @@
-<?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".fragments.ChangeEmail">
+    android:layout_height="match_parent">
 
-    <LinearLayout
+    <EditText
+        android:id="@+id/txt_new_email"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/background_negative"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/button_h_m"
         android:layout_marginTop="70dp"
-        android:orientation="vertical">
+        android:hint="Nuevo correo"
+        android:inputType="textEmailAddress"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_weight="@integer/config_navAnimTime"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <EditText
-            android:id="@+id/txt_new_email"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/button_font"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="100dp"
-            android:ems="10"
-            android:inputType="textEmailAddress"
-            android:text="Nuevo correo"
-            android:textColor="@color/button_font"
-            android:textSize="25sp" />
+    <EditText
+        android:id="@+id/txt_confirm_email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/button_h_m"
+        android:layout_marginTop="70dp"
 
-        <EditText
-            android:id="@+id/txt_confirm_email"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="30dp"
-            android:backgroundTint="@color/button_font"
-            android:ems="10"
-            android:inputType="textEmailAddress"
-            android:text="Confirmar correo"
-            android:textColor="@color/button_font"
-            android:textSize="25sp" />
+        android:ems="10"
+        android:hint="Confirmar correo"
+        android:inputType="textEmailAddress"
+        android:textColor="@color/button_font_negative"
+        android:textColorHint="#AAAAAA"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txt_new_email" />
 
-        <Button
-            android:id="@+id/btn_change_email"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/custom_button_negative"
-            android:layout_marginTop="240dp"
-            android:layout_marginHorizontal="60dp"
-            android:textColor="@color/button_font_negative"
-            android:text="Cambiar correo" />
-    </LinearLayout>
-
-</FrameLayout>
+    <Button
+        android:id="@+id/btn_change_email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/button_h_m"
+        android:layout_marginTop="70dp"
+        android:background="@drawable/custom_button"
+        android:text="Cambiar correo"
+        app:backgroundTint="@color/button_font_negative"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txt_confirm_email" />
+</androidx.constraintlayout.widget.ConstraintLayout>

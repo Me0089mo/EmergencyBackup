@@ -44,14 +44,7 @@ class SettingsFragment : Fragment() {
         backup_config_button.setOnClickListener { v -> changeFragment(backupSettingsFragment) }
     }
 
-    fun set_dashboard_text(){
-        dashboard_username.text=username
-        if(dir_set!!){
-            dashboard_dir.text = ""
-        }else{
 
-        }
-    }
 
     companion object {
         @JvmStatic
