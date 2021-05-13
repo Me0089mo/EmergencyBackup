@@ -40,7 +40,7 @@ const updatePubKeyValidator = (data) => {
   });
   return schema.validate(data);
 };
-
+module.exports.updatePubKeyValidator = updatePubKeyValidator;
 module.exports.updateEmailValidator = updateEmailValidator;
 module.exports.updatePasswordValidator = updatePasswordValidator;
 module.exports.registerValidation = registerValidation;
