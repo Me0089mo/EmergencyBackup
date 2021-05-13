@@ -1,4 +1,3 @@
-
 const Joi = require("joi");
 
 const registerValidation = (data) => {
@@ -20,21 +19,14 @@ const loginValidation = (data) => {
 };
 
 const updateEmailValidator = (data) => {
-  const schema = Joi.object({
-    email: Joi.string().email().required(),
-  });
-  return schema.validate(data);
+  const schema = Joi.object({ email: Joi.string().email().required() })
+
+;
 };
 
 const updatePasswordValidator = (data) => {
-  const schema = Joi.object({
-    password: Joi.string().min(6).max(255).required(),
-    new_password: Joi.string().min(6).max(255).required(),
-//    confirmation: Joi.string().min(6).max(255).required(),
-  });
-  return schema.validate(data);
+  const schema = Joi.object({ password: Joi.string().email().required() });
 };
-
 module.exports.updateEmailValidator = updateEmailValidator;
 module.exports.updatePasswordValidator = updatePasswordValidator;
 module.exports.registerValidation = registerValidation;
