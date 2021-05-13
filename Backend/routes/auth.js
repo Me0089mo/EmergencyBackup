@@ -2,8 +2,13 @@ const router = require("express").Router();
 const User = require("../model/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-//const { registerValidation, loginValidation } = require("../validation");
-const { updateEmailValidator,updatePasswordValidator, registerValidation, loginValidation } = require("../model/validation");
+const {
+  updatePubKeyValidator,
+  updateEmailValidator,
+  updatePasswordValidator,
+  registerValidation,
+  loginValidation,
+} = require("../model/validation");
 
 router.post("/register", async (req, res) => {
   //Data Validation
@@ -43,12 +48,14 @@ router.post("/register", async (req, res) => {
 });
 
 router.get("/download", async (req, res) => {
-  console.log(req.get("Authorization"));
-  const decoded = jwt.verify(req.get("Authorization"), process.env.PRIVATE_KEY);
-
+  let decoded = "";
+  try {
+    decoded = jwt.verify(req.get("Authorization"), process.env.PRIVATE_KEY);
+  } catch (error) {
+    return res.status(401).send({ error: true, message: "unauthorized" });
+  }
   const userID = decoded._id;
   const dir = "uploads/" + userID;
-  console.log("File being donwloaedd from:" + userID);
   return res.download(dir + "/backUpFile");
 });
 
@@ -58,13 +65,14 @@ router.post("/login", async (req, res) => {
   //Data Validation
   const { error } = loginValidation(req.body);
   if (error) return res.status(400).send(error.details[0].message);
-
   //Check if registered
   const user = await User.findOne({ email: req.body.email });
-  if (!user) return res.status(401).send("User not found");
+  if (!user)
+    return res.status(401).send({ error: true, message: "User not found" });
   // Check password
   const passCorrect = await bcrypt.compare(req.body.password, user.password);
-  if (!passCorrect) return res.status(401).send("Invalid password");
+  if (!passCorrect)
+    return res.status(401).send({ error: true, message: "Invalid password" });
 
   const token = jwt.sign(
     {
@@ -81,47 +89,87 @@ router.post("/login", async (req, res) => {
 
 router.put("/update_password", async (req, res) => {
   const { error } = updatePasswordValidator(req.body);
-  if (error) return res.status(400).send(error.details[0].message);
+  if (error)
+    return res
+      .status(400)
+      .send({ success: false, message: error.details[0].message });
 
-  const decoded = jwt.verify(
-    req.header("authorization"),
-    process.env.PRIVATE_KEY
-  );
-  
-  const user = await User.findOne({ _id: decoded._id});
-  if (!user) return res.status(401).send("User not found");
-  
+  let decoded = "";
+  try {
+    decoded = jwt.verify(req.header("authorization"), process.env.PRIVATE_KEY);
+  } catch (error) {
+    return res.status(401).send({ error: true, message: "unauthorized" });
+  }
+
+  const user = await User.findOne({ _id: decoded._id });
+  if (!user)
+    return res.status(401).send({ success: false, message: "User not found" });
+
   // Check password
   const passCorrect = await bcrypt.compare(req.body.password, user.password);
-  if (!passCorrect) return res.status(401).send("Wrong password");
-  
-  console.log(user);
+  if (!passCorrect)
+    return res.status(401).send({
+      success: false,
+      message: "Contraseña incorrecta",
+    });
+
   const salt = await bcrypt.genSalt(10);
   const hashed_password = await bcrypt.hash(req.body.new_password, salt);
-  user.password=hashed_password
-
-//  await user.updateOne( { password: hashed_password })
-  await user.save()
-  return res.status(200).send({'success':true,"message":""});
+  user.password = hashed_password;
+  await user.save();
+  return res.status(200).send({ success: true, message: "Success" });
 });
 
 router.put("/update_email", async (req, res) => {
-  console.log(req.body)
-
   const { error } = updateEmailValidator(req.body);
-  if (error) return res.status(400).send(error.details[0].message);
+  if (error)
+    return res
+      .status(400)
+      .send({ error: true, message: error.details[0].message });
+  let decoded = "";
+  try {
+    decoded = jwt.verify(req.header("authorization"), process.env.PRIVATE_KEY);
+  } catch (error) {
+    return res.status(401).send({ error: true, message: "unauthorized" });
+  }
 
-  const decoded = jwt.verify(
-    req.header("authorization"),
-    process.env.PRIVATE_KEY
-  );
-  console.log(req.header("authorization"));  
-  const user = await User.findOne({ _id: decoded._id});
-  if (!user) return res.status(401).send("User not found");
-  user.email=req.body.email
-  await user.save()
-  return res.status(200).send({'success':true,"message":""});
+  const user = await User.findOne({ _id: decoded._id });
+  if (!user)
+    return res.status(401).send({ error: true, message: "User not found" });
+  user.email = req.body.email;
+  await user.save();
+  return res.status(200).send({ success: true, message: "Success" });
 });
 
+router.put("/update_key", async (req, res) => {
+  const { error } = updatePubKeyValidator(req.body);
+  if (error)
+    return res
+      .status(400)
+      .send({ success: false, message: error.details[0].message });
+
+  let decoded = "";
+  try {
+    decoded = jwt.verify(req.header("authorization"), process.env.PRIVATE_KEY);
+  } catch (error) {
+    return res.status(401).send({ error: true, message: "unauthorized" });
+  }
+
+  const user = await User.findOne({ _id: decoded._id });
+  if (!user)
+    return res.status(401).send({ success: false, message: "User not found" });
+
+  // Check password
+  const passCorrect = await bcrypt.compare(req.body.password, user.password);
+  if (!passCorrect)
+    return res.status(401).send({
+      success: false,
+      message: "Contraseña incorrecta",
+    });
+
+  user.pub_key = req.body.pub_key;
+  await user.save();
+  return res.status(200).send({ success: true, message: "Success" });
+});
 
 module.exports = router;

@@ -15,19 +15,25 @@ export class AppComponent {
   username = 'asdf1234damian@gmail.com';
   password = 'passw0rd';
   showSpinner = false;
-  screenSize = [0,0];
+  screenSize = [0, 0];
   fromSmartphone = true;
   loginCardVisible = false;
-  constructor(public snackBar: MatSnackBar, private http: HttpClient, private modalService: NgbModal) {}
+  constructor(
+    public snackBar: MatSnackBar,
+    private http: HttpClient,
+    private modalService: NgbModal
+  ) {}
 
   handleError() {}
 
   open(content: any) {
-    this.modalService.open(content, {centered: true}).result.then((result) => {
-      this.login();
-    }, (reason) => {});
+    this.modalService.open(content, { centered: true }).result.then(
+      (result) => {
+        this.login();
+      },
+      (reason) => {}
+    );
   }
-  
 
   login() {
     this.showSpinner = true;
@@ -48,10 +54,8 @@ export class AppComponent {
           this.user_token = res;
           console.log(res);
           this.getScreenSize();
-          if(this.screenSize[0] < 500)
-            this.openBrowserWarning();
-          else
-            this.fromSmartphone = false;
+          if (this.screenSize[0] < 500) this.openBrowserWarning();
+          else this.fromSmartphone = false;
           this.showSpinner = false;
         },
         error: (err) => {
@@ -75,12 +79,12 @@ export class AppComponent {
     );
   }
 
-  openBrowserWarning(){
+  openBrowserWarning() {
     let snackBarRef2 = this.snackBar.open(
       'Para restablecer tu respaldo directo del celular debes ingresar a la App móvil o descarga el respaldo desde tu computadora',
       'OK',
-      {duration: 5000}
-    )
+      { duration: 5000 }
+    );
   }
 
   download() {
@@ -88,7 +92,7 @@ export class AppComponent {
       .get(environment.host_url + environment.api_download, {
         headers: {
           'Content-Type': 'application/json',
-          Authorization: this.user_token,
+          authorization: this.user_token,
         },
         responseType: 'arraybuffer',
       })

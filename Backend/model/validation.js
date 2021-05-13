@@ -1,4 +1,3 @@
-
 const Joi = require("joi");
 
 const registerValidation = (data) => {
@@ -30,7 +29,14 @@ const updatePasswordValidator = (data) => {
   const schema = Joi.object({
     password: Joi.string().min(6).max(255).required(),
     new_password: Joi.string().min(6).max(255).required(),
-//    confirmation: Joi.string().min(6).max(255).required(),
+  });
+  return schema.validate(data);
+};
+
+const updatePubKeyValidator = (data) => {
+  const schema = Joi.object({
+    password: Joi.string().min(6).max(255).required(),
+    pub_key: Joi.string().required(),
   });
   return schema.validate(data);
 };
