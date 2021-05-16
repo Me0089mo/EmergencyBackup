@@ -43,19 +43,12 @@ class AEScfbCipher(val applicationContext: Context) : CipherFactory(){
             var dataRead:Int
             var compressedData:ByteArray
             initializeCipher()
-            var band = 1
             do{
                 dataRead = inputStream.read(readingArray)
                 if(dataRead == -1) break
                 compressedData = compressor.compressData(readingArray)
-                if(compressedData.isNotEmpty()) {
-                        /*if(band == 1){
-                        compressedData.forEach { b -> print("$b ") }
-                        print("\n")
-                        band = 0
-                    }*/
+                if(compressedData.isNotEmpty())
                     processData(compressedData)
-                }
             }while(dataRead >= 0)
             finalizeCipher(compressor.finalizeCompression())
         }

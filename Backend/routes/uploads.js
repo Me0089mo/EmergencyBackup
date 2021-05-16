@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const multer = require("multer");
 const fs = require("fs");
+const {createHmac,} = require("crypto");
 
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -33,4 +34,18 @@ router.post("/", upload.single("file"), function (req, res, next) {
   //console.log(req.file.buffer.toString("utf-8",0,33))
 });
 
+function calculateHmac(){
+
+}
+
+function readHmac(file){
+  const inputStream = fs.createReadStream(file)
+  let readBytes = inputStream.read(32)
+  console.log(readBytes)
+  readBytes = inp
+}
+
+function verifyHmac(){
+
+}
 module.exports = router;

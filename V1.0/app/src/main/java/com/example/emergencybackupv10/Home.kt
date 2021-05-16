@@ -10,6 +10,7 @@ import androidx.preference.PreferenceManager
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.net.toUri
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import com.auth0.android.jwt.JWT
@@ -31,6 +32,9 @@ import java.net.URI
 
 
 class Home : AppCompatActivity() {
+    private val BACKUP_CONFIG = 42
+    private val KEY_SELECTION = 43
+    private val BACKUP_SELECTION = 44
     private var backUpOnCloud: Boolean = false;
     private var username: String? = ""
     private var id: String? = ""
@@ -42,6 +46,7 @@ class Home : AppCompatActivity() {
     private var privateKeyFile: String? = ""
     private var cipheredDataPath: String? = null
     private var decipheredDataPath: String? = null
+    private var directoryToRestore: String? = null
     private lateinit var  url:String;
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -69,6 +74,7 @@ class Home : AppCompatActivity() {
             println("Preference: ${mutableEntry.key} ${mutableEntry.value}")
         }
         val direct = sharedPreferences.getStringSet(getString(R.string.CONFIG_DIR_SET), null)
+        directoryToRestore = applicationContext.filesDir.absolutePath + "/CipheredData"
     }
 
     private fun getDataFromIntent() {
@@ -115,11 +121,25 @@ class Home : AppCompatActivity() {
         backUpOnCloud = false
     }
 
-    internal fun addFolderToBackup(){
+    internal fun intentForBackupConfiguration(){
         val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE).apply {
             flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
         }
-        startActivityForResult(intent, 42)
+        startActivityForResult(intent, BACKUP_CONFIG)
+    }
+
+    internal fun intentForKeySelection(){
+        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE).apply {
+            flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+        }
+        startActivityForResult(intent, KEY_SELECTION)
+    }
+
+    internal fun intentForBackupSelection(){
+        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE).apply {
+            flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+        }
+        startActivityForResult(intent, BACKUP_SELECTION)
     }
 
     internal fun getDirList(): MutableSet<String> {
@@ -153,7 +173,8 @@ class Home : AppCompatActivity() {
     }
 
     public fun startBackup(v: View) {
-        val createBackup = Backup(this, getDirList())
+        val cipher = AEScfbCipher(this)
+        val createBackup = Backup(this, getDirList(), cipher)
         createBackup.create()
     }
 
@@ -163,6 +184,14 @@ class Home : AppCompatActivity() {
             uploadFile(file)
         }
         Log.i("debug files=", "done!")
+    }
+
+    public fun restoreBackup(v: View){
+        //Obteniendo carpeta de directorios
+        var rootDir = mutableListOf<String>()
+        directoryToRestore?.let { rootDir.add(it) }
+        val decipher = DescifradorAES_CFB(this, privateKeyFile)
+        val restoreBackup = Backup(this, rootDir.toMutableSet(), decipher)
     }
 
     public fun uploadFile(file:File) {
@@ -214,14 +243,14 @@ class Home : AppCompatActivity() {
     }
 
 
-    public fun decipherData(v: View) {
+    /*public fun decipherData(v: View) {
         val decipher = DescifradorAES_CFB(this, privateKeyFile!!)
         decipher.recoverKeys()
         val cipheredFiles = File(cipheredDataPath!!)
         readDirectory(cipheredFiles, decipheredDataPath!!, decipher)
-    }
+    }*/
 
-    private fun readDirectory(f: File, decipheredDataPath: String, descifrador: DescifradorAES_CFB) {
+    /*private fun readDirectory(f: File, decipheredDataPath: String, descifrador: DescifradorAES_CFB) {
         if (f.isDirectory) {
             f.listFiles()?.forEach { documentFile ->
                 if (documentFile.isDirectory) {
@@ -230,17 +259,27 @@ class Home : AppCompatActivity() {
                 } else descifrador.decipherFile(documentFile.absolutePath, decipheredDataPath, documentFile.name)
             }
         }
-    }
+    }*/
 
 
     override fun onActivityResult(
             requestCode: Int, resultCode: Int, resultData: Intent?) {
         super.onActivityResult(requestCode, resultCode, resultData)
         var dirList = getDirList()
-        if (requestCode == 42 && resultCode == Activity.RESULT_OK) {
+        if (requestCode == BACKUP_CONFIG && resultCode == Activity.RESULT_OK) {
             resultData?.data?.also { uri ->
                 dirList.add(uri.toString())
                 saveDirList(dirList)
+            }
+        }
+        if(requestCode == KEY_SELECTION && resultCode == Activity.RESULT_OK){
+            resultData?.data?.also { uri ->
+                privateKeyFile = uri.toString()
+            }
+        }
+        if(requestCode == BACKUP_SELECTION && resultCode == Activity.RESULT_OK){
+            resultData?.data?.also { uri ->
+                directoryToRestore = uri.toString()
             }
         }
     }

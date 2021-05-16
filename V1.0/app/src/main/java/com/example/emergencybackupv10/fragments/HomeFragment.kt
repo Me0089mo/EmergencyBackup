@@ -17,6 +17,7 @@ import androidx.documentfile.provider.DocumentFile
 import androidx.preference.PreferenceManager
 import com.example.emergencybackupv10.Backup
 import com.example.emergencybackupv10.DescifradorAES_CFB
+import com.example.emergencybackupv10.Home
 import com.example.emergencybackupv10.R
 import kotlinx.android.synthetic.main.fragment_home.*
 import java.io.File
@@ -58,18 +59,6 @@ class HomeFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_home, container, false)
     }
 
-    /*override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        btnSelect.setOnClickListener { v: View? ->
-            println("Shared Proferences: ${sharedPreferences?.getStringSet(R.string.CONFIG_DIR_SET.toString(), null)}")
-            //Creating document picker
-            val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE).apply {
-                flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
-            }
-            startActivityForResult(intent, 42)
-        }
-    }*/
-
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onStart() {
         super.onStart()
@@ -81,20 +70,16 @@ class HomeFragment : Fragment() {
 //            println("After: ${sharedPreferences?.getStringSet(getString(R.string.CONFIG_DIR_SET), null)}")
 //            println("Before: ${sharedPreferences?.getStringSet(getString(R.string.CONFIG_DIR_SET), null)}")
 //        }
-        /*
-        btnCifrar.setOnClickListener { v: View? ->
-            val createBackup = Backup(this.requireContext().applicationContext, this.requireContext().filesDir.absolutePath)
-            createBackup.readConfiguration()
-            createBackup.testConfigFile()
-            createBackup.readAll(cipheredDataPath!!)
+
+        btn_cifrar.setOnClickListener { v: View? ->
+            if (v != null) {
+                (activity as Home).startBackup(v)
+            }
         }
 
-        btnDescifrar.setOnClickListener { v : View? ->
-            val decipher = DescifradorAES_CFB(this.requireContext(), publicKeyFile!!, privateKeyFile!!)
-            decipher.recoverKeys()
-            val cipheredFiles = File(cipheredDataPath!!)
-            readDirectory(cipheredFiles, decipheredDataPath!!, decipher)
-        }*/
+        btn_decifrar.setOnClickListener { v : View? ->
+            v?.let { (activity as Home).restoreBackup(it) }
+        }
     }
 
 
@@ -105,21 +90,6 @@ class HomeFragment : Fragment() {
             text_home.text = "No hay un respaldo pendiente\n Hurray?"
         }
     }
-
-    /*override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?){
-        super.onActivityResult(requestCode, resultCode, data)
-        if(requestCode == 42 && resultCode == Activity.RESULT_OK) {
-            data?.data.also { uri ->
-                uri?.let {
-                    val newBackup = Backup(this.requireContext().applicationContext, this.requireContext().filesDir.absolutePath)
-                    if (newBackup.existConfiguration())
-                        newBackup.modifyConfiguration(it)
-                    else
-                        newBackup.createConfiguration(it)
-                }
-            }
-        }
-    }*/
 
     companion object {
         @JvmStatic

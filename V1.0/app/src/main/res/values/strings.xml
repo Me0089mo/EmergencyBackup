@@ -16,6 +16,7 @@
 
 Guárdala en un lugar seguro que no sea en tu teléfono y no la pierdas. Sin ella no podrás recuperar la información respaldada.
     </string>
+    <string name="restore_warning">Si no has descargado tu respaldo previamente presiona el botón de descarga y espera unos momentos</string>
     <string name="login">Iniciar sesión</string>
     <string name="arg_backuponcloud">backuponclound</string>
     <string name="signup">Registrarse</string>

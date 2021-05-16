@@ -58,11 +58,6 @@ class SettingsFragment : Fragment() {
     }
 
     private fun changeFragment(fragment: Fragment) {
-        /*fragment.arguments = bundleOf(
-            R.string.ARG_BU_AVAILABLE.toString() to backUpOnCloud,
-            R.string.ARG_NAME.toString() to username,
-            R.string.ARG_ID.toString() to id
-        )*/
         activity?.supportFragmentManager?.beginTransaction()?.apply {
             replace(R.id.nav_host_fragment, fragment)
             addToBackStack(null)
