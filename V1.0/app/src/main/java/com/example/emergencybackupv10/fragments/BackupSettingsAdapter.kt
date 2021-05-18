@@ -42,10 +42,6 @@ class BackupSettingsAdapter(
 
     override fun getItemCount(): Int = values.size
 
-    fun getAllItems(): MutableList<String>{
-        return values
-    }
-
     inner class ViewHolder(itemView: View) :
         RecyclerView.ViewHolder(itemView),
         View.OnTouchListener,

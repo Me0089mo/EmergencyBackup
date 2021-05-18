@@ -14,7 +14,7 @@ import java.util.*
 class Backup(val applicationContext : Context, val dirList:MutableSet<String>, val cipherFactory: CipherFactory) {
     //private val cifrador = AEScfbCipher(applicationContext)
 
-    fun create(){
+    fun start(){
         dirList.forEach { dir ->
             val docFile = DocumentFile.fromTreeUri(applicationContext, Uri.parse(dir))
             if (docFile!!.exists() && docFile.isDirectory){

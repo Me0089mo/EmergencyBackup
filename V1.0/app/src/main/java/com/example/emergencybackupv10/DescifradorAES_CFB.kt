@@ -21,7 +21,7 @@ import javax.crypto.spec.SecretKeySpec
     Tag size = 32 bytes
     128+32 = 160
  */
-class DescifradorAES_CFB(val applicationContext : Context, val pkDirectory: String?): CipherFactory() {
+class DescifradorAES_CFB(val applicationContext : Context, val pkDirectory: Uri?): CipherFactory() {
     override val cipher:Cipher = Cipher.getInstance("AES/CFB/PKCS5PADDING")
     override val keyCipher = Cipher.getInstance("RSA/ECB/OAEPPADDING")
     override val keyManager = KeyManager(applicationContext)
@@ -39,6 +39,7 @@ class DescifradorAES_CFB(val applicationContext : Context, val pkDirectory: Stri
 
     init {
         userPrivateKey = pkDirectory?.let { keyManager.recoverPrivateKey(it) }!!
+        File(decipheredDataPath).mkdir()
     }
 
     override fun processFile(path: Uri, fileName: String) {
@@ -111,7 +112,7 @@ class DescifradorAES_CFB(val applicationContext : Context, val pkDirectory: Stri
         key = SecretKeySpec(processKey(userPrivateKey, cipheredKey), "AES")
         cipher.init(Cipher.DECRYPT_MODE, key, IvParameterSpec(iv))
         val keyMac = SecretKeySpec(processKey(userPrivateKey, cipheredKeyMac), "HMAC")
-        /*print("Recovered tag: ")
+        print("Recovered tag: ")
         macTag.forEach { b -> print("$b, ") }
         print("\nRecovered mac key: ")
         keyMac.encoded.forEach { b -> print("$b, ") }
@@ -119,7 +120,7 @@ class DescifradorAES_CFB(val applicationContext : Context, val pkDirectory: Stri
         key.encoded.forEach { b -> print("$b, ") }
         print("\nRecovered iv: ")
         iv.forEach { b -> print("$b, ") }
-        print("\n")*/
+        print("\n")
         mac = HMAC(keyMac)
         mac.initializeMac()
     }
@@ -146,11 +147,6 @@ class DescifradorAES_CFB(val applicationContext : Context, val pkDirectory: Stri
         decompressor.inflate(decompressedData)
         decompressor.end()
         fileOutStream.write(decompressedData)
-    }
-
-    fun recoverKeys(){
-        val keyMan = KeyManager(applicationContext)
-        userPrivateKey = keyMan.recoverPrivateKey(pkDirectory.toString())
     }
 
     private fun generateNewName(name:String):String {

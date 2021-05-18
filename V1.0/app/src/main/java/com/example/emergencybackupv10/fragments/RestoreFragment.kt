@@ -1,13 +1,17 @@
 package com.example.emergencybackupv10.fragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.text.Editable
+import android.text.SpannableString
+import android.text.style.UnderlineSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import com.example.emergencybackupv10.Home
 import com.example.emergencybackupv10.R
 import kotlinx.android.synthetic.main.fragment_restore.*
+
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -52,6 +56,14 @@ class RestoreFragment : Fragment() {
         btn_restore.setOnClickListener { v ->
             (activity as Home).restoreBackup(v)
         }
+    }
+
+    fun showKeyPath(location: String){
+        key_location.setText(location)
+    }
+
+    fun showBackupPath(location: String){
+        backup_location.setText(location)
     }
 
     companion object {

@@ -1,9 +1,12 @@
 package com.example.emergencybackupv10
 
 import android.content.Context
+import android.net.Uri
 import android.os.Environment
 import android.util.Base64
+import androidx.documentfile.provider.DocumentFile
 import java.io.File
+import java.net.URI
 import java.security.*
 import java.security.spec.PKCS8EncodedKeySpec
 import java.security.spec.X509EncodedKeySpec
@@ -58,9 +61,15 @@ class KeyManager(val context : Context) {
         return keys
     }
 
-    fun recoverPrivateKey(location: String): PrivateKey{
+    fun recoverPrivateKey(location: Uri?): PrivateKey{
         val keyFac = KeyFactory.getInstance("RSA")
-        val user = File(location).readBytes()
+        var user : ByteArray? = null
+        location?.let {
+            context.contentResolver.openInputStream(it)?.use { reader ->
+                user = reader.readBytes()
+            }
+        }
+        //val user = File(URI(location)).readBytes()
         val privKeyU = PKCS8EncodedKeySpec(user)
         return keyFac.generatePrivate(privKeyU)
     }

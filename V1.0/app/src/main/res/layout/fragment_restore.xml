@@ -19,14 +19,14 @@
         <EditText
             android:id="@+id/key_location"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_marginHorizontal="@dimen/button_h_m"
             android:paddingRight="90dp"
             android:hint="Selecciona tu llave"
             android:inputType="text"
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="@id/btn_select_key"
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
@@ -55,7 +55,7 @@
         <EditText
             android:id="@+id/backup_location"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_marginHorizontal="@dimen/button_h_m"
             android:paddingRight="65dp"
             android:hint="Selecciona tu respaldo"
@@ -64,7 +64,7 @@
             android:textColorHint="#AAAAAA"
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="@id/btn_select_backup"
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
