@@ -39,9 +39,9 @@ class SettingsFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        change_mail_button.setOnClickListener { v -> changeFragment(changeEmailFragment) }
-        change_password_button.setOnClickListener { v -> changeFragment(changePasswordFragment)}
-        backup_config_button.setOnClickListener { v -> changeFragment(backupSettingsFragment) }
+        change_mail_button.setOnClickListener { v -> changeFragment(changeEmailFragment, "change_email_frag") }
+        change_password_button.setOnClickListener { v -> changeFragment(changePasswordFragment, "change_password_frag")}
+        backup_config_button.setOnClickListener { v -> changeFragment(backupSettingsFragment, "backup_config_frag") }
     }
 
 
@@ -57,13 +57,10 @@ class SettingsFragment : Fragment() {
             }
     }
 
-    private fun changeFragment(fragment: Fragment) {
-        /*fragment.arguments = bundleOf(
-            R.string.ARG_BU_AVAILABLE.toString() to backUpOnCloud,
-            R.string.ARG_NAME.toString() to username,
-            R.string.ARG_ID.toString() to id
-        )*/
+    private fun changeFragment(fragment: Fragment, fragmentTag: String) {
+
         activity?.supportFragmentManager?.beginTransaction()?.apply {
+            add(fragment, fragmentTag)
             replace(R.id.nav_host_fragment, fragment)
             addToBackStack(null)
             commit()

@@ -2,6 +2,7 @@ package com.example.emergencybackupv10
 
 import android.content.Context
 import android.net.Uri
+import android.os.Environment
 import java.io.*
 import java.security.*
 import java.security.spec.X509EncodedKeySpec
@@ -20,7 +21,8 @@ class AEScfbCipher(val applicationContext: Context) : CipherFactory(){
     override lateinit var byteOutStream: ByteArrayOutputStream
     override lateinit var mac : HMAC
     private val keyGenerator = KeyGenerator.getInstance("AES")
-    private val cipheredDataPath: String = applicationContext.filesDir.absolutePath + "/CipheredData"
+    private val cipheredDataPath: String = applicationContext.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)!!.absolutePath + "/CipheredData"
+    //applicationContext.filesDir.absolutePath + "/CipheredData"
     private var userPublicKey : PublicKey
     private var serverPublicKey : PublicKey
 
@@ -30,6 +32,7 @@ class AEScfbCipher(val applicationContext: Context) : CipherFactory(){
         val pKeys = keyManager.recoverPublicKeys()
         userPublicKey = pKeys[0]
         serverPublicKey = pKeys[1]
+        File(cipheredDataPath).mkdir()
     }
 
     override fun processFile(path : Uri, fileName : String){
@@ -38,24 +41,18 @@ class AEScfbCipher(val applicationContext: Context) : CipherFactory(){
             val inputStream = BufferedInputStream(reader)
             val readingArray = ByteArray(1024)
             val entry = compressor.newFile(fileName)
-            //Writing the new entry
-            fileOutStream.write(entry)
+
             var dataRead:Int
             var compressedData:ByteArray
             initializeCipher()
-            var band = 1
+            //Writing the new entry
+            fileOutStream.write(entry)
             do{
                 dataRead = inputStream.read(readingArray)
                 if(dataRead == -1) break
                 compressedData = compressor.compressData(readingArray)
-                if(compressedData.isNotEmpty()) {
-                        /*if(band == 1){
-                        compressedData.forEach { b -> print("$b ") }
-                        print("\n")
-                        band = 0
-                    }*/
+                if(compressedData.isNotEmpty())
                     processData(compressedData)
-                }
             }while(dataRead >= 0)
             finalizeCipher(compressor.finalizeCompression())
         }

@@ -2,6 +2,7 @@ package com.example.emergencybackupv10
 
 import Upload
 import android.app.Activity
+import android.app.Instrumentation
 import android.content.Intent
 import android.content.SharedPreferences
 import android.net.Uri
@@ -10,9 +11,13 @@ import androidx.preference.PreferenceManager
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.net.toUri
 import androidx.core.os.bundleOf
+import androidx.documentfile.provider.DocumentFile
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.RecyclerView
 import com.auth0.android.jwt.JWT
+import com.example.emergencybackupv10.fragments.BackupSettings
 import com.example.emergencybackupv10.fragments.HomeFragment
 import com.example.emergencybackupv10.fragments.RestoreFragment
 import com.example.emergencybackupv10.fragments.SettingsFragment
@@ -31,6 +36,9 @@ import java.net.URI
 
 
 class Home : AppCompatActivity() {
+    private val BACKUP_CONFIG = 42
+    private val KEY_SELECTION = 43
+    private val BACKUP_SELECTION = 44
     private var backUpOnCloud: Boolean = false;
     private var username: String? = ""
     private var id: String? = ""
@@ -39,10 +47,12 @@ class Home : AppCompatActivity() {
     private val settingsFragment = SettingsFragment()
     private lateinit var sharedPreferences: SharedPreferences
     private var publicKeyFile: String? = ""
-    private var privateKeyFile: String? = ""
+    private var privateKeyFile: Uri? = null
     private var cipheredDataPath: String? = null
     private var decipheredDataPath: String? = null
-    private lateinit var  url:String;
+    private var directoryToRestore: String? = null
+    private lateinit var  url:String
+    private var processingIntent = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,13 +65,13 @@ class Home : AppCompatActivity() {
         } else {
             getDataFromIntent()
         }
-        changeFragment(homeFragment)
+        changeFragment(homeFragment, "home_frag")
         bottom_nav.selectedItemId = R.id.navigation_home
         bottom_nav.setOnNavigationItemSelectedListener {
             when (it.itemId) {
-                R.id.navigation_home -> changeFragment(homeFragment)
-                R.id.navigation_ajustes -> changeFragment(settingsFragment)
-                R.id.navigation_restore -> changeFragment(restoreFragment)
+                R.id.navigation_home -> changeFragment(homeFragment, "home_frag")
+                R.id.navigation_ajustes -> changeFragment(settingsFragment, "settings_frag")
+                R.id.navigation_restore -> changeFragment(restoreFragment, "restore_frag")
             }
             true
         }
@@ -69,6 +79,7 @@ class Home : AppCompatActivity() {
             println("Preference: ${mutableEntry.key} ${mutableEntry.value}")
         }
         val direct = sharedPreferences.getStringSet(getString(R.string.CONFIG_DIR_SET), null)
+        directoryToRestore = applicationContext.filesDir.absolutePath + "/CipheredData"
     }
 
     private fun getDataFromIntent() {
@@ -76,7 +87,7 @@ class Home : AppCompatActivity() {
         username = intent.getStringExtra(getString(R.string.ARG_NAME))
         id = intent.getStringExtra(getString(R.string.ARG_ID))
         publicKeyFile = intent.getStringExtra(getString(R.string.ARG_PUB_KEY))
-        privateKeyFile = intent.getStringExtra(getString(R.string.ARG_PRIV_KEY))
+        //privateKeyFile = intent.getStringExtra(getString(R.string.ARG_PRIV_KEY))
     }
 
     private fun getDataFromServer() {
@@ -92,16 +103,17 @@ class Home : AppCompatActivity() {
         backUpOnCloud = false
     }
 
-    private fun changeFragment(fragment: Fragment) {
+    private fun changeFragment(fragment: Fragment, tag: String) {
         fragment.arguments = bundleOf(
                 R.string.ARG_BU_AVAILABLE.toString() to backUpOnCloud,
                 R.string.ARG_NAME.toString() to username,
                 R.string.ARG_ID.toString() to id,
-                getString(R.string.ARG_PUB_KEY) to publicKeyFile,
-                getString(R.string.ARG_PRIV_KEY) to privateKeyFile
+                getString(R.string.ARG_PUB_KEY) to publicKeyFile
+                //getString(R.string.ARG_PRIV_KEY) to privateKeyFile
         )
 
         supportFragmentManager.beginTransaction().apply {
+            add(fragment, tag)
             replace(R.id.nav_host_fragment, fragment)
             commit()
         }
@@ -115,11 +127,26 @@ class Home : AppCompatActivity() {
         backUpOnCloud = false
     }
 
-    internal fun addFolderToBackup(){
+    internal fun intentForBackupConfiguration(){
         val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE).apply {
             flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
         }
-        startActivityForResult(intent, 42)
+        startActivityForResult(intent, BACKUP_CONFIG)
+    }
+
+    internal fun intentForKeySelection(){
+        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+            addCategory(Intent.CATEGORY_OPENABLE)
+            type = "*/*"
+        }
+        startActivityForResult(intent, KEY_SELECTION)
+    }
+
+    internal fun intentForBackupSelection(){
+        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE).apply {
+            flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+        }
+        startActivityForResult(intent, BACKUP_SELECTION)
     }
 
     internal fun getDirList(): MutableSet<String> {
@@ -137,7 +164,7 @@ class Home : AppCompatActivity() {
         }
     }
 
-    public fun pickDir(v: View) {
+    /*public fun pickDir(v: View) {
         val cipherDataDirectory = File(this.filesDir, "CipheredData")
         val decipheredDataDirectory = File(this.filesDir, "DecipheredData")
         if (decipheredDataDirectory.exists() || cipherDataDirectory.mkdir())
@@ -150,11 +177,12 @@ class Home : AppCompatActivity() {
             flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
         }
         startActivityForResult(intent, 42)
-    }
+    }*/
 
     public fun startBackup(v: View) {
-        val createBackup = Backup(this, getDirList())
-        createBackup.create()
+        val cipher = AEScfbCipher(this)
+        val createBackup = Backup(this, getDirList(), cipher)
+        createBackup.start()
     }
 
     public fun uploadBackup(v: View) {
@@ -163,6 +191,15 @@ class Home : AppCompatActivity() {
             uploadFile(file)
         }
         Log.i("debug files=", "done!")
+    }
+
+    public fun restoreBackup(v: View){
+        //Obteniendo carpeta de directorios
+        var rootDir = mutableListOf<String>()
+        directoryToRestore?.let { rootDir.add(it) }
+        val decipher = DescifradorAES_CFB(this, privateKeyFile)
+        val restoreBackup = Backup(this, rootDir.toMutableSet(), decipher)
+        restoreBackup.start()
     }
 
     public fun uploadFile(file:File) {
@@ -213,15 +250,26 @@ class Home : AppCompatActivity() {
         );
     }
 
+    internal fun actualizeBackupConfig(namesList: ArrayList<String>): ArrayList<String>{
+        val dirList = getDirList()
+        namesList.clear()
+        for (dir in dirList){
+            val ind = dir.indexOfLast { it == '%' }
+            namesList.add(dir.drop(ind+3))
+            println(dir)
+        }
+        return namesList
+    }
 
-    public fun decipherData(v: View) {
+
+    /*public fun decipherData(v: View) {
         val decipher = DescifradorAES_CFB(this, privateKeyFile!!)
         decipher.recoverKeys()
         val cipheredFiles = File(cipheredDataPath!!)
         readDirectory(cipheredFiles, decipheredDataPath!!, decipher)
-    }
+    }*/
 
-    private fun readDirectory(f: File, decipheredDataPath: String, descifrador: DescifradorAES_CFB) {
+    /*private fun readDirectory(f: File, decipheredDataPath: String, descifrador: DescifradorAES_CFB) {
         if (f.isDirectory) {
             f.listFiles()?.forEach { documentFile ->
                 if (documentFile.isDirectory) {
@@ -230,18 +278,41 @@ class Home : AppCompatActivity() {
                 } else descifrador.decipherFile(documentFile.absolutePath, decipheredDataPath, documentFile.name)
             }
         }
-    }
+    }*/
 
 
     override fun onActivityResult(
             requestCode: Int, resultCode: Int, resultData: Intent?) {
         super.onActivityResult(requestCode, resultCode, resultData)
-        var dirList = getDirList()
-        if (requestCode == 42 && resultCode == Activity.RESULT_OK) {
+        if (requestCode == BACKUP_CONFIG && resultCode == Activity.RESULT_OK) {
+            var dirList = getDirList()
             resultData?.data?.also { uri ->
                 dirList.add(uri.toString())
                 saveDirList(dirList)
             }
+            val backupFrag : BackupSettings =
+                supportFragmentManager.findFragmentByTag("backup_config_frag") as BackupSettings
+            backupFrag.updateRecycler()
+        }
+        if(requestCode == KEY_SELECTION && resultCode == Activity.RESULT_OK){
+            var location: String = ""
+            resultData?.data?.also { uri ->
+                privateKeyFile = uri
+                location = DocumentFile.fromSingleUri(applicationContext, uri)?.name!!
+            }
+            val restoreFrag : RestoreFragment =
+                supportFragmentManager.findFragmentByTag("restore_frag") as RestoreFragment
+            restoreFrag.showKeyPath(location)
+        }
+        if(requestCode == BACKUP_SELECTION && resultCode == Activity.RESULT_OK){
+            var location: String = ""
+            resultData?.data?.also { uri ->
+                directoryToRestore = uri.toString()
+                location = DocumentFile.fromTreeUri(applicationContext, uri)?.name!!
+            }
+            val restoreFrag : RestoreFragment =
+                supportFragmentManager.findFragmentByTag("restore_frag") as RestoreFragment
+            restoreFrag.showBackupPath(location)
         }
     }
 

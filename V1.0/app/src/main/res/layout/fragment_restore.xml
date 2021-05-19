@@ -5,17 +5,119 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    <TextView
-            android:id="@+id/text_notifications"
-            android:layout_width="match_parent"
+    <LinearLayout
+        android:id="@+id/layout_key"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="70dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_weight="@integer/config_navAnimTime"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" >
+
+        <EditText
+            android:id="@+id/key_location"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="@dimen/button_h_m"
+            android:paddingRight="90dp"
+            android:hint="Selecciona tu llave"
+            android:inputType="text"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/btn_select_key"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/btn_select_key"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:text="restore"
-            android:layout_marginEnd="8dp"
-            android:textAlignment="center"
-            android:textSize="20sp"
+            android:background="@drawable/custom_button"
+            android:text="Seleccionar"
+            android:textSize="10sp"
+            app:backgroundTint="@color/button_font_negative"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toBottomOf="@+id/key_location" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_backup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="70dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/layout_key">
+
+        <EditText
+            android:id="@+id/backup_location"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="@dimen/button_h_m"
+            android:paddingRight="65dp"
+            android:hint="Selecciona tu respaldo"
+            android:inputType="text"
+            android:textColor="@color/button_font_negative"
+            android:textColorHint="#AAAAAA"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/btn_select_backup"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/btn_select_backup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/custom_button"
+            android:text="Seleccionar"
+            android:textSize="10sp"
+            app:backgroundTint="@color/button_font_negative"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/backup_location" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/txt_warning"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/button_h_m"
+        android:layout_marginTop="70dp"
+        android:text="@string/restore_warning"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_weight="@integer/config_navAnimTime"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/layout_backup"
+        />
+
+    <Button
+        android:id="@+id/btn_download"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/button_h_m"
+        android:layout_marginTop="70dp"
+        android:background="@drawable/custom_button"
+        android:text="Descargar"
+        app:backgroundTint="@color/button_font_negative"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txt_warning" />
+
+    <Button
+        android:id="@+id/btn_restore"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/button_h_m"
+        android:layout_marginTop="70dp"
+        android:background="@drawable/custom_button"
+        android:text="Reestablecer"
+        app:backgroundTint="@color/button_font_negative"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_download" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
