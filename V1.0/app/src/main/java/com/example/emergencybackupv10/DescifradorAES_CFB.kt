@@ -2,14 +2,9 @@ package com.example.emergencybackupv10
 
 import android.content.Context
 import android.net.Uri
-import android.os.Build
-import androidx.annotation.RequiresApi
-import androidx.documentfile.provider.DocumentFile
+import com.example.emergencybackupv10.utils.AlertUtils
 import java.io.*
 import java.security.*
-import java.security.spec.AlgorithmParameterSpec
-import java.security.spec.PKCS8EncodedKeySpec
-import java.security.spec.X509EncodedKeySpec
 import java.util.zip.*
 import javax.crypto.*
 import javax.crypto.spec.IvParameterSpec
@@ -17,9 +12,9 @@ import javax.crypto.spec.SecretKeySpec
 
 /*
     IV size = 16 bytes
-    Key size = 128 bytes
+    Key size = 16 bytes
     Tag size = 32 bytes
-    128+32 = 160
+    Total = 64
  */
 class DescifradorAES_CFB(val applicationContext : Context, val pkDirectory: Uri?): CipherFactory() {
     override val cipher:Cipher = Cipher.getInstance("AES/CFB/PKCS5PADDING")
@@ -30,12 +25,15 @@ class DescifradorAES_CFB(val applicationContext : Context, val pkDirectory: Uri?
     override lateinit var fileOutStream : FileOutputStream
     override lateinit var byteOutStream : ByteArrayOutputStream
     override lateinit var mac : HMAC
-    private lateinit var inflaterOutStream : InflaterOutputStream
-    private lateinit var cipheredFile : File
+    private lateinit var decipheredFileOutStream : FileOutputStream
+    private lateinit var zipInputStream: ZipInputStream
+    private lateinit var decipheredFile : File
+    private lateinit var decompressedFile : File
     private lateinit var macTag : ByteArray
-    private var userPrivateKey : PrivateKey
-    private val decipheredDataPath: String = applicationContext.filesDir.absolutePath + "/DecipheredData"
     private lateinit var key : SecretKey
+    private var userPrivateKey : PrivateKey
+    private var macMatches = false
+    private val decipheredDataPath: String = applicationContext.filesDir.absolutePath + "/DecipheredData"
 
     init {
         userPrivateKey = pkDirectory?.let { keyManager.recoverPrivateKey(it) }!!
@@ -57,50 +55,39 @@ class DescifradorAES_CFB(val applicationContext : Context, val pkDirectory: Uri?
             val iv = ByteArray(16)
             fileInput.read(cipheredKey)
             fileInput.read(iv)
+
             initializeCipher(cipheredKey, iv, cipheredKeyMac)
 
-            val bufInputStream = BufferedInputStream(fileInput)
-            //val cipherInputStream = CipherInputStream(bufInputStream, cipher)
-            var zipInputStream = ZipInputStream(fileInput)
-            val entry = zipInputStream.nextEntry
-            if(entry == null) println("Null Zip Entry")
-            else println("Size: ${entry.compressedSize}, Name: ${entry.name}")
-
-            val byteOutReadStream = ByteArrayOutputStream()
             val readingArray = ByteArray(1024)
             var readLong:Int
-
             do{
                 readLong = fileInput.read(readingArray)
-                println("Read bytes: $readLong")
                 if(readLong == -1) break
-                if(readingArray.isNotEmpty()) {
-                    processData(readingArray)
-                }
+                processData(readingArray, readLong)
             }while(readLong >= 0)
             finalizeCipher()
-
-            //zipOutStream.close()
-            byteOutReadStream.close()
+            if(macMatches) decompressData()
+            else{
+                AlertUtils().topToast(applicationContext, "Archivo $fileName corrupto. No se restaurará y será eliminado")
+                decipheredFile.delete()
+                decompressedFile.delete()
+            }
+            println(macMatches)
         }
     }
 
-    override fun processData(data: ByteArray) {
-        cipheredOutput.write(data)
-        val aux = byteOutStream.toByteArray()
-        mac.calculateMac(data)
-        aux.forEach { b -> print("$b ") }
-        print("\n")
-        decompressData(aux)
-        byteOutStream.reset()
+    override fun processData(data: ByteArray, numBytes: Int) {
+        cipheredOutput.write(data, 0, numBytes)
+        mac.calculateMac(data, numBytes)
     }
 
     override fun createOutputFile(path: String, fileName: String) {
-        cipheredFile = File("$path/$fileName")
-        fileOutStream = FileOutputStream(cipheredFile)
-        inflaterOutStream = InflaterOutputStream(fileOutStream)
-        byteOutStream = ByteArrayOutputStream()
-        cipheredOutput = CipherOutputStream(byteOutStream, cipher)
+        decompressedFile = File("$path/$fileName")
+        decipheredFile = File("$path/${generateNewName(fileName)}")
+        decipheredFileOutStream = FileOutputStream(decipheredFile)
+        byteOutStream = ByteArrayOutputStream(1024)
+        fileOutStream = FileOutputStream(decompressedFile)
+        cipheredOutput = CipherOutputStream(decipheredFileOutStream, cipher)
     }
 
     override fun processKey(cipherKey: Key, data: ByteArray): ByteArray {
@@ -112,48 +99,40 @@ class DescifradorAES_CFB(val applicationContext : Context, val pkDirectory: Uri?
         key = SecretKeySpec(processKey(userPrivateKey, cipheredKey), "AES")
         cipher.init(Cipher.DECRYPT_MODE, key, IvParameterSpec(iv))
         val keyMac = SecretKeySpec(processKey(userPrivateKey, cipheredKeyMac), "HMAC")
-        print("Recovered tag: ")
-        macTag.forEach { b -> print("$b, ") }
-        print("\nRecovered mac key: ")
-        keyMac.encoded.forEach { b -> print("$b, ") }
-        print("\nRecovered cipher key: ")
-        key.encoded.forEach { b -> print("$b, ") }
-        print("\nRecovered iv: ")
-        iv.forEach { b -> print("$b, ") }
-        print("\n")
         mac = HMAC(keyMac)
         mac.initializeMac()
     }
 
     private fun finalizeCipher(){
         cipheredOutput.close()
-        fileOutStream.write(byteOutStream.toByteArray())
-        mac.calculateMac(byteOutStream.toByteArray())
+        decipheredFileOutStream.close()
         mac.finalizeMac()
-        if(mac.verifyMac(macTag)){
-            //se reestablece archivo
-        }
-        inflaterOutStream.close()
-        fileOutStream.close()
+        if(mac.verifyMac(macTag))
+            macMatches = true
     }
 
-    private fun decompressData(compressedData: ByteArray){
-        //println("Before compression: ${compressData.size}")
-        compressedData.forEach { b -> print("$b ") }
-        print("\n")
-        val decompressor = Inflater()
-        val decompressedData = ByteArray(2048)
-        decompressor.setInput(compressedData, 0,compressedData.size)
-        decompressor.inflate(decompressedData)
-        decompressor.end()
-        fileOutStream.write(decompressedData)
+    private fun decompressData(){
+        zipInputStream = ZipInputStream(FileInputStream(decipheredFile))
+        var readingArray = ByteArray(1024)
+        var reading = 0
+        if(zipInputStream.nextEntry != null){
+            while(reading != -1){
+                reading = zipInputStream.read(readingArray)
+                if(reading != -1)
+                    fileOutStream.write(readingArray, 0, reading)
+            }
+            fileOutStream.close()
+            zipInputStream.closeEntry()
+        }
+        zipInputStream.close()
+        decipheredFile.delete()
     }
 
     private fun generateNewName(name:String):String {
         var newName = ""
         for (index in (name.length - 1).downTo(0)) {
             if (name[index] == '.') {
-                newName = name.substring(0, index) + "Ciphered"
+                newName = name.substring(0, index) + "Deciphered"
                 newName += name.substring(index, name.length)
                 break
             }

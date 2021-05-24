@@ -2,24 +2,17 @@ package com.example.emergencybackupv10.fragments
 
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.text.TextUtils
-import android.util.Log
-import android.util.Patterns
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.preference.PreferenceManager
 import com.example.emergencybackupv10.R
 import com.example.emergencybackupv10.networking.ServerResponse
 import com.example.emergencybackupv10.networking.UpdateUser
 import com.example.emergencybackupv10.utils.AlertUtils
-import kotlinx.android.synthetic.main.activity_signup.*
-import kotlinx.android.synthetic.main.fragment_change_email.*
 import kotlinx.android.synthetic.main.fragment_change_email.btn_change_email
 import kotlinx.android.synthetic.main.fragment_change_password.*
-import kotlinx.android.synthetic.main.fragment_settings.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

@@ -21,8 +21,10 @@ class AEScfbCipher(val applicationContext: Context) : CipherFactory(){
     override lateinit var byteOutStream: ByteArrayOutputStream
     override lateinit var mac : HMAC
     private val keyGenerator = KeyGenerator.getInstance("AES")
+    private val cipheredDataPath: String = applicationContext.filesDir.absolutePath + "/CipheredData"
+    /* Para pruebas
     private val cipheredDataPath: String = applicationContext.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)!!.absolutePath + "/CipheredData"
-    //applicationContext.filesDir.absolutePath + "/CipheredData"
+    */
     private var userPublicKey : PublicKey
     private var serverPublicKey : PublicKey
 
@@ -41,20 +43,22 @@ class AEScfbCipher(val applicationContext: Context) : CipherFactory(){
             val inputStream = BufferedInputStream(reader)
             val readingArray = ByteArray(1024)
             val entry = compressor.newFile(fileName)
-
             var dataRead:Int
             var compressedData:ByteArray
+
             initializeCipher()
             //Writing the new entry
-            fileOutStream.write(entry)
+            processData(entry, entry.size)
+
             do{
                 dataRead = inputStream.read(readingArray)
                 if(dataRead == -1) break
-                compressedData = compressor.compressData(readingArray)
-                if(compressedData.isNotEmpty())
-                    processData(compressedData)
+                compressedData = compressor.compressData(readingArray, dataRead)
+                processData(compressedData, compressedData.size)
             }while(dataRead >= 0)
-            finalizeCipher(compressor.finalizeCompression())
+            val entryClose = compressor.finalizeCompression()
+            processData(entryClose, entryClose.size)
+            finalizeCipher()
         }
     }
 
@@ -67,32 +71,19 @@ class AEScfbCipher(val applicationContext: Context) : CipherFactory(){
         fileOutStream.write(cipher.iv)
     }
 
-    override fun processData(data : ByteArray){
-        cipheredOutput.write(data)
+    override fun processData(data: ByteArray, numBytes: Int) {
+        cipheredOutput.write(data, 0, numBytes)
         val aux = byteOutStream.toByteArray()
         fileOutStream.write(aux)
-        mac.calculateMac(aux)
+        mac.calculateMac(aux, aux.size)
         byteOutStream.reset()
     }
 
-    private fun finalizeCipher(zipEntryClosing  : ByteArray){
-        fileOutStream.write(zipEntryClosing)
+    private fun finalizeCipher(){
         cipheredOutput.close()
-        /*fileOutStream.write(byteOutStream.toByteArray())
-        mac.calculateMac(byteOutStream.toByteArray())*/
         mac.finalizeMac()
         fileOutStream.channel.position(0)
         fileOutStream.write(mac.tag)
-        /*print("Original tag: ")
-        mac.tag.forEach { b -> print("$b, ") }
-        print("\nOriginal mac key: ")
-        mac.key.encoded.forEach { b -> print("$b, ") }
-        print("\nOriginal cipher key: ")
-        key.encoded.forEach { b -> print("$b, ") }
-        print("\nOriginal iv: ")
-        cipher.iv.forEach { b -> print("$b, ") }
-        print("\n")*/
-
         fileOutStream.write(processKey(serverPublicKey, mac.key.encoded))
         fileOutStream.close()
     }

@@ -1,6 +1,5 @@
 package com.example.emergencybackupv10
 
-import javax.crypto.Cipher
 import javax.crypto.KeyGenerator
 import javax.crypto.Mac
 import javax.crypto.SecretKey
@@ -26,14 +25,14 @@ class HMAC constructor(){
         key = keyGenerator.generateKey()
     }
 
-    fun calculateMac(data: ByteArray){
-        macInstance.update(data)
+    fun calculateMac(data: ByteArray, numBytes: Int){
+        macInstance.update(data, 0, numBytes)
     }
 
     fun finalizeMac(){
         tag = macInstance.doFinal()
-
     }
 
-    fun verifyMac(tagCalculated : ByteArray) : Boolean = tag.contentEquals(tagCalculated)
+    fun verifyMac(tagRecovered : ByteArray) : Boolean = tag.contentEquals(tagRecovered)
+
 }

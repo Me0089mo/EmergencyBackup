@@ -17,7 +17,7 @@ abstract class CipherFactory {
     abstract var byteOutStream : ByteArrayOutputStream
     abstract var mac : HMAC
     abstract fun processFile(path : Uri, fileName : String)
-    abstract fun processData(data : ByteArray)
+    abstract fun processData(data : ByteArray, numBytes: Int)
     abstract fun createOutputFile(path : String, fileName : String)
     abstract fun processKey(cipherKey : Key, data : ByteArray) : ByteArray
 }

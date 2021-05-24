@@ -13,7 +13,8 @@ import com.example.emergencybackupv10.R
 import kotlinx.android.synthetic.main.fragment_backup_settings.*
 
 class BackupSettings : Fragment() {
-    var namesList = mutableListOf<String>()
+    var directories = mutableListOf<Pair<String, String>>()
+    lateinit var backupAdapter: BackupSettingsAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,13 +27,10 @@ class BackupSettings : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_backup_settings, container, false)
         val dirList = (activity as Home).getDirList()
-        namesList.clear()
-        for (dir in dirList){
-            val ind = dir.indexOfLast { it == '%' }
-            namesList.add(dir.drop(ind+3))
-        }
+        getValuesFromDirList(dirList)
+
         val recyclerView = view?.findViewById<RecyclerView>(R.id.folder_list)
-        val backupAdapter = BackupSettingsAdapter(namesList)
+        backupAdapter = BackupSettingsAdapter(directories)
         val callback = ItemTouchHelperAdapter(backupAdapter)
         val itemTouchHelper = ItemTouchHelper(callback)
         backupAdapter.setTouchHelper(itemTouchHelper)
@@ -51,18 +49,24 @@ class BackupSettings : Fragment() {
         }
 
         btn_save_changes.setOnClickListener { v ->
+            (activity as Home).resetDirList()
+            val newList: List<String> = backupAdapter.getItems().map { it.second }
+            (activity as Home).saveDirList(newList.toMutableSet())
         }
     }
 
     fun updateRecycler(){
         val dirList = (activity as Home).getDirList()
-        namesList.clear()
+        getValuesFromDirList(dirList)
+        this.view?.findViewById<RecyclerView>(R.id.folder_list)?.adapter?.notifyDataSetChanged()
+    }
+
+    fun getValuesFromDirList(dirList: MutableSet<String>){
+        directories.clear()
         for (dir in dirList) {
             val ind = dir.indexOfLast { it == '%' }
-            namesList.add(dir.drop(ind + 3))
-            println(dir)
+            directories.add(Pair(dir.drop(ind + 3), dir))
         }
-        this.view?.findViewById<RecyclerView>(R.id.folder_list)?.adapter?.notifyDataSetChanged()
     }
 
     companion object {
