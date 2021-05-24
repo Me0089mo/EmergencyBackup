@@ -8,8 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.preference.PreferenceManager
 import com.example.emergencybackupv10.R
-import com.example.emergencybackupv10.networking.ServerResponse
-import com.example.emergencybackupv10.networking.UpdateUser
+import com.example.emergencybackupv10.networking.interfaces.ServerResponse
+import com.example.emergencybackupv10.networking.interfaces.UpdateUser
 import com.example.emergencybackupv10.utils.AlertUtils
 import kotlinx.android.synthetic.main.fragment_change_email.btn_change_email
 import kotlinx.android.synthetic.main.fragment_change_password.*
@@ -64,13 +64,19 @@ class ChangePassword : Fragment() {
             )
             call.enqueue(object : Callback<ServerResponse> {
                 override fun onFailure(call: Call<ServerResponse>?, t: Throwable?) {
-                    alertUtils.topToast(requireContext(), "failure"+call.toString())
+                    alertUtils.topToast(requireContext(), "Hubo un error por favor intentalo otra vez mas tarde")
                 }
                 override fun onResponse(
                     call: Call<ServerResponse>?,
                     response: Response<ServerResponse>?
                 ) {
-                    alertUtils.topToast(requireContext(), response.toString())
+                    if(response?.body()?.error==true){
+                        alertUtils.topToast(requireContext(), "Se ha cambiado la contraseña")
+                    }else{
+                        alertUtils.topToast(requireContext(), response?.body()?.message.toString())
+                    }
+
+
                 }
             }
             );

@@ -1,10 +1,8 @@
+package com.example.emergencybackupv10.networking
+
 import android.content.Context
 import com.android.volley.*
-import com.android.volley.toolbox.HttpHeaderParser
 import com.android.volley.toolbox.Volley
-import org.json.JSONException
-import org.json.JSONObject
-import java.io.UnsupportedEncodingException
 
 
 class HttpQ constructor(context: Context) {

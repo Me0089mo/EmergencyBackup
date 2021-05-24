@@ -1,6 +1,6 @@
 package com.example.emergencybackupv10
 
-import HttpQ
+import com.example.emergencybackupv10.networking.HttpQ
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -21,7 +21,7 @@ class Login : AppCompatActivity() {
     private lateinit var queue: RequestQueue;
     private lateinit var url: String;
     private val alertUtils: AlertUtils = AlertUtils();
-    private lateinit var sharedPreferences:SharedPreferences;
+    private lateinit var sharedPreferences: SharedPreferences;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,12 +33,12 @@ class Login : AppCompatActivity() {
 
     }
 
-    public fun checkForToken(){
-        val t = sharedPreferences.getString(getString(R.string.CONFIG_TOKEN),null)
-        if (t != null){
+    public fun checkForToken() {
+        val t = sharedPreferences.getString(getString(R.string.CONFIG_TOKEN), null)
+        if (t != null) {
             val intent = Intent(this, Home::class.java)
             intent.putExtra(
-                    getString(R.string.CONFIG_WAS_LOGED_IN),true
+                getString(R.string.CONFIG_WAS_LOGED_IN), true
             )
             startActivity(intent)
         }
@@ -49,7 +49,7 @@ class Login : AppCompatActivity() {
         startActivity(intent)
     }
 
-    public fun logIn( view: View) {
+    public fun logIn(view: View) {
         if (!isValidEmail(login_email.text.toString())) {
             alertUtils.topToast(this, "Dirección de correo invalida")
             return
@@ -58,20 +58,26 @@ class Login : AppCompatActivity() {
         val postRequest: StringRequest = object : StringRequest(
             Method.POST, url,
             Response.Listener { response ->
+
                 var token = response.toString()
+                val jwt = JWT(token)
                 //Save the token to local storage
-                with (sharedPreferences.edit()) {
+                with(sharedPreferences.edit()) {
                     putString(getString(R.string.CONFIG_TOKEN), token)
+                    putString(
+                        getString(R.string.CONFIG_SERVER_PUB_KEY),
+                        jwt.getClaim(getString(R.string.CONFIG_SERVER_PUB_KEY)).asString()
+                    )
                     apply()
                 }
 
+
                 //Parse the token as parameter to teh next activity
-                val jwt = JWT(token)
+
                 val intent = Intent(this, Home::class.java)
                 intent.putExtra(
-                    getString(R.string.CONFIG_WAS_LOGED_IN),false
+                    getString(R.string.CONFIG_WAS_LOGED_IN), false
                 )
-
                 intent.putExtra(
                     getString(R.string.ARG_BU_AVAILABLE),
                     jwt.getClaim(getString(R.string.ARG_BU_AVAILABLE)).asBoolean()
@@ -89,7 +95,7 @@ class Login : AppCompatActivity() {
                 startActivity(intent);
             },
             Response.ErrorListener { error ->
-                val msg: String  = HttpQ.getInstance(this).getErrorMsg(error)
+                val msg: String = HttpQ.getInstance(this).getErrorMsg(error)
                 alertUtils.topToast(this, msg)
             }
         ) {

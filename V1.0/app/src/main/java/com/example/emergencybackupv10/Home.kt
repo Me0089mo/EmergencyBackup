@@ -22,7 +22,7 @@ import com.example.emergencybackupv10.fragments.BackupSettings
 import com.example.emergencybackupv10.fragments.HomeFragment
 import com.example.emergencybackupv10.fragments.RestoreFragment
 import com.example.emergencybackupv10.fragments.SettingsFragment
-import com.example.emergencybackupv10.networking.ServerResponse
+import com.example.emergencybackupv10.networking.interfaces.ServerResponse
 import kotlinx.android.synthetic.main.activity_home.*
 import okhttp3.MediaType
 import okhttp3.MultipartBody
@@ -208,8 +208,8 @@ class Home : AppCompatActivity() {
                 reqFilePart
         )
 
-        val authPart :RequestBody = RequestBody.create(
-                MultipartBody.FORM,
+
+
                 sharedPreferences.getString(getString(R.string.CONFIG_TOKEN), null)!!
         )
 
@@ -224,13 +224,13 @@ class Home : AppCompatActivity() {
         val uploadService : Upload = retrofit.create(Upload::class.java)
 
         val call: Call<ServerResponse> = uploadService.upload(
-                authPart,
-                multipartFile
+            authorization = sharedPreferences.getString(getString(R.string.CONFIG_TOKEN), null)!!
+            ,file = multipartFile
         )
 
         call.enqueue(object : Callback<ServerResponse> {
             override fun onFailure(call: Call<ServerResponse>?, t: Throwable?) {
-                Log.i("retrofit fail ", "call failed")
+                Log.i("retrofit fail ", "call fai   led")
             }
 
             override fun onResponse(call: Call<ServerResponse>?, response: Response<ServerResponse>?) {

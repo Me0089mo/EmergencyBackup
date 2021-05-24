@@ -1,6 +1,6 @@
 package com.example.emergencybackupv10
 
-import HttpQ
+import com.example.emergencybackupv10.networking.HttpQ
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -12,6 +12,7 @@ import androidx.preference.PreferenceManager
 import com.android.volley.RequestQueue
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
+import com.auth0.android.jwt.JWT
 import com.example.emergencybackupv10.utils.AlertUtils
 import kotlinx.android.synthetic.main.activity_signup.*
 
@@ -53,9 +54,14 @@ class SignUp : AppCompatActivity() {
             Method.POST, url,
             Response.Listener { response ->
                 var token = response.toString()
+                val jwt = JWT(token)
                 //Save the token to local storage
-                with (sharedPreferences.edit()) {
+                with(sharedPreferences.edit()) {
                     putString(getString(R.string.CONFIG_TOKEN), token)
+                    putString(
+                        getString(R.string.CONFIG_SERVER_PUB_KEY),
+                        jwt.getClaim(getString(R.string.CONFIG_SERVER_PUB_KEY)).asString()
+                    )
                     apply()
                 }
                 val intent = Intent(this, RegistrationSuccess::class.java)

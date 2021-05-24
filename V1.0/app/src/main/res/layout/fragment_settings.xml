@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -52,7 +51,7 @@
 
 
                 <Button
-                    android:id="@+id/dashboard_dir_button"
+                    android:id="@+id/change_mail_button"
                     style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -61,7 +60,7 @@
                     android:background="?android:attr/selectableItemBackground"
                     android:fontFamily="sans-serif-medium"
                     android:onClick="pickDir"
-                    android:text="Selecciónar carpeta"
+                    android:text="Cambiar correo electrónico"
                     android:textAlignment="viewStart"
                     android:textColor="@color/button_font_negative"
                     android:textSize="14sp"
@@ -74,27 +73,7 @@
                     app:strokeColor="#FFFFFF"
                     app:strokeWidth="1dp" />
 
-                <Button
-                    android:id="@+id/change_mail_button"
-                    style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="@dimen/button_h_m"
-                    android:layout_marginTop="2dp"
-                    android:background="?android:attr/selectableItemBackground"
-                    android:fontFamily="sans-serif-medium"
-                    android:onClick="pickDir"
-                    android:text="Cambiar Correo"
-                    android:textAlignment="viewStart"
-                    android:textColor="@color/button_font_negative"
-                    android:textSize="14sp"
-                    app:icon="@drawable/ic_baseline_arrow_forward_ios_24"
-                    app:iconGravity="end"
-                    app:iconTint="@color/button_font_negative"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="1.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/dashboard_dir_button" />
+
 
                 <Button
                     android:id="@+id/change_password_button"
@@ -125,7 +104,6 @@
                     android:layout_marginTop="2dp"
                     android:background="?android:attr/selectableItemBackground"
                     android:fontFamily="sans-serif-medium"
-                    android:onClick="pickDir"
                     android:text="Configurar respaldo"
                     android:textAlignment="viewStart"
                     android:textColor="@color/button_font_negative"
@@ -147,7 +125,6 @@
                     android:layout_marginTop="3dp"
                     android:background="?android:attr/selectableItemBackground"
                     android:fontFamily="sans-serif-medium"
-                    android:onClick="pickDir"
                     android:text="Solicitar nueva llave"
                     android:textAlignment="viewStart"
                     android:textColor="@color/button_font_negative"

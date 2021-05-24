@@ -1,7 +1,5 @@
-
-import com.example.emergencybackupv10.networking.ServerResponse
+package com.example.emergencybackupv10.networking.interfaces
 import okhttp3.MultipartBody
-import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.http.Header
 import retrofit2.http.Multipart
@@ -12,6 +10,6 @@ interface Upload {
     @Multipart
     @POST("/api/upload")
     fun upload(
-        @Header("authorization") authorization: RequestBody,
+        @Header("authorization") authorization: String,
         @Part file: MultipartBody.Part): Call<ServerResponse>
 }

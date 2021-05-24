@@ -1,4 +1,4 @@
-package com.example.emergencybackupv10.networking
+package com.example.emergencybackupv10.networking.interfaces
 
 data class ServerResponse (
     val error: Boolean,

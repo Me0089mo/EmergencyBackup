@@ -1,4 +1,4 @@
-package com.example.emergencybackupv10.networking
+package com.example.emergencybackupv10.networking.interfaces
 
 import retrofit2.Call
 import retrofit2.http.*

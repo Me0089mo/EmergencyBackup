@@ -12,12 +12,10 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.preference.PreferenceManager
 import com.example.emergencybackupv10.R
-import com.example.emergencybackupv10.networking.ServerResponse
-import com.example.emergencybackupv10.networking.UpdateUser
+import com.example.emergencybackupv10.networking.interfaces.ServerResponse
+import com.example.emergencybackupv10.networking.interfaces.UpdateUser
 import com.example.emergencybackupv10.utils.AlertUtils
-import kotlinx.android.synthetic.main.activity_signup.*
 import kotlinx.android.synthetic.main.fragment_change_email.*
-import kotlinx.android.synthetic.main.fragment_settings.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -30,7 +28,7 @@ class ChangeEmail : Fragment() {
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var retrofit:Retrofit;
     private lateinit var  url:String;
-    private lateinit var updateService:UpdateUser;
+    private lateinit var updateService: UpdateUser;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

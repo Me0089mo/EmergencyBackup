@@ -203,3 +203,8 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+
+# rsa keys
+*rsa.public
+*rsa.private

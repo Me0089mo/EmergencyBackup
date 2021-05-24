@@ -5,6 +5,7 @@
     <string name="ARG_NAME">name</string>
     <string name="CONFIG_TOKEN">CONFIG_TOKEN</string>
     <string name="ARG_PUB_KEY">publicKey</string>
+    <string name="CONFIG_SERVER_PUB_KEY">server_pub_key</string>
     <string name="ARG_PRIV_KEY">privateKey</string>
     <string name="CONFIG_WAS_LOGED_IN">LOGED_IN</string>
     <string name="CONFIG_DIR_SET">DIR_SET</string>
