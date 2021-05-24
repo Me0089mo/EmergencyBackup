@@ -59,8 +59,8 @@ class SignUp : AppCompatActivity() {
                 with(sharedPreferences.edit()) {
                     putString(getString(R.string.CONFIG_TOKEN), token)
                     putString(
-                        getString(R.string.CONFIG_SERVER_PUB_KEY),
-                        jwt.getClaim(getString(R.string.CONFIG_SERVER_PUB_KEY)).asString()
+                        getString(R.string.CONFIG_SERVER_PEM_CERTIFICATE),
+                        jwt.getClaim(getString(R.string.CONFIG_SERVER_PEM_CERTIFICATE)).asString()
                     )
                     apply()
                 }

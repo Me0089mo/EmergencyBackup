@@ -1,19 +1,13 @@
 package com.example.emergencybackupv10
 
 import android.content.Context
-import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Environment
 import android.util.Base64
-import androidx.documentfile.provider.DocumentFile
 import androidx.preference.PreferenceManager
 import java.io.File
-import java.net.URI
-import java.nio.charset.Charset
 import java.security.*
-import java.security.spec.EncodedKeySpec
 import java.security.spec.PKCS8EncodedKeySpec
-import java.security.spec.RSAPublicKeySpec
 import java.security.spec.X509EncodedKeySpec
 
 class KeyManager(val context : Context) {
@@ -28,13 +22,6 @@ class KeyManager(val context : Context) {
         keysGenerator.initialize(1024)
         val keys : KeyPair = keysGenerator.generateKeyPair()
         //Save public key///////////////////////////////////////////////////////////////////////////
-        println("public key is")
-        println(keys.public.algorithm)
-        println(keys.public.format)
-        println(keys.public.encoded.toString(Charsets.ISO_8859_1))
-        println(keys.public.encoded.toString(Charsets.US_ASCII))
-        println(keys.public.encoded.toString(Charsets.UTF_8))
-
         val pubFile = File(context.filesDir, "userPubKey.pk")
         publicDirectory = pubFile.absolutePath
         pubFile.writeBytes(keys.public.encoded)
@@ -73,10 +60,13 @@ class KeyManager(val context : Context) {
         keys.add(keyFac.generatePublic(pubKeyU))
         /*Servers public key is saved in shared preferences after login*/
         val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
-        val server_key_string:String = sharedPreferences.getString(context.getString(R.string.CONFIG_SERVER_PUB_KEY),"")!!
-        println(server_key_string)
-        val server = server_key_string.toByteArray(Charsets.UTF_8)
-        val pubKeyS = X509EncodedKeySpec(server)
+        val pem_certificate:String = sharedPreferences.getString(context.getString(R.string.CONFIG_SERVER_PEM_CERTIFICATE),"")!!
+        val server_key_string = pem_certificate
+            .replace("-----BEGIN PUBLIC KEY-----", "")
+            .replace(System.lineSeparator(), "")
+            .replace("-----END PUBLIC KEY-----", "");
+        val encoded_key :ByteArray= Base64.decode(server_key_string,0)
+        val pubKeyS = X509EncodedKeySpec(encoded_key)
         keys.add(keyFac.generatePublic(pubKeyS))
         return keys
     }
