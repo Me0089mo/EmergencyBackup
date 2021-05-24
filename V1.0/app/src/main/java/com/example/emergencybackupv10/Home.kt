@@ -11,6 +11,7 @@ import androidx.preference.PreferenceManager
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.edit
 import androidx.core.net.toUri
 import androidx.core.os.bundleOf
 import androidx.documentfile.provider.DocumentFile
@@ -48,11 +49,8 @@ class Home : AppCompatActivity() {
     private lateinit var sharedPreferences: SharedPreferences
     private var publicKeyFile: String? = ""
     private var privateKeyFile: Uri? = null
-    private var cipheredDataPath: String? = null
-    private var decipheredDataPath: String? = null
     private var directoryToRestore: String? = null
     private lateinit var  url:String
-    private var processingIntent = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -157,27 +155,19 @@ class Home : AppCompatActivity() {
         return dirList;
     }
 
-    private fun saveDirList(dl: MutableSet<String>) {
+    internal fun resetDirList() {
+        with(sharedPreferences.edit()) {
+            putStringSet(getString(R.string.CONFIG_DIR_SET), null)
+            apply()
+        }
+    }
+
+    internal fun saveDirList(dl: MutableSet<String>) {
         with(sharedPreferences.edit()) {
             putStringSet(getString(R.string.CONFIG_DIR_SET), dl)
             apply()
         }
     }
-
-    /*public fun pickDir(v: View) {
-        val cipherDataDirectory = File(this.filesDir, "CipheredData")
-        val decipheredDataDirectory = File(this.filesDir, "DecipheredData")
-        if (decipheredDataDirectory.exists() || cipherDataDirectory.mkdir())
-            cipheredDataPath = cipherDataDirectory.absolutePath
-        if (decipheredDataDirectory.exists() || decipheredDataDirectory.mkdir())
-            decipheredDataPath = decipheredDataDirectory.absolutePath
-
-        //Creating document picker
-        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE).apply {
-            flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
-        }
-        startActivityForResult(intent, 42)
-    }*/
 
     public fun startBackup(v: View) {
         val cipher = AEScfbCipher(this)
@@ -247,39 +237,8 @@ class Home : AppCompatActivity() {
                 Log.i("retrofit response", response.toString())
             }
         }
-        );
+        )
     }
-
-    internal fun actualizeBackupConfig(namesList: ArrayList<String>): ArrayList<String>{
-        val dirList = getDirList()
-        namesList.clear()
-        for (dir in dirList){
-            val ind = dir.indexOfLast { it == '%' }
-            namesList.add(dir.drop(ind+3))
-            println(dir)
-        }
-        return namesList
-    }
-
-
-    /*public fun decipherData(v: View) {
-        val decipher = DescifradorAES_CFB(this, privateKeyFile!!)
-        decipher.recoverKeys()
-        val cipheredFiles = File(cipheredDataPath!!)
-        readDirectory(cipheredFiles, decipheredDataPath!!, decipher)
-    }*/
-
-    /*private fun readDirectory(f: File, decipheredDataPath: String, descifrador: DescifradorAES_CFB) {
-        if (f.isDirectory) {
-            f.listFiles()?.forEach { documentFile ->
-                if (documentFile.isDirectory) {
-                    File(decipheredDataPath, documentFile.name).mkdir()
-                    readDirectory(documentFile, "$decipheredDataPath/${documentFile.name}", descifrador)
-                } else descifrador.decipherFile(documentFile.absolutePath, decipheredDataPath, documentFile.name)
-            }
-        }
-    }*/
-
 
     override fun onActivityResult(
             requestCode: Int, resultCode: Int, resultData: Intent?) {

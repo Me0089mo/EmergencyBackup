@@ -15,7 +15,7 @@ import kotlinx.android.synthetic.main.item_folder_viewer.view.*
 import java.util.*
 
 class BackupSettingsAdapter(
-    private val values : MutableList<String>
+    private val values : MutableList<Pair<String, String>>
 ) : RecyclerView.Adapter<BackupSettingsAdapter.ViewHolder>(),
     ItemTouchHelperInterface{
 
@@ -37,10 +37,14 @@ class BackupSettingsAdapter(
 
     override fun onBindViewHolder(holder: BackupSettingsAdapter.ViewHolder, position: Int) {
         val item = values[position]
-        holder.contentView?.text = item
+        holder.contentView?.text = item.first
     }
 
     override fun getItemCount(): Int = values.size
+
+    fun getItems(): List<Pair<String, String>>{
+        return values
+    }
 
     inner class ViewHolder(itemView: View) :
         RecyclerView.ViewHolder(itemView),

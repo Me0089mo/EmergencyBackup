@@ -2,6 +2,8 @@ package com.example.emergencybackupv10
 
 import java.io.ByteArrayOutputStream
 import java.io.FileInputStream
+import java.util.zip.Deflater
+import java.util.zip.DeflaterOutputStream
 import java.util.zip.ZipEntry
 import java.util.zip.ZipOutputStream
 
@@ -16,19 +18,14 @@ class Compressor {
         return byteOutReadStream.toByteArray()
     }
 
-    fun compressData(data: ByteArray): ByteArray{
+    fun compressData(data: ByteArray, numBytes: Int): ByteArray{
         byteOutReadStream.reset()
-        zipOutStream.write(data, 0, data.size)
+        zipOutStream.write(data, 0, numBytes)
         return byteOutReadStream.toByteArray()
-    }
-
-    fun positionNextEntry(fis: FileInputStream){
-
     }
 
     fun finalizeCompression(): ByteArray{
         byteOutReadStream.reset()
-        zipOutStream.closeEntry()
         zipOutStream.finish()
         val entryClosing = byteOutReadStream.toByteArray()
         zipOutStream.close()
