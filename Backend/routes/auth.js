@@ -1,7 +1,10 @@
 const router = require("express").Router();
 const User = require("../model/User");
+const fs = require("fs");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const PRIVATE_KEY = fs.readFileSync("rsa.private", { encoding: "utf-8" });
+const PUBLIC_KEY = fs.readFileSync("rsa.public", { encoding: "utf-8" });
 const {
   updatePubKeyValidator,
   updateEmailValidator,
@@ -39,10 +42,10 @@ router.post("/register", async (req, res) => {
       _id: user._id,
       name: user.name,
       user_pub_key: user.pub_key,
-      server_pub_key: process.env.PUBLIC_KEY,
+      server_pub_key: PUBLIC_KEY,
       hasBackup: user.hasBackup,
     },
-    process.env.PRIVATE_KEY
+    PRIVATE_KEY
   );
   return res.header("auth-token", token).send(token);
 });
@@ -50,12 +53,16 @@ router.post("/register", async (req, res) => {
 router.get("/download", async (req, res) => {
   let decoded = "";
   try {
-    decoded = jwt.verify(req.get("Authorization"), process.env.PRIVATE_KEY);
+    decoded = jwt.verify(req.get("Authorization"), PRIVATE_KEY);
   } catch (error) {
     return res.status(401).send({ error: true, message: "unauthorized" });
   }
   const userID = decoded._id;
   const dir = "uploads/" + userID;
+
+  if (!fs.existsSync(dir)) {
+    return res.status(404).send({ error: true, message: "no backupt found" });
+  }
   return res.download(dir + "/backUpFile");
 });
 
@@ -64,7 +71,10 @@ router.get("/download", async (req, res) => {
 router.post("/login", async (req, res) => {
   //Data Validation
   const { error } = loginValidation(req.body);
-  if (error) return res.status(400).send(error.details[0].message);
+  if (error)
+    return res
+      .status(400)
+      .send({ error: true, message: error.details[0].message });
   //Check if registered
   const user = await User.findOne({ email: req.body.email });
   if (!user)
@@ -79,10 +89,10 @@ router.post("/login", async (req, res) => {
       _id: user._id,
       name: user.name,
       user_pub_key: user.pub_key,
-      server_pub_key: process.env.PUBLIC_KEY,
+      server_pub_key: PUBLIC_KEY,
       hasBackup: user.hasBackup,
     },
-    process.env.PRIVATE_KEY
+    PRIVATE_KEY
   );
   return res.header("auth-token", token).send(token);
 });
@@ -96,7 +106,7 @@ router.put("/update_password", async (req, res) => {
 
   let decoded = "";
   try {
-    decoded = jwt.verify(req.header("authorization"), process.env.PRIVATE_KEY);
+    decoded = jwt.verify(req.header("authorization"), PRIVATE_KEY);
   } catch (error) {
     return res.status(401).send({ error: true, message: "unauthorized" });
   }
@@ -128,7 +138,7 @@ router.put("/update_email", async (req, res) => {
       .send({ error: true, message: error.details[0].message });
   let decoded = "";
   try {
-    decoded = jwt.verify(req.header("authorization"), process.env.PRIVATE_KEY);
+    decoded = jwt.verify(req.header("authorization"), PRIVATE_KEY);
   } catch (error) {
     return res.status(401).send({ error: true, message: "unauthorized" });
   }
@@ -150,7 +160,7 @@ router.put("/update_key", async (req, res) => {
 
   let decoded = "";
   try {
-    decoded = jwt.verify(req.header("authorization"), process.env.PRIVATE_KEY);
+    decoded = jwt.verify(req.header("authorization"), PRIVATE_KEY);
   } catch (error) {
     return res.status(401).send({ error: true, message: "unauthorized" });
   }
