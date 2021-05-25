@@ -21,10 +21,10 @@ class AEScfbCipher(val applicationContext: Context) : CipherFactory(){
     override lateinit var byteOutStream: ByteArrayOutputStream
     override lateinit var mac : HMAC
     private val keyGenerator = KeyGenerator.getInstance("AES")
-    private val cipheredDataPath: String = applicationContext.filesDir.absolutePath + "/CipheredData"
-    /* Para pruebas
+    //private val cipheredDataPath: String = applicationContext.filesDir.absolutePath + "/CipheredData"
+    //Para pruebas
     private val cipheredDataPath: String = applicationContext.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)!!.absolutePath + "/CipheredData"
-    */
+
     private var userPublicKey : PublicKey
     private var serverPublicKey : PublicKey
 

@@ -1,6 +1,6 @@
 package com.example.emergencybackupv10
 
-import Upload
+//import Upload
 import android.app.Activity
 import android.app.Instrumentation
 import android.content.Intent
@@ -169,29 +169,28 @@ class Home : AppCompatActivity() {
         }
     }
 
-    public fun startBackup(v: View) {
+    fun startBackup(v: View) {
         val cipher = AEScfbCipher(this)
         val createBackup = Backup(this, getDirList(), cipher)
         createBackup.start()
     }
 
-    public fun uploadBackup(v: View) {
+    /*fun uploadBackup(v: View) {
         val cipherDataFile = File(applicationContext.filesDir.absolutePath, "CipheredData")
         cipherDataFile.listFiles().forEach { file ->
             uploadFile(file)
         }
         Log.i("debug files=", "done!")
-    }
+    }*/
 
-    public fun restoreBackup(v: View){
-        //Obteniendo carpeta de directorios
+    fun restoreBackup(v: View){
         var rootDir = mutableListOf<String>()
         directoryToRestore?.let { rootDir.add(it) }
         val decipher = DescifradorAES_CFB(this, privateKeyFile)
         val restoreBackup = Backup(this, rootDir.toMutableSet(), decipher)
         restoreBackup.start()
     }
-
+    /*
     public fun uploadFile(file:File) {
         Log.i("debug upload", "uploading ${file.name}")
         val fileURI = Uri.fromFile(file)
@@ -219,7 +218,7 @@ class Home : AppCompatActivity() {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
 
-//      Get service and call objectts
+//      Get service and call objects
 
         val uploadService : Upload = retrofit.create(Upload::class.java)
 
@@ -239,7 +238,7 @@ class Home : AppCompatActivity() {
         }
         )
     }
-
+    */
     override fun onActivityResult(
             requestCode: Int, resultCode: Int, resultData: Intent?) {
         super.onActivityResult(requestCode, resultCode, resultData)
