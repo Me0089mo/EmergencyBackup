@@ -4,13 +4,15 @@ const bcrypt = require("bcryptjs");
 const multer = require("multer");
 const fs = require("fs");
 const {createHmac,} = require("crypto");
+const PRIVATE_KEY = fs.readFileSync("rsa.private", { encoding: "utf-8" });
+const PUBLIC_KEY = fs.readFileSync("rsa.public", { encoding: "utf-8" });
 
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, "uploads");
   },
   filename: function (req, file, cb) {
-    const decoded = jwt.verify(req.body.auth, process.env.PRIVATE_KEY);
+    const decoded = jwt.verify(req.header("authorization"), PRIVATE_KEY);
     const user = decoded._id;
     const dir = "uploads/" + user;
     console.log(typeof file.buffer);
@@ -26,7 +28,7 @@ var storage = multer.diskStorage({
 var upload = multer({ storage: storage });
 
 router.post("/", upload.single("file"), function (req, res, next) {
-  const decoded = jwt.verify(req.body.auth, process.env.PRIVATE_KEY);
+  const decoded = jwt.verify(req.header("authorization"), PRIVATE_KEY);
   const userID = decoded._id;
   console.log("File being uploaded from:" + userID);
 

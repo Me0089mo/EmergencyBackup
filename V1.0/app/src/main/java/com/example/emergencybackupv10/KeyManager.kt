@@ -4,9 +4,8 @@ import android.content.Context
 import android.net.Uri
 import android.os.Environment
 import android.util.Base64
-import androidx.documentfile.provider.DocumentFile
+import androidx.preference.PreferenceManager
 import java.io.File
-import java.net.URI
 import java.security.*
 import java.security.spec.PKCS8EncodedKeySpec
 import java.security.spec.X509EncodedKeySpec
@@ -14,6 +13,7 @@ import java.security.spec.X509EncodedKeySpec
 class KeyManager(val context : Context) {
     private var public : PublicKey? = null
     private var private : PrivateKey? = null
+
     private lateinit var publicDirectory : String
     private lateinit var privateDirectory : String
 
@@ -49,14 +49,24 @@ class KeyManager(val context : Context) {
         return directories
     }
 
+    /*@Returns array with two public keys, the first one is the users public key, the second is the
+    servers*/
     fun recoverPublicKeys(): ArrayList<PublicKey>{
+        /*User public key comes from a file */
         var keys = ArrayList<PublicKey>()
         val keyFac = KeyFactory.getInstance("RSA")
         val user = File(context.filesDir, "userPubKey.pk").readBytes()
         val pubKeyU = X509EncodedKeySpec(user)
         keys.add(keyFac.generatePublic(pubKeyU))
-        val server = File(context.filesDir, "userPubKey.pk").readBytes()
-        val pubKeyS = X509EncodedKeySpec(server)
+        /*Servers public key is saved in shared preferences after login*/
+        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+        val pem_certificate:String = sharedPreferences.getString(context.getString(R.string.CONFIG_SERVER_PEM_CERTIFICATE),"")!!
+        val server_key_string = pem_certificate
+            .replace("-----BEGIN PUBLIC KEY-----", "")
+            .replace(System.lineSeparator(), "")
+            .replace("-----END PUBLIC KEY-----", "");
+        val encoded_key :ByteArray= Base64.decode(server_key_string,0)
+        val pubKeyS = X509EncodedKeySpec(encoded_key)
         keys.add(keyFac.generatePublic(pubKeyS))
         return keys
     }
@@ -69,7 +79,6 @@ class KeyManager(val context : Context) {
                 user = reader.readBytes()
             }
         }
-        //val user = File(URI(location)).readBytes()
         val privKeyU = PKCS8EncodedKeySpec(user)
         return keyFac.generatePrivate(privKeyU)
     }

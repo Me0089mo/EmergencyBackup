@@ -1,8 +1,11 @@
 package com.example.emergencybackupv10
 
+<<<<<<< HEAD
 //import Upload
+=======
+import com.example.emergencybackupv10.networking.interfaces.Upload
+>>>>>>> 2266a55c7d29897865fee6647b7e274642eb97ce
 import android.app.Activity
-import android.app.Instrumentation
 import android.content.Intent
 import android.content.SharedPreferences
 import android.net.Uri
@@ -207,10 +210,6 @@ class Home : AppCompatActivity() {
                 reqFilePart
         )
 
-
-
-                sharedPreferences.getString(getString(R.string.CONFIG_TOKEN), null)!!
-        )
 
 //        Create retrofit instance
         val retrofit = Retrofit.Builder()

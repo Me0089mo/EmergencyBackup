@@ -100,4 +100,14 @@ class AEScfbCipher(val applicationContext: Context) : CipherFactory(){
         keyCipher.init(Cipher.ENCRYPT_MODE, cipherKey)
         return keyCipher.doFinal(data)
     }
+
+    fun print_bytes(bytes: ByteArray): String? {
+        val sb = StringBuilder()
+        sb.append("[ ")
+        for (b in bytes) {
+            sb.append(String.format("0x%02X ", b))
+        }
+        sb.append("]")
+        return sb.toString()
+    }
 }
