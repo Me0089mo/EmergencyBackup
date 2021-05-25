@@ -1,10 +1,6 @@
 package com.example.emergencybackupv10
 
-<<<<<<< HEAD
-//import Upload
-=======
 import com.example.emergencybackupv10.networking.interfaces.Upload
->>>>>>> 2266a55c7d29897865fee6647b7e274642eb97ce
 import android.app.Activity
 import android.content.Intent
 import android.content.SharedPreferences
@@ -178,13 +174,13 @@ class Home : AppCompatActivity() {
         createBackup.start()
     }
 
-    /*fun uploadBackup(v: View) {
+    fun uploadBackup(v: View) {
         val cipherDataFile = File(applicationContext.filesDir.absolutePath, "CipheredData")
         cipherDataFile.listFiles().forEach { file ->
             uploadFile(file)
         }
         Log.i("debug files=", "done!")
-    }*/
+    }
 
     fun restoreBackup(v: View){
         var rootDir = mutableListOf<String>()
@@ -193,7 +189,7 @@ class Home : AppCompatActivity() {
         val restoreBackup = Backup(this, rootDir.toMutableSet(), decipher)
         restoreBackup.start()
     }
-    /*
+
     public fun uploadFile(file:File) {
         Log.i("debug upload", "uploading ${file.name}")
         val fileURI = Uri.fromFile(file)
@@ -237,7 +233,7 @@ class Home : AppCompatActivity() {
         }
         )
     }
-    */
+    
     override fun onActivityResult(
             requestCode: Int, resultCode: Int, resultData: Intent?) {
         super.onActivityResult(requestCode, resultCode, resultData)
