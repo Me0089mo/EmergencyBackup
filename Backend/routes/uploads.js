@@ -49,29 +49,35 @@ router.post("/", upload.single("file"), function (req, res, next) {
   try {
     fd = fs.openSync(req.file.path, "r");
   } catch (error) {
-    retunr;
+    return res.send({ error: true, message: "no file found" });
   }
-  //Read the whole file
-  const file_buffer = Buffer.alloc(req.file.size);
-  fs.readSync(fd, file_buffer, 0, req.file.size, 0);
-  //Extract parts from the file
-  const file_mac = file_buffer.subarray(0, 32);
-  const ciph_mac_key = file_buffer.subarray(32, 160);
-  const file_content = file_buffer.subarray(304);
-  //Get decipher mac_key
-  const mac_key = privateDecrypt(PRIVATE_KEY, ciph_mac_key);
-  //Generate mac
-  const hmac_obj = createHmac("SHA256", mac_key);
-  hmac_obj.update(file_content);
-  const hmac_copy = hmac_obj.digest();
-  //Close the file before deletion
-  fs.closeSync(fd);
-  //Verify macs are the same
-  if (Buffer.compare(hmac_copy, file_mac) === 0) {
-    res.send({ error: false, message: "success" });
-  } else {
+  try {
+    //Read the whole file
+    const file_buffer = Buffer.alloc(req.file.size);
+    fs.readSync(fd, file_buffer, 0, req.file.size, 0);
+    //Extract parts from the file
+    const file_mac = file_buffer.subarray(0, 32);
+    const ciph_mac_key = file_buffer.subarray(32, 160);
+    const file_content = file_buffer.subarray(304);
+    //Get decipher mac_key
+    const mac_key = privateDecrypt(PRIVATE_KEY, ciph_mac_key);
+    //Generate mac
+    const hmac_obj = createHmac("SHA256", mac_key);
+    hmac_obj.update(file_content);
+    const hmac_copy = hmac_obj.digest();
+    //Close the file before deletion
+    fs.closeSync(fd);
+    //Verify macs are the same
+    if (Buffer.compare(hmac_copy, file_mac) === 0) {
+      return res.send({ error: false, message: "success" });
+    }
     fs.unlinkSync(req.file.path);
-    res.send({
+    return res.send({
+      error: true,
+      message: "cannot prove integrity; the file has been dispossed",
+    });
+  } catch (error) {
+    return res.send({
       error: true,
       message: "cannot prove integrity; the file has been dispossed",
     });
