@@ -38,9 +38,6 @@ class HomeFragment : Fragment() {
             backUpOnCloud = it.getBoolean(ARG_BU_AVAILABLE)
             publicKeyFile = it.getString(getString(R.string.ARG_PUB_KEY))
             privateKeyFile = it.getString(getString(R.string.ARG_PRIV_KEY))
-            //sharedPreferences = it.get("ARG_PREFERENCES") as SharedPreferences?
-            println("Llave publica: ${publicKeyFile}")
-            println("Llave privada: ${privateKeyFile}")
         }
 
         //Creating directories for ciphered and deciphered data

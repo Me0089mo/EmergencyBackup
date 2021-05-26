@@ -72,9 +72,6 @@ class Home : AppCompatActivity() {
             }
             true
         }
-        for (mutableEntry in sharedPreferences.all) {
-            println("Preference: ${mutableEntry.key} ${mutableEntry.value}")
-        }
         val direct = sharedPreferences.getStringSet(getString(R.string.CONFIG_DIR_SET), null)
         directoryToRestore = applicationContext.filesDir.absolutePath + "/CipheredData"
     }
