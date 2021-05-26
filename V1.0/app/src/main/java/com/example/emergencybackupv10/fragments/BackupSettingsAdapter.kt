@@ -1,21 +1,15 @@
 package com.example.emergencybackupv10.fragments
 
-import android.gesture.Gesture
 import android.view.*
 import android.widget.TextView
-import androidx.core.view.MotionEventCompat
 import androidx.recyclerview.widget.ItemTouchHelper
-import androidx.recyclerview.widget.ItemTouchHelper.DOWN
-import androidx.recyclerview.widget.ItemTouchHelper.UP
 import androidx.recyclerview.widget.RecyclerView
 import com.example.emergencybackupv10.R
-import com.example.emergencybackupv10.databinding.ItemFolderViewerBinding
-import kotlinx.android.synthetic.main.fragment_backup_settings.view.*
 import kotlinx.android.synthetic.main.item_folder_viewer.view.*
 import java.util.*
 
 class BackupSettingsAdapter(
-    private val values : MutableList<Pair<String, String>>
+    private var values : MutableList<Pair<Int, Pair<String, String>>>
 ) : RecyclerView.Adapter<BackupSettingsAdapter.ViewHolder>(),
     ItemTouchHelperInterface{
 
@@ -37,12 +31,12 @@ class BackupSettingsAdapter(
 
     override fun onBindViewHolder(holder: BackupSettingsAdapter.ViewHolder, position: Int) {
         val item = values[position]
-        holder.contentView?.text = item.first
+        holder.contentView?.text = item.second.first
     }
 
     override fun getItemCount(): Int = values.size
 
-    fun getItems(): List<Pair<String, String>>{
+    fun getItems(): List<Pair<Int, Pair<String, String>>>{
         return values
     }
 
@@ -104,11 +98,17 @@ class BackupSettingsAdapter(
     }
 
     override fun onItemMove(from: Int, to: Int) {
+        val aux = values[from]
+        values[from] =  Pair(values[to].first,values[from].second)
+        values[to] = Pair(aux.first, values[to].second)
         Collections.swap(values, from, to)
         notifyItemMoved(from, to)
     }
 
     override fun onItemSwipe(position: Int) {
+        for (i in position+1..values.size-1){
+            values[i] = Pair(values[i].first-1, values[i].second)
+        }
         values.removeAt(position)
         notifyItemRemoved(position)
     }

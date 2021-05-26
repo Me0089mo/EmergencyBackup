@@ -13,7 +13,7 @@ import com.example.emergencybackupv10.R
 import kotlinx.android.synthetic.main.fragment_backup_settings.*
 
 class BackupSettings : Fragment() {
-    var directories = mutableListOf<Pair<String, String>>()
+    var directories = mutableListOf<Pair<Int, Pair<String, String>>>()
     lateinit var backupAdapter: BackupSettingsAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,7 +50,7 @@ class BackupSettings : Fragment() {
 
         btn_save_changes.setOnClickListener { v ->
             (activity as Home).resetDirList()
-            val newList: List<String> = backupAdapter.getItems().map { it.second }
+            val newList: List<String> = backupAdapter.getItems().map { "${it.first}|${it.second.second}" }
             (activity as Home).saveDirList(newList.toMutableSet())
         }
     }
@@ -64,9 +64,17 @@ class BackupSettings : Fragment() {
     fun getValuesFromDirList(dirList: MutableSet<String>){
         directories.clear()
         for (dir in dirList) {
-            val ind = dir.indexOfLast { it == '%' }
-            directories.add(Pair(dir.drop(ind + 3), dir))
+            val onlyName = dir.indexOfLast { it == '%' }
+            var priority = dir.dropLastWhile { it != '|' }
+            val onlyUri = dir.dropWhile { it != '|' }.substring(1)
+            priority = priority.substring(0, priority.length-1)
+            directories.add(Pair(priority.toInt(), Pair(dir.drop(onlyName + 3), onlyUri)))
         }
+        /*println("Before sort")
+        directories.forEach { println("${it.first} ${it.second.second}") }*/
+        directories.sortBy { it.first }
+        /*println("After sort")
+        directories.forEach { println("${it.first} + ${it.second.second}") }*/
     }
 
     companion object {

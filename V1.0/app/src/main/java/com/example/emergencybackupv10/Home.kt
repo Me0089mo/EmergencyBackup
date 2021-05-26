@@ -233,14 +233,15 @@ class Home : AppCompatActivity() {
         }
         )
     }
-    
+
     override fun onActivityResult(
             requestCode: Int, resultCode: Int, resultData: Intent?) {
         super.onActivityResult(requestCode, resultCode, resultData)
         if (requestCode == BACKUP_CONFIG && resultCode == Activity.RESULT_OK) {
             var dirList = getDirList()
+            val num = dirList.size + 1
             resultData?.data?.also { uri ->
-                dirList.add(uri.toString())
+                dirList.add("${num}|${uri.toString()}")
                 saveDirList(dirList)
             }
             val backupFrag : BackupSettings =

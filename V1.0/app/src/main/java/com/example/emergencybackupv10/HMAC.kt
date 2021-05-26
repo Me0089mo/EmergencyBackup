@@ -33,6 +33,13 @@ class HMAC constructor(){
         tag = macInstance.doFinal()
     }
 
-    fun verifyMac(tagRecovered : ByteArray) : Boolean = tag.contentEquals(tagRecovered)
+    fun verifyMac(tagRecovered : ByteArray) : Boolean{
+        println("Tag recibido")
+        tagRecovered.forEach { b -> print("$b ") }
+        println("\nTag calculado")
+        tag.forEach { b -> print("$b ") }
+        println("")
+        return tag.contentEquals(tagRecovered)
+    }
 
 }

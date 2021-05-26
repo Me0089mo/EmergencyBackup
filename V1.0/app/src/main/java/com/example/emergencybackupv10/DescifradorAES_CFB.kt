@@ -12,9 +12,8 @@ import javax.crypto.spec.SecretKeySpec
 
 /*
     IV size = 16 bytes
-    Key size = 16 bytes
+    Key size = 128 bytes
     Tag size = 32 bytes
-    Total = 64
  */
 class DescifradorAES_CFB(val applicationContext : Context, val pkDirectory: Uri?): CipherFactory() {
     override val cipher:Cipher = Cipher.getInstance("AES/CFB/PKCS5PADDING")
@@ -72,7 +71,6 @@ class DescifradorAES_CFB(val applicationContext : Context, val pkDirectory: Uri?
                 decipheredFile.delete()
                 decompressedFile.delete()
             }
-            println(macMatches)
         }
     }
 
@@ -105,6 +103,7 @@ class DescifradorAES_CFB(val applicationContext : Context, val pkDirectory: Uri?
 
     private fun finalizeCipher(){
         cipheredOutput.close()
+        decipheredFileOutStream.flush()
         decipheredFileOutStream.close()
         mac.finalizeMac()
         if(mac.verifyMac(macTag))
@@ -132,7 +131,7 @@ class DescifradorAES_CFB(val applicationContext : Context, val pkDirectory: Uri?
         var newName = ""
         for (index in (name.length - 1).downTo(0)) {
             if (name[index] == '.') {
-                newName = name.substring(0, index) + "Deciphered"
+                newName = name.substring(0, index-8) + "Deciphered"
                 newName += name.substring(index, name.length)
                 break
             }
