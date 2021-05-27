@@ -1,11 +1,9 @@
 const router = require("express").Router();
 const jwt = require("jsonwebtoken");
-const bcrypt = require("bcryptjs");
+const User = require("../model/User");
 const multer = require("multer");
 const fs = require("fs");
 const { createHmac, privateDecrypt, publicEncrypt } = require("crypto");
-const { create } = require("domain");
-const { stringify } = require("querystring");
 const PRIVATE_KEY = fs.readFileSync("rsa.private", { encoding: "utf-8" });
 
 var storage = multer.diskStorage({
@@ -69,7 +67,11 @@ router.post("/", upload.single("file"), function (req, res, next) {
     fs.closeSync(fd);
     //Verify macs are the same
     if (Buffer.compare(hmac_copy, file_mac) === 0) {
-      return res.send({ error: false, message: "success" });
+      let decoded = jwt.verify(req.header("authorization"), PRIVATE_KEY);
+      const user = await User.findOne({ _id: decoded._id });
+      user.hasBackup = true;
+      await user.save();
+      return res.status(200).send({ success: true, message: "Success" });
     }
     fs.unlinkSync(req.file.path);
     return res.send({
