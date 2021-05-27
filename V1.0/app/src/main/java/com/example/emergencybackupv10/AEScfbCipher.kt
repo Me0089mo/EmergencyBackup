@@ -49,7 +49,6 @@ class AEScfbCipher(val applicationContext: Context) : CipherFactory(){
             initializeCipher()
             //Writing the new entry
             processData(entry, entry.size)
-
             do{
                 dataRead = inputStream.read(readingArray)
                 if(dataRead == -1) break
@@ -81,15 +80,18 @@ class AEScfbCipher(val applicationContext: Context) : CipherFactory(){
 
     private fun finalizeCipher(){
         cipheredOutput.close()
+        val aux = byteOutStream.toByteArray()
+        fileOutStream.write(aux)
+        mac.calculateMac(aux, aux.size)
         mac.finalizeMac()
         fileOutStream.channel.position(0)
         fileOutStream.write(mac.tag)
-        fileOutStream.write(processKey(serverPublicKey, mac.key.encoded))
+        fileOutStream.write(processKey(userPublicKey, mac.key.encoded))
         fileOutStream.close()
     }
 
     override fun createOutputFile(path : String, fileName : String){
-        val cipheredFile = File("$path/$fileName")
+        val cipheredFile = File("$path/${fileName}")
         fileOutStream = FileOutputStream(cipheredFile)
         fileOutStream.channel.position(160)
         byteOutStream = ByteArrayOutputStream()
@@ -109,5 +111,17 @@ class AEScfbCipher(val applicationContext: Context) : CipherFactory(){
         }
         sb.append("]")
         return sb.toString()
+    }
+
+    private fun generateNewName(name:String):String {
+        var newName = ""
+        for (index in (name.length - 1).downTo(0)) {
+            if (name[index] == '.') {
+                newName = name.substring(0, index) + "Ciphered"
+                newName += name.substring(index, name.length)
+                break
+            }
+        }
+        return newName
     }
 }
