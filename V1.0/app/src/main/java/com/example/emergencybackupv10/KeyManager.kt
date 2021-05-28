@@ -4,6 +4,8 @@ import android.content.Context
 import android.net.Uri
 import android.os.Environment
 import android.util.Base64
+import androidx.core.net.toUri
+import androidx.documentfile.provider.DocumentFile
 import androidx.preference.PreferenceManager
 import java.io.File
 import java.security.*
@@ -25,15 +27,27 @@ class KeyManager(val context : Context) {
         val pubFile = File(context.filesDir, "userPubKey.pk")
         publicDirectory = pubFile.absolutePath
         pubFile.writeBytes(keys.public.encoded)
+
+        println("Public key: ")
+        println(Base64.encodeToString(keys.public.encoded, Base64.DEFAULT))
         //Save private key//////////////////////////////////////////////////////////////////////////
         var parentFile : File?
-        if(Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED)
+        println(Environment.getExternalStorageState())
+        if(Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED) {
             parentFile = context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)
+            println("Private key at: ")
+            println(context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)?.absolutePath)
+            println(context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)?.path)
+            println(context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)?.canonicalPath)
+        }
         else
             parentFile = context.filesDir
         val privFile = File(parentFile, "userPrivKey.pk")
         privateDirectory = privFile.absolutePath
         privFile.writeBytes(keys.private.encoded)
+        
+        println("Private key: ")
+        println(Base64.encodeToString(keys.private.encoded, Base64.DEFAULT))
     }
 
     fun getPubKeyAsString():String{

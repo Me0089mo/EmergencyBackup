@@ -16,13 +16,14 @@ import androidx.core.os.bundleOf
 import androidx.documentfile.provider.DocumentFile
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
+import com.android.volley.toolbox.StringRequest
 import com.auth0.android.jwt.JWT
-import com.example.emergencybackupv10.fragments.BackupSettings
-import com.example.emergencybackupv10.fragments.HomeFragment
-import com.example.emergencybackupv10.fragments.RestoreFragment
-import com.example.emergencybackupv10.fragments.SettingsFragment
+import com.example.emergencybackupv10.fragments.*
+import com.example.emergencybackupv10.networking.HttpQ
 import com.example.emergencybackupv10.networking.interfaces.ServerResponse
+import com.example.emergencybackupv10.utils.AlertUtils
 import kotlinx.android.synthetic.main.activity_home.*
+import kotlinx.android.synthetic.main.activity_login.*
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -50,6 +51,7 @@ class Home : AppCompatActivity() {
     private var privateKeyFile: Uri? = null
     private var directoryToRestore: String? = null
     private lateinit var  url:String
+    private var emergency: Boolean? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,6 +64,7 @@ class Home : AppCompatActivity() {
         } else {
             getDataFromIntent()
         }
+        //emergency = intent.getBooleanExtra(getString(R.string.EMERGENCY), false)
         changeFragment(homeFragment, "home_frag")
         bottom_nav.selectedItemId = R.id.navigation_home
         bottom_nav.setOnNavigationItemSelectedListener {
@@ -73,6 +76,9 @@ class Home : AppCompatActivity() {
             true
         }
         val direct = sharedPreferences.getStringSet(getString(R.string.CONFIG_DIR_SET), null)
+        if(emergency == true){
+            startBackup()
+        }
         directoryToRestore = applicationContext.filesDir.absolutePath + "/CipheredData"
     }
 
@@ -81,7 +87,7 @@ class Home : AppCompatActivity() {
         username = intent.getStringExtra(getString(R.string.ARG_NAME))
         id = intent.getStringExtra(getString(R.string.ARG_ID))
         publicKeyFile = intent.getStringExtra(getString(R.string.ARG_PUB_KEY))
-        //privateKeyFile = intent.getStringExtra(getString(R.string.ARG_PRIV_KEY))
+        emergency = intent.getBooleanExtra(getString(R.string.EMERGENCY), false)
     }
 
     private fun getDataFromServer() {
@@ -165,7 +171,12 @@ class Home : AppCompatActivity() {
         }
     }
 
-    fun startBackup(v: View) {
+    fun generateNewKey(){
+        val keyMan = KeyManager(applicationContext)
+        keyMan.generateKeys()
+    }
+
+    fun startBackup() {
         val cipher = AEScfbCipher(this)
         val createBackup = Backup(this, getDirList(), cipher)
         createBackup.start()

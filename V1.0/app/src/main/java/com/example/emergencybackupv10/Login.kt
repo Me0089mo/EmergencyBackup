@@ -1,13 +1,17 @@
 package com.example.emergencybackupv10
 
+import android.content.Context
 import com.example.emergencybackupv10.networking.HttpQ
 import android.content.Intent
 import android.content.SharedPreferences
+import android.net.ConnectivityManager
+import android.os.Build
 import android.os.Bundle
 import androidx.preference.PreferenceManager
 import android.text.TextUtils
 import android.util.Patterns
 import android.view.View
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.android.volley.RequestQueue
 import com.android.volley.Response
@@ -29,8 +33,7 @@ class Login : AppCompatActivity() {
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         queue = HttpQ.getInstance(this.applicationContext).requestQueue
         url = getString(R.string.host_url) + getString(R.string.api_login)
-        checkForToken();
-
+        checkForToken()
     }
 
     public fun checkForToken() {
@@ -70,7 +73,8 @@ class Login : AppCompatActivity() {
                     )
                     apply()
                 }
-
+                val pubKey = sharedPreferences.getString(getString(R.string.CONFIG_SERVER_PEM_CERTIFICATE), null)
+                println(pubKey)
 
                 //Parse the token as parameter to teh next activity
 
