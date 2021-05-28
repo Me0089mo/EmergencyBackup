@@ -9,4 +9,6 @@
     <string name="ARG_PRIV_KEY">privateKey</string>
     <string name="CONFIG_WAS_LOGED_IN">LOGED_IN</string>
     <string name="CONFIG_DIR_SET">DIR_SET</string>
+    <string name="EMERGENCY">EMERGENCY</string>
+    <string name="KEY_LOCATION">priv_key_location</string>
 </resources>

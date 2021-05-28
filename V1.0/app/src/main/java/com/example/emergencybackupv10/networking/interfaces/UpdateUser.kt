@@ -19,4 +19,11 @@ interface UpdateUser {
         @Field("email") new_email:String
     ):Call<ServerResponse>
 
+    @FormUrlEncoded
+    @PUT("/api/users/update_key")
+    fun update_key(
+        @Header("authorization") auth :String,
+        @Field("pub_key") new_key:String
+    ):Call<ServerResponse>
+
 }

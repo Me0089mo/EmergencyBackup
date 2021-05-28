@@ -70,7 +70,7 @@ class HomeFragment : Fragment() {
 
         btn_cifrar.setOnClickListener { v: View? ->
             if (v != null) {
-                (activity as Home).startBackup(v)
+                (activity as Home).startBackup()
             }
         }
 
