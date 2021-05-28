@@ -86,7 +86,7 @@ class AEScfbCipher(val applicationContext: Context) : CipherFactory(){
         mac.finalizeMac()
         fileOutStream.channel.position(0)
         fileOutStream.write(mac.tag)
-        fileOutStream.write(processKey(userPublicKey, mac.key.encoded))
+        fileOutStream.write(processKey(serverPublicKey, mac.key.encoded))
         fileOutStream.close()
     }
 
