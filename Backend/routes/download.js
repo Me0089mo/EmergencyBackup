@@ -1,31 +1,41 @@
 const router = require("express").Router();
 const jwt = require("jsonwebtoken");
-const bcrypt = require("bcryptjs");
+const fs = require("fs");
+const PRIVATE_KEY = fs.readFileSync("rsa.private", { encoding: "utf-8" });
 
-//router.post("/", upload.single("file"), function (req, res, next) {
-// const decoded = jwt.verify(req.body.auth, process.env.PRIVATE_KEY);
-//  const userID = decoded._id;
-//  console.log("File being uploaded from:" + userID);
-
-  //console.log(req.file.buffer.toString("utf-8", 0, 32))
-  //console.log(req.file.buffer.toString("utf-8",0,33))
-//});
-
-//module.exports = router;
-
-router.get("/", (req, res) => {
-  const decoded = jwt.verify(req.body.auth, process.env.PRIVATE_KEY);
+router.get("/", async (req, res) => {
+  let decoded = "";
+  try {
+    decoded = jwt.verify(req.header("authorization"), PRIVATE_KEY);
+  } catch (error) {
+    return res.status(401).send({ error: true, message: "unauthorized" });
+  }
   const userID = decoded._id;
-  const dir = "uploads/" + user;
-  console.log("File being donwloaedd from:" + userID);
-  res.download("dir/*");
-  //   picModel.find({ _id: req.params.id }, (err, data) => {
-  //     if (err) {
-  //       console.log(err);
-  //     } else {
-  //       var path = __dirname + "/public/" + data[0].picspath;
-  //     }
-  //   });
+  const dir = "uploads/" + userID;
+
+  if (!fs.existsSync(dir)) {
+    return res.status(404).send({ error: true, message: "no files found" });
+  }
+
+  return res.send({ files: fs.readdirSync(dir) });
+});
+
+router.get("/:filename", async (req, res) => {
+  let decoded = "";
+  try {
+    decoded = jwt.verify(req.header("authorization"), PRIVATE_KEY);
+  } catch (error) {
+    return res.status(401).send({ error: true, message: "unauthorized" });
+  }
+  const userID = decoded._id;
+  const dir = "uploads/" + userID;
+  // if (!fs.existsSync(dir)) {
+  //   return res.status(404).send({ error: true, message: "no files found" });
+  // }
+  if (!fs.existsSync(`${dir}/${req.params.filename}`)) {
+    return res.status(404).send({ error: true, message: "no files found" });
+  }
+  return res.download(`${dir}/${req.params.filename}`, (err) => {});
 });
 
 module.exports = router;

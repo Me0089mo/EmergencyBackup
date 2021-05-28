@@ -46,6 +46,7 @@ app.use(express.json());
 //Route middleware
 app.use("/api/users", authRoute);
 app.use("/api/upload", uploadsRoute);
+app.use("/api/download", downloadsRoute);
 var httpServer = http.createServer(app);
 var httpsServer = https.createServer(credentials, app);
 
