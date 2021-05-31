@@ -41,6 +41,7 @@ class ChangeKey : Fragment() {
     private lateinit var retrofit: Retrofit;
     private lateinit var url: String;
     private lateinit var updateService: UpdateUser;
+    private lateinit var publicKey: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,6 +63,9 @@ class ChangeKey : Fragment() {
                 .build()
         updateService = retrofit.create(UpdateUser::class.java)
         btn_change_key.setOnClickListener { v ->
+            val keyMan = KeyManager(requireActivity().applicationContext)
+            keyMan.generateKeys()
+            publicKey = keyMan.getPubKeyAsString()
             updateKey()
         }
     }
@@ -74,7 +78,7 @@ class ChangeKey : Fragment() {
         val t = sharedPreferences.getString(getString(R.string.CONFIG_TOKEN), "")
         val call: Call<ServerResponse> = updateService.update_key(
             auth = t.toString(),
-            new_key = txt_old_pass.text.toString()
+            new_key = publicKey
         )
         call.enqueue(object : Callback<ServerResponse> {
             override fun onFailure(call: Call<ServerResponse>?, t: Throwable?) {
