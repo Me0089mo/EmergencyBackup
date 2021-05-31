@@ -2,7 +2,13 @@ import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { LoginCardComponent } from './components/login-card/login-card.component';
+import { BackupsModalComponent } from './components/backups-modal/backups-modal.component';
+
+interface file_arr_interface {
+  files: string[];
+}
 
 @Component({
   selector: 'app-root',
@@ -10,103 +16,88 @@ import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  private user_token: any = null;
-  title = 'EmergencyBackup';
-  username = 'asdf1234damian@gmail.com';
-  password = 'passw0rd';
-  showSpinner = false;
-  screenSize = [0, 0];
-  fromSmartphone = true;
-  loginCardVisible = false;
+  private user_token: string = '';
+  public logedIn: boolean = false;
+  public files_available: string[] = [];
   constructor(
     public snackBar: MatSnackBar,
     private http: HttpClient,
     private modalService: NgbModal
-  ) {}
+  ) {
+    this.displayModal();
+  }
 
   handleError() {}
 
-  open(content: any) {
-    this.modalService.open(content, { centered: true }).result.then(
-      (result) => {
-        this.login();
+  displayModal() {
+    let login_modal_ref = this.modalService.open(LoginCardComponent, {
+      centered: true,
+    });
+    login_modal_ref.componentInstance.user_token.subscribe({
+      next: (res: string) => {
+        this.user_token = res;
+        login_modal_ref.close();
+        this.checkForBackup();
       },
-      (reason) => {}
-    );
+    });
   }
 
-  login() {
-    this.showSpinner = true;
+  checkForBackup() {
     this.http
-      .post(
-        environment.host_url + environment.api_login,
-        {
-          email: this.username,
-          password: this.password,
+      .get(environment.host_url + environment.api_check_bu, {
+        headers: {
+          'Content-Type': 'application/json',
+          authorization: this.user_token,
         },
-        {
-          headers: { 'Content-Type': 'application/json' },
-          responseType: 'text',
-        }
-      )
+      })
       .subscribe({
         next: (res) => {
-          this.user_token = res;
-          console.log(res);
-          this.getScreenSize();
-          if (this.screenSize[0] < 500) this.openBrowserWarning();
-          else this.fromSmartphone = false;
-          this.showSpinner = false;
+          if (res) {
+            this.display_backup();
+          } else {
+            this.display_no_backup();
+          }
         },
         error: (err) => {
-          this.openErrorDialog();
-          this.showSpinner = false;
+          this.display_error();
         },
-        complete: () => {},
       });
   }
 
-  getScreenSize() {
-    this.screenSize[0] = window.screen.width;
-    this.screenSize[1] = window.screen.height;
-  }
-
-  openErrorDialog() {
-    let snackBarRef = this.snackBar.open(
-      'Usuario o contraseña incorrectos',
-      'Ok',
-      { duration: 3000 }
-    );
-  }
-
-  openBrowserWarning() {
-    let snackBarRef2 = this.snackBar.open(
-      'Para restablecer tu respaldo directo del celular debes ingresar a la App móvil o descarga el respaldo desde tu computadora',
-      'OK',
-      { duration: 5000 }
-    );
-  }
-
-  download() {
+  display_backup() {
     this.http
       .get(environment.host_url + environment.api_download, {
         headers: {
           'Content-Type': 'application/json',
           authorization: this.user_token,
         },
-        responseType: 'arraybuffer',
       })
       .subscribe({
-        next: (res) => {
-          let blob = new Blob([res], { type: 'text/csv' });
-          let url = window.URL.createObjectURL(blob);
-          let pwa = window.open(url);
-          if (!pwa || pwa.closed || typeof pwa.closed == 'undefined') {
-            alert('Please disable your Pop-up blocker and try again.');
-          }
-          console.log(res);
+        next: (res: any) => {
+          let login_modal_ref = this.modalService.open(BackupsModalComponent, {
+            centered: true,
+          });
+          login_modal_ref.componentInstance.file_name_arr = res['files'];
+          login_modal_ref.componentInstance.user_token = this.user_token;
         },
       });
   }
-  downLoadFile(data: any, type: string) {}
+
+  display_no_backup() {}
+  display_error() {}
+
+  // getScreenSize() {
+  //   this.screenSize[0] = window.screen.width;
+  //   this.screenSize[1] = window.screen.height;
+  // }
+
+  // openBrowserWarning() {
+  //   let snackBarRef2 = this.snackBar.open(
+  //     'Para restablecer tu respaldo directo del celular debes ingresar a la App móvil o descarga el respaldo desde tu computadora',
+  //     'OK',
+  //     { duration: 5000 }
+  //   );
+  // }
+
+  // downLoadFile(data: any, type: string) {}
 }

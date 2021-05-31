@@ -166,4 +166,19 @@ router.put("/update_key", async (req, res) => {
   return res.status(200).send({ success: true, message: "Success" });
 });
 
+router.get("/has_backup", async (req, res) => {
+  let decoded = "";
+  try {
+    decoded = jwt.verify(req.header("authorization"), PRIVATE_KEY);
+  } catch (error) {
+    return res.status(401).send({ error: true, message: "unauthorized" });
+  }
+
+  const user = await User.findOne({ _id: decoded._id });
+  if (!user)
+    return res.status(401).send({ success: false, message: "User not found" });
+
+  return res.status(200).send(user.hasBackup);
+});
+
 module.exports = router;

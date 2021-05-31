@@ -1,83 +1,30 @@
 <div class="top-pane">
   <p id="header">Recupera tus archivos generados recientemente</p>
-  <br><br>
+  <br /><br />
   <p id="title">Emergency Backup</p>
-  <br><br>
-  <p id="info-top">¡No pierdas tu información! Con esta aplicación podrás realizar un respaldo de emergencia de los últimos archivos generado en tu celular.</p>
+  <br /><br />
+  <p id="info-top">
+    ¡No pierdas tu información! Con esta aplicación podrás realizar un respaldo
+    de emergencia de los últimos archivos generado en tu celular.
+  </p>
 </div>
 <div class="info">
-  <a>¿Ya has realizado algún respaldo?</a><br><br>
+  <a>¿Ya has realizado algún respaldo?</a><br /><br />
   <a>Inicia sesión y descárgalo aquí</a>
 </div>
 <div id="login" style="display: flex; justify-content: center">
-  <div><button mat-raised-button class="btn-main" (click)="open(content)">
-    Ingresar
-  </button></div>
+  <div>
+    <button mat-raised-button class="btn-main" (click)="displayModal()">
+      Ingresar
+    </button>
+  </div>
   <div id="btn-download">
-    <button 
-    mat-raised-button 
-    class="btn-main"
-    disabled="{{fromSmartphone}}" 
-    (click)="download()">
-    Descargar
-  </button></div>
+    <button
+      mat-raised-button
+      class="btn-main"
+      [disabled]="!logedIn ? 'true' : 'false'"
+    >
+      Descargar
+    </button>
+  </div>
 </div>
-
-<ng-template #content let-modal>
-  <mat-card class="login_card">
-    <div style="display: flex; justify-content: center">
-      <img class="user-icon" src="../assets/person-24px.svg" stype />
-    </div>
-    <mat-card-content>
-      <form class="example-form">
-        <table class="full-width" cellspacing="0">
-          <tr>
-            <td>
-              <mat-form-field class="full-width">
-                <input
-                  matInput
-                  placeholder="Correo Electrónico"
-                  [(ngModel)]="username"
-                  name="username"
-                  required
-                />
-              </mat-form-field>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <mat-form-field class="full-width">
-                <input
-                  matInput
-                  placeholder="Contraseña"
-                  [(ngModel)]="password"
-                  type="password"
-                  name="password"
-                  required
-                />
-              </mat-form-field>
-            </td>
-          </tr>
-        </table>
-      </form>
-    </mat-card-content>
-    <mat-card-actions>
-      <div style="display: flex; justify-content: center">
-        <mat-spinner
-          [style.display]="showSpinner ? 'block' : 'none'"
-        ></mat-spinner>
-      </div>
-      <div style="display: flex; justify-content: center">
-        <button
-          mat-raised-button
-          (click)="modal.close()"
-          class="login_button"
-          [style.display]="showSpinner ? 'none' : 'block'"
-        >
-          Ingresar
-        </button>
-      </div>
-    </mat-card-actions>
-  </mat-card>
-
-</ng-template>

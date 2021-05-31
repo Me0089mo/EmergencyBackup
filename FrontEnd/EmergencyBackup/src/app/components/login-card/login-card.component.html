@@ -1,0 +1,60 @@
+<mat-card class="login_card">
+  <div style="display: flex; justify-content: center">
+    <img class="user-icon" src="../assets/person-24px.svg" />
+  </div>
+  <div style="display: flex; justify-content: center">
+    <p *ngIf="displayError" class="error_msg">Credenciales incorrectas</p>
+  </div>
+  <mat-card-content>
+    <form class="example-form">
+      <table class="full-width" cellspacing="0">
+        <tr>
+          <td>
+            <mat-form-field class="full-width">
+              <input
+                matInput
+                placeholder="Correo Electrónico"
+                [(ngModel)]="username"
+                name="username"
+                required
+              />
+            </mat-form-field>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <mat-form-field class="full-width">
+              <input
+                matInput
+                placeholder="Contraseña"
+                [(ngModel)]="password"
+                type="password"
+                name="password"
+                required
+              />
+            </mat-form-field>
+          </td>
+        </tr>
+      </table>
+    </form>
+  </mat-card-content>
+  <mat-card-actions>
+    <div style="display: flex; justify-content: center">
+      <mat-spinner
+        diameter="40"
+        [style.display]="showSpinner ? 'block' : 'none'"
+      ></mat-spinner>
+    </div>
+    <div style="display: flex; justify-content: center">
+      <button
+        ngbAutofocus
+        mat-raised-button
+        class="login_button"
+        (click)="login()"
+        [style.display]="showSpinner ? 'none' : 'block'"
+      >
+        Ingresar
+      </button>
+    </div>
+  </mat-card-actions>
+</mat-card>

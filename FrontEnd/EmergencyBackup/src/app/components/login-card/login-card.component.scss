@@ -1,0 +1,37 @@
+.login_card {
+  min-width: 400px;
+  border-radius: 20px;
+  background-color: #343534;
+  color: white;
+}
+
+.error_msg {
+  color: red;
+}
+
+.user-icon {
+  filter: invert(100%);
+  width: 150px;
+  height: 150px;
+  align-items: center;
+}
+
+.main_div {
+  background: #585A58;
+  /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  //height: 100vh;
+  //display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 20px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.login_button {
+  width: 40%;
+  color: white;
+  background-color: #585A58;
+}

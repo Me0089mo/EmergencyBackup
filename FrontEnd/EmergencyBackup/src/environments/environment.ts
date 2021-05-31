@@ -4,9 +4,11 @@
 
 export const environment = {
   production: false,
-  host_url: 'http://40.117.255.53:8080',
+  // host_url: 'http://40.117.255.53:8080',
+  host_url: 'http://localhost:8080',
   api_login: '/api/users/login/',
-  api_download: '/api/users/download/',
+  api_check_bu: '/api/users/has_backup/',
+  api_download: '/api/download/',
 };
 
 /*

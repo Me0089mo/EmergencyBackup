@@ -1,0 +1,9 @@
+<mat-action-list>
+  <button
+    mat-list-item
+    *ngFor="let filename of file_name_arr"
+    (click)="download(filename)"
+  >
+    {{ filename }}
+  </button>
+</mat-action-list>

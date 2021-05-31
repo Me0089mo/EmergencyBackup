@@ -10,12 +10,15 @@ import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
-
+import { MatListModule } from '@angular/material/list';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatDialogModule } from '@angular/material/dialog';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { LoginCardComponent } from './components/login-card/login-card.component';
+import { BackupsModalComponent } from './components/backups-modal/backups-modal.component';
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, LoginCardComponent, BackupsModalComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -23,6 +26,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     MatCardModule,
     MatButtonModule,
     MatInputModule,
+    MatListModule,
+    MatDialogModule,
     MatSnackBarModule,
     FormsModule,
     MatProgressSpinnerModule,
