@@ -23,6 +23,7 @@ interface UpdateUser {
     @PUT("/api/users/update_key")
     fun update_key(
         @Header("authorization") auth :String,
+        @Field("password") password :String,
         @Field("pub_key") new_key:String
     ):Call<ServerResponse>
 

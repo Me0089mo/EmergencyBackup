@@ -10,6 +10,7 @@ import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.replace
 import androidx.preference.PreferenceManager
 import com.example.emergencybackupv10.R
+import kotlinx.android.synthetic.main.fragment_change_key.*
 import kotlinx.android.synthetic.main.fragment_settings.*
 
 class SettingsFragment : Fragment() {
@@ -18,6 +19,7 @@ class SettingsFragment : Fragment() {
     private var username: String? = "DefaultUsernameText"
     private val changeEmailFragment = ChangeEmail()
     private val changePasswordFragment = ChangePassword()
+    private val changePubKeyFragment = ChangeKey()
     private val backupSettingsFragment = BackupSettings()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,6 +44,7 @@ class SettingsFragment : Fragment() {
         change_mail_button.setOnClickListener { v -> changeFragment(changeEmailFragment, "change_email_frag") }
         change_password_button.setOnClickListener { v -> changeFragment(changePasswordFragment, "change_password_frag")}
         backup_config_button.setOnClickListener { v -> changeFragment(backupSettingsFragment, "backup_config_frag") }
+        get_new_key_button.setOnClickListener{v-> changeFragment(changePubKeyFragment,"change_pub_key")}
     }
 
 
@@ -58,7 +61,6 @@ class SettingsFragment : Fragment() {
     }
 
     private fun changeFragment(fragment: Fragment, fragmentTag: String) {
-
         activity?.supportFragmentManager?.beginTransaction()?.apply {
             add(fragment, fragmentTag)
             replace(R.id.nav_host_fragment, fragment)

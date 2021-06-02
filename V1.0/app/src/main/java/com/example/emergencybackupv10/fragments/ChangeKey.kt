@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.preference.PreferenceManager
 import com.example.emergencybackupv10.KeyManager
 import com.example.emergencybackupv10.R
 import com.example.emergencybackupv10.networking.interfaces.ServerResponse
@@ -27,6 +28,7 @@ class ChangeKey : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
     }
 
     override fun onCreateView(
@@ -34,6 +36,7 @@ class ChangeKey : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this.context)
         return inflater.inflate(R.layout.fragment_change_key, container, false)
     }
 
@@ -53,9 +56,11 @@ class ChangeKey : Fragment() {
     }
 
     fun updateKey(){
-        val t = sharedPreferences.getString(getString(R.string.CONFIG_TOKEN), "")
+        val t = sharedPreferences.getString(getString(R.string.CONFIG_TOKEN), "")!!
+        val p = update_key_password.text.toString();
         val call: Call<ServerResponse> = updateService.update_key(
-            auth = t.toString(),
+            auth = t,
+            password = p,
             new_key = publicKey
         )
         call.enqueue(object : Callback<ServerResponse> {

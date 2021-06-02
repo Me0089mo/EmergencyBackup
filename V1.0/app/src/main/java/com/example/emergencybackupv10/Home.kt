@@ -381,7 +381,7 @@ class Home : AppCompatActivity() {
 
     private fun logOut() {
         with(sharedPreferences.edit()) {
-            remove(getString(com.example.emergencybackupv10.R.string.CONFIG_TOKEN))
+            clear()
             apply()
         }
         val intent = Intent(this, Login::class.java)
