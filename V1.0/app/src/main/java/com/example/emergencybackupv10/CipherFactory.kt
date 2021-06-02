@@ -16,8 +16,10 @@ abstract class CipherFactory {
     abstract var fileOutStream : FileOutputStream
     abstract var byteOutStream : ByteArrayOutputStream
     abstract var mac : HMAC
+    abstract val cipherOrDecipher: Boolean
     abstract fun processFile(path : Uri, fileName : String)
     abstract fun processData(data : ByteArray, numBytes: Int)
     abstract fun createOutputFile(path : String, fileName : String)
     abstract fun processKey(cipherKey : Key, data : ByteArray) : ByteArray
+    abstract fun isCipher(): Boolean
 }

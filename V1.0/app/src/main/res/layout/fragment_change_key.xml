@@ -41,20 +41,6 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:text="@string/change_key3" />
 
-        <EditText
-            android:id="@+id/email_change_key"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textEmailAddress"
-            android:hint="Correo electrónico" />
-
-        <EditText
-            android:id="@+id/password_change_key"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textPassword"
-            android:hint="Contraseña" />
-
         <Button
             android:id="@+id/btn_change_key"
             android:layout_width="match_parent"

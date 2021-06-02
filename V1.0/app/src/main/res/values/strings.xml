@@ -21,7 +21,7 @@
     <string name="restore_warning">Si no has descargado tu respaldo previamente presiona el botón de descarga y espera unos momentos</string>
     <string name="change_key">Si tinenes un respaldo en la nube que no hayas restaurado, no podrás recuperarlo si cambias tu llave</string>
     <string name="change_key2">Una vez el cambio sea realizado, la llave anterior quedará inservible</string>
-    <string name="change_key3">Si deseas continuar, ingresa tu correo y contraseña, y presiona el botón para generar una nueva llave</string>
+    <string name="change_key3">Si deseas continuar presiona el botón para generar una nueva llave</string>
     <string name="login">Iniciar sesión</string>
     <string name="arg_backuponcloud">backuponclound</string>
     <string name="signup">Registrarse</string>

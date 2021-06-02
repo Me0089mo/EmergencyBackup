@@ -75,7 +75,7 @@ class HomeFragment : Fragment() {
         }
 
         btn_decifrar.setOnClickListener { v : View? ->
-            v?.let { (activity as Home).restoreBackup(it) }
+            v?.let { (activity as Home).restoreBackup() }
         }
     }
 

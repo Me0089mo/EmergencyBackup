@@ -1,39 +1,40 @@
 package com.example.emergencybackupv10
 
-import com.example.emergencybackupv10.networking.interfaces.Upload
 import android.app.Activity
 import android.content.Intent
 import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
-import androidx.preference.PreferenceManager
+import android.os.Environment
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.edit
-import androidx.core.net.toUri
 import androidx.core.os.bundleOf
 import androidx.documentfile.provider.DocumentFile
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.RecyclerView
-import com.android.volley.toolbox.StringRequest
+import androidx.preference.PreferenceManager
 import com.auth0.android.jwt.JWT
 import com.example.emergencybackupv10.fragments.*
-import com.example.emergencybackupv10.networking.HttpQ
+import com.example.emergencybackupv10.networking.interfaces.Download
 import com.example.emergencybackupv10.networking.interfaces.ServerResponse
+import com.example.emergencybackupv10.networking.interfaces.Upload
 import com.example.emergencybackupv10.utils.AlertUtils
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.activity_login.*
-import okhttp3.MediaType
-import okhttp3.MultipartBody
-import okhttp3.RequestBody
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.Dispatchers.Main
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import okhttp3.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.io.File
-import java.net.URI
+import java.io.*
+import java.nio.CharBuffer
 
 
 class Home : AppCompatActivity() {
@@ -52,6 +53,7 @@ class Home : AppCompatActivity() {
     private var directoryToRestore: String? = null
     private lateinit var  url:String
     private var emergency: Boolean? = null
+    private var downloadsDir: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -79,6 +81,7 @@ class Home : AppCompatActivity() {
         if(emergency == true){
             startBackup()
         }
+        downloadsDir = applicationContext.filesDir.absolutePath + "/Backup"
         directoryToRestore = applicationContext.filesDir.absolutePath + "/CipheredData"
     }
 
@@ -171,18 +174,14 @@ class Home : AppCompatActivity() {
         }
     }
 
-    fun generateNewKey(){
-        val keyMan = KeyManager(applicationContext)
-        keyMan.generateKeys()
-    }
-
     fun startBackup() {
         val cipher = AEScfbCipher(this)
         val createBackup = Backup(this, getDirList(), cipher)
         createBackup.start()
+        uploadBackup()
     }
 
-    fun uploadBackup(v: View) {
+    fun uploadBackup() {
         val cipherDataFile = File(applicationContext.filesDir.absolutePath, "CipheredData")
         cipherDataFile.listFiles().forEach { file ->
             uploadFile(file)
@@ -190,7 +189,45 @@ class Home : AppCompatActivity() {
         Log.i("debug files=", "done!")
     }
 
-    fun restoreBackup(v: View){
+    fun downloadBackup(){
+        //File(applicationContext.filesDir.absoluteFile, "CipheredData").mkdir()
+        File(downloadsDir).mkdir()
+        var files: List<String>? = null
+        val retrofit = Retrofit.Builder()
+            .baseUrl(url)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+        val downloadService: Download = retrofit.create(Download::class.java)
+
+        val call: Call<ServerResponse> = downloadService.download(
+            authorization = sharedPreferences.getString(getString(R.string.CONFIG_TOKEN), null)!!)
+
+        call.enqueue(object : Callback<ServerResponse> {
+            override fun onFailure(call: Call<ServerResponse>?, t: Throwable?) {
+                Log.i("retrofit fail ", "call fai   led")
+            }
+
+            override fun onResponse(call: Call<ServerResponse>?, response: Response<ServerResponse>?) {
+                Log.i("retrofit response", response.toString())
+                println(response?.body()?.files)
+                files = response?.body()?.files!!
+                files?.forEach { file ->
+                    downloadFile(file)
+                }
+                val location = DocumentFile.fromFile(File(downloadsDir)).name
+                val restoreFrag : RestoreFragment =
+                    supportFragmentManager.findFragmentByTag("restore_frag") as RestoreFragment
+                restoreFrag.showBackupPath(location!!)
+                directoryToRestore = downloadsDir
+                val alertUtils = AlertUtils()
+                alertUtils.topToast(applicationContext, "Su respaldo ha terminado de descargarse")
+                println(directoryToRestore)
+            }
+        }
+        )
+    }
+
+    fun restoreBackup(){
         var rootDir = mutableListOf<String>()
         directoryToRestore?.let { rootDir.add(it) }
         val decipher = DescifradorAES_CFB(this, privateKeyFile)
@@ -198,7 +235,7 @@ class Home : AppCompatActivity() {
         restoreBackup.start()
     }
 
-    public fun uploadFile(file:File) {
+    fun uploadFile(file:File) {
         Log.i("debug upload", "uploading ${file.name}")
         val fileURI = Uri.fromFile(file)
         Log.i("debug upload", "URI: ${fileURI.toString()}")
@@ -214,15 +251,13 @@ class Home : AppCompatActivity() {
                 reqFilePart
         )
 
-
-//        Create retrofit instance
+        //Create retrofit instance
         val retrofit = Retrofit.Builder()
                 .baseUrl(url)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
 
-//      Get service and call objects
-
+        //Get service and call objects
         val uploadService : Upload = retrofit.create(Upload::class.java)
 
         val call: Call<ServerResponse> = uploadService.upload(
@@ -240,6 +275,59 @@ class Home : AppCompatActivity() {
             }
         }
         )
+    }
+
+    fun downloadFile(fileName: String){
+        Log.i("Downloading file", fileName)
+
+        //Create retrofit instance
+        val retrofit = Retrofit.Builder()
+            .baseUrl(url)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        //Get service and call objects
+        val downloadService : Download = retrofit.create(Download::class.java)
+
+        val call: Call<ResponseBody> = downloadService.downloadFile(
+            authorization = sharedPreferences.getString(getString(R.string.CONFIG_TOKEN), null)!!
+            ,file = fileName
+        )
+
+        call.enqueue(object: Callback<ResponseBody> {
+
+            override fun onFailure(call: Call<ResponseBody>?, t: Throwable?) {
+                Log.i("Retrofit fail ", "call failed")
+            }
+
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                Log.i("Retrofit response", response.toString())
+                if(response.isSuccessful){
+                    GlobalScope.launch(Main) { // launch coroutine in the main thread
+                        saveFile(response, fileName)
+                    }
+                }
+            }
+        })
+    }
+
+    suspend fun saveFile(response: Response<ResponseBody>, fileName: String){
+        return withContext(Dispatchers.IO) {
+            val file = File(downloadsDir, fileName)
+            val fileOutputStream = FileOutputStream(file)
+            val inStream = BufferedInputStream(response.body()?.byteStream())
+            val data = ByteArray(1024)
+            var read = 0;
+            while (read != -1) {
+                read = inStream.read(data)
+                println(read)
+                if (read != -1)
+                    fileOutputStream.write(data, 0, read)
+            }
+            fileOutputStream.flush()
+            fileOutputStream.close()
+            inStream.close()
+        }
     }
 
     override fun onActivityResult(
@@ -265,6 +353,7 @@ class Home : AppCompatActivity() {
             val restoreFrag : RestoreFragment =
                 supportFragmentManager.findFragmentByTag("restore_frag") as RestoreFragment
             restoreFrag.showKeyPath(location)
+            restoreFrag.enableRestore()
         }
         if(requestCode == BACKUP_SELECTION && resultCode == Activity.RESULT_OK){
             var location: String = ""
@@ -275,6 +364,7 @@ class Home : AppCompatActivity() {
             val restoreFrag : RestoreFragment =
                 supportFragmentManager.findFragmentByTag("restore_frag") as RestoreFragment
             restoreFrag.showBackupPath(location)
+            restoreFrag.enableRestore()
         }
     }
 

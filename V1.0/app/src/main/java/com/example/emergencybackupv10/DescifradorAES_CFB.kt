@@ -20,6 +20,7 @@ class DescifradorAES_CFB(val applicationContext : Context, val pkDirectory: Uri?
     override val keyCipher = Cipher.getInstance("RSA/ECB/OAEPPADDING")
     override val keyManager = KeyManager(applicationContext)
     override val compressor = Compressor()
+    override val cipherOrDecipher: Boolean = false
     override lateinit var cipheredOutput : CipherOutputStream
     override lateinit var fileOutStream : FileOutputStream
     override lateinit var byteOutStream : ByteArrayOutputStream
@@ -138,4 +139,6 @@ class DescifradorAES_CFB(val applicationContext : Context, val pkDirectory: Uri?
         }
         return newName
     }
+
+    override fun isCipher(): Boolean = cipherOrDecipher
 }
