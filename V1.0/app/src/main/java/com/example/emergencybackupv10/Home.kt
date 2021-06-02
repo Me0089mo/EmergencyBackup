@@ -112,13 +112,15 @@ class Home : AppCompatActivity() {
                 R.string.ARG_NAME.toString() to username,
                 R.string.ARG_ID.toString() to id,
                 getString(R.string.ARG_PUB_KEY) to publicKeyFile
-                //getString(R.string.ARG_PRIV_KEY) to privateKeyFile
         )
 
-        supportFragmentManager.beginTransaction().apply {
-            add(fragment, tag)
-            replace(R.id.nav_host_fragment, fragment)
-            commit()
+        if (supportFragmentManager.fragments.size == 0  || (supportFragmentManager.fragments[0].tag != tag)){
+            supportFragmentManager.beginTransaction().apply {
+                add(fragment, tag)
+                replace(R.id.nav_host_fragment, fragment)
+                addToBackStack(null)
+                commit()
+            }
         }
     }
 
