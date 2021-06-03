@@ -80,19 +80,15 @@ router.post("/", upload.single("file"), async function (req, res, next) {
       const user = await User.findOne({ _id: decoded._id });
       user.hasBackup = true;
       //Replace old mac in the file
-      const new_mac_key = generateHmacKey()
-
       const new_key = publicEncrypt(
         "-----BEGIN PUBLIC KEY-----\n" +
           user.pub_key +
           "-----END PUBLIC KEY-----",
-        new_mac_key
+        mac_key
       );
 
-      const new_mac = createHmac("SHA256", new_key);
-      new_mac.update(file_content);
       file_buffer = Buffer.concat([
-        new_mac.digest(),
+        file_mac,
         new_key,
         extras,
         file_content,
@@ -120,14 +116,5 @@ router.post("/", upload.single("file"), async function (req, res, next) {
     });
   }
 });
-
-function generateHmacKey() {
-  const key = await subtle.generateKey({
-    name: 'HMAC',
-    hash: 'SHA-256'
-  }, true, ['sign', 'verify']);
-
-  return key;
-}
 
 module.exports = router;
