@@ -39,14 +39,6 @@ class HomeFragment : Fragment() {
             publicKeyFile = it.getString(getString(R.string.ARG_PUB_KEY))
             privateKeyFile = it.getString(getString(R.string.ARG_PRIV_KEY))
         }
-
-        //Creating directories for ciphered and deciphered data
-        /*val cipherDataDirectory = File(this.requireContext().filesDir, "CipheredData")
-        val decipheredDataDirectory = File(this.requireContext().filesDir, "DecipheredData")
-        if(cipherDataDirectory.exists() || cipherDataDirectory.mkdir())
-            cipheredDataPath = cipherDataDirectory.absolutePath
-        if(decipheredDataDirectory.exists() || decipheredDataDirectory.mkdir())
-            decipheredDataPath = decipheredDataDirectory.absolutePath*/
     }
 
     override fun onCreateView(
@@ -60,13 +52,7 @@ class HomeFragment : Fragment() {
     override fun onStart() {
         super.onStart()
         setText()
-        //sharedPreferences = activity?.applicationContext?.getSharedPreferences(getString(R.string.CONFIG_DIR_SET), Context.MODE_PRIVATE)
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(activity?.applicationContext)
-//        btnSelect.setOnClickListener { v: View? ->
-//            //Creating document picker
-//            println("After: ${sharedPreferences?.getStringSet(getString(R.string.CONFIG_DIR_SET), null)}")
-//            println("Before: ${sharedPreferences?.getStringSet(getString(R.string.CONFIG_DIR_SET), null)}")
-//        }
 
         btn_cifrar.setOnClickListener { v: View? ->
             if (v != null) {

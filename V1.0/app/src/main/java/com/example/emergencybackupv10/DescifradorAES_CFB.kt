@@ -4,6 +4,7 @@ import android.content.Context
 import android.net.Uri
 import com.example.emergencybackupv10.utils.AlertUtils
 import java.io.*
+import java.lang.Exception
 import java.security.*
 import java.util.zip.*
 import javax.crypto.*
@@ -17,7 +18,7 @@ import javax.crypto.spec.SecretKeySpec
  */
 class DescifradorAES_CFB(val applicationContext : Context, val pkDirectory: Uri?): CipherFactory() {
     override val cipher:Cipher = Cipher.getInstance("AES/CFB/PKCS5PADDING")
-    override val keyCipher = Cipher.getInstance("RSA/ECB/OAEPPADDING")
+    override val keyCipher = Cipher.getInstance("RSA/ECB/OAEPPadding")
     override val keyManager = KeyManager(applicationContext)
     override val compressor = Compressor()
     override val cipherOrDecipher: Boolean = false
@@ -32,6 +33,8 @@ class DescifradorAES_CFB(val applicationContext : Context, val pkDirectory: Uri?
     private lateinit var macTag : ByteArray
     private lateinit var key : SecretKey
     private var userPrivateKey : PrivateKey
+    private var errorProcessingKeys: Boolean = false
+    private val alertUtils = AlertUtils()
     private var macMatches = false
     private val decipheredDataPath: String = applicationContext.filesDir.absolutePath + "/DecipheredData"
 
@@ -42,6 +45,7 @@ class DescifradorAES_CFB(val applicationContext : Context, val pkDirectory: Uri?
 
     override fun processFile(path: Uri, fileName: String) {
         createOutputFile(decipheredDataPath, fileName)
+        errorProcessingKeys = false
         applicationContext.contentResolver.openInputStream(path)?.use { reader ->
             val fileInput = BufferedInputStream(reader)
 
@@ -57,6 +61,12 @@ class DescifradorAES_CFB(val applicationContext : Context, val pkDirectory: Uri?
             fileInput.read(iv)
 
             initializeCipher(cipheredKey, iv, cipheredKeyMac)
+            println("Error: $errorProcessingKeys")
+            if(errorProcessingKeys){
+                alertUtils.topToast(applicationContext, "Llaves de archivo corruptas")
+                closeStreams()
+                return
+            }
 
             val readingArray = ByteArray(1024)
             var readLong:Int
@@ -89,15 +99,37 @@ class DescifradorAES_CFB(val applicationContext : Context, val pkDirectory: Uri?
         cipheredOutput = CipherOutputStream(decipheredFileOutStream, cipher)
     }
 
-    override fun processKey(cipherKey: Key, data: ByteArray): ByteArray {
+    private fun closeStreams(){
+        decipheredFileOutStream.close()
+        byteOutStream.close()
+        fileOutStream.close()
+        decompressedFile.delete()
+        decipheredFile.delete()
+    }
+
+    override fun processKey(cipherKey: Key, data: ByteArray): ByteArray? {
         keyCipher.init(Cipher.DECRYPT_MODE, cipherKey)
-        return keyCipher.doFinal(data)
+        var decKey: ByteArray? = null
+        try {
+            decKey = keyCipher.doFinal(data)
+        }catch (exep: Exception){}
+        return decKey
     }
 
     private fun initializeCipher(cipheredKey : ByteArray, iv : ByteArray, cipheredKeyMac: ByteArray){
-        key = SecretKeySpec(processKey(userPrivateKey, cipheredKey), "AES")
+        val decKey = processKey(userPrivateKey, cipheredKey)
+        if(decKey == null){
+            errorProcessingKeys = true
+            return
+        }
+        key = SecretKeySpec(decKey, "AES")
         cipher.init(Cipher.DECRYPT_MODE, key, IvParameterSpec(iv))
-        val keyMac = SecretKeySpec(processKey(userPrivateKey, cipheredKeyMac), "HMAC")
+        val decKeyMac = processKey(userPrivateKey, cipheredKeyMac)
+        if(decKeyMac == null){
+            errorProcessingKeys = true
+            return
+        }
+        val keyMac = SecretKeySpec(decKeyMac, "HMAC")
         mac = HMAC(keyMac)
         mac.initializeMac()
     }

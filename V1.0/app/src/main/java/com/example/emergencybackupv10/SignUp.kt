@@ -49,6 +49,8 @@ class SignUp : AppCompatActivity() {
         keyMan.generateKeys()
         pubKey = keyMan.getPubKeyAsString()
         userKeysFiles = keyMan.getKeysDirectories()
+        val toRemove = userKeysFiles[1].substringBefore("Android/data/com.example.emergencybackupv10/files/Documents/userPrivKey.pk")
+        val privKeyLoc = userKeysFiles[1].removePrefix(toRemove)
 
         val postRequest: StringRequest = object : StringRequest(
             Method.POST, url,
@@ -65,6 +67,7 @@ class SignUp : AppCompatActivity() {
                     apply()
                 }
                 val intent = Intent(this, RegistrationSuccess::class.java)
+                intent.putExtra(getString(R.string.KEY_LOCATION), privKeyLoc)
                 startActivity(intent);
             },
             Response.ErrorListener { error ->

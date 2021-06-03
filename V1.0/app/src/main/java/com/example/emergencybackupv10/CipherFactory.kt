@@ -20,6 +20,6 @@ abstract class CipherFactory {
     abstract fun processFile(path : Uri, fileName : String)
     abstract fun processData(data : ByteArray, numBytes: Int)
     abstract fun createOutputFile(path : String, fileName : String)
-    abstract fun processKey(cipherKey : Key, data : ByteArray) : ByteArray
+    abstract fun processKey(cipherKey : Key, data : ByteArray) : ByteArray?
     abstract fun isCipher(): Boolean
 }

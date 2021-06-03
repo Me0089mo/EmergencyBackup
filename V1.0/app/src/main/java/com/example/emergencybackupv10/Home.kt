@@ -77,12 +77,11 @@ class Home : AppCompatActivity() {
             }
             true
         }
-        val direct = sharedPreferences.getStringSet(getString(R.string.CONFIG_DIR_SET), null)
         if(emergency == true){
             startBackup()
         }
         downloadsDir = applicationContext.filesDir.absolutePath + "/Backup"
-        directoryToRestore = applicationContext.filesDir.absolutePath + "/CipheredData"
+        //directoryToRestore = applicationContext.filesDir.absolutePath + "/CipheredData"
     }
 
     private fun getDataFromIntent() {
@@ -99,7 +98,6 @@ class Home : AppCompatActivity() {
             logOut();
             return;
         }
-        Log.i("debug", t.toString())
         val jwt = JWT(t)
         username = jwt.getClaim(getString(R.string.ARG_NAME)).asString()
         id = jwt.getClaim(getString(R.string.ARG_ID)).asString()
@@ -213,9 +211,7 @@ class Home : AppCompatActivity() {
                 Log.i("retrofit response", response.toString())
                 println(response?.body()?.files)
                 files = response?.body()?.files!!
-                files?.forEach { file ->
-                    downloadFile(file)
-                }
+                files?.forEach { file -> downloadFile(file) }
                 val location = DocumentFile.fromFile(File(downloadsDir)).name
                 val restoreFrag : RestoreFragment =
                     supportFragmentManager.findFragmentByTag("restore_frag") as RestoreFragment
@@ -223,14 +219,13 @@ class Home : AppCompatActivity() {
                 directoryToRestore = downloadsDir
                 val alertUtils = AlertUtils()
                 alertUtils.topToast(applicationContext, "Su respaldo ha terminado de descargarse")
-                println(directoryToRestore)
             }
         }
         )
     }
 
     fun restoreBackup(){
-        var rootDir = mutableListOf<String>()
+        val rootDir = mutableListOf<String>()
         directoryToRestore?.let { rootDir.add(it) }
         val decipher = DescifradorAES_CFB(this, privateKeyFile)
         val restoreBackup = Backup(this, rootDir.toMutableSet(), decipher)
@@ -322,7 +317,6 @@ class Home : AppCompatActivity() {
             var read = 0;
             while (read != -1) {
                 read = inStream.read(data)
-                println(read)
                 if (read != -1)
                     fileOutputStream.write(data, 0, read)
             }
@@ -355,7 +349,6 @@ class Home : AppCompatActivity() {
             val restoreFrag : RestoreFragment =
                 supportFragmentManager.findFragmentByTag("restore_frag") as RestoreFragment
             restoreFrag.showKeyPath(location)
-            restoreFrag.enableRestore()
         }
         if(requestCode == BACKUP_SELECTION && resultCode == Activity.RESULT_OK){
             var location: String = ""
@@ -366,7 +359,6 @@ class Home : AppCompatActivity() {
             val restoreFrag : RestoreFragment =
                 supportFragmentManager.findFragmentByTag("restore_frag") as RestoreFragment
             restoreFrag.showBackupPath(location)
-            restoreFrag.enableRestore()
         }
     }
 

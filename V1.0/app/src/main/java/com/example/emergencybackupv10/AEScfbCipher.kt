@@ -13,7 +13,7 @@ import javax.crypto.*
 class AEScfbCipher(val applicationContext: Context) : CipherFactory(){
 
     override val cipher:Cipher = Cipher.getInstance("AES/CFB/PKCS5PADDING")
-    override val keyCipher = Cipher.getInstance("RSA/ECB/OAEPPADDING")
+    override val keyCipher = Cipher.getInstance("RSA/ECB/OAEPPadding")
     override val keyManager = KeyManager(applicationContext)
     override val compressor = Compressor()
     override val cipherOrDecipher: Boolean = true
@@ -98,9 +98,12 @@ class AEScfbCipher(val applicationContext: Context) : CipherFactory(){
         cipheredOutput = CipherOutputStream(byteOutStream, cipher)
     }
 
-    override fun processKey(cipherKey : Key, data : ByteArray) : ByteArray{
+    override fun processKey(cipherKey : Key, data : ByteArray) : ByteArray?{
         keyCipher.init(Cipher.ENCRYPT_MODE, cipherKey)
-        return keyCipher.doFinal(data)
+        val ciphKey = keyCipher.doFinal(data)
+        //println("Ciphered MAC ")
+        //ciphKey.forEach { b -> print("$b ") }
+        return ciphKey
     }
 
     fun print_bytes(bytes: ByteArray): String? {

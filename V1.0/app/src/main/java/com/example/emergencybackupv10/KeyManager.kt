@@ -13,9 +13,6 @@ import java.security.spec.PKCS8EncodedKeySpec
 import java.security.spec.X509EncodedKeySpec
 
 class KeyManager(val context : Context) {
-    private var public : PublicKey? = null
-    private var private : PrivateKey? = null
-
     private lateinit var publicDirectory : String
     private lateinit var privateDirectory : String
 
@@ -28,26 +25,21 @@ class KeyManager(val context : Context) {
         publicDirectory = pubFile.absolutePath
         pubFile.writeBytes(keys.public.encoded)
 
-        println("Public key: ")
-        println(Base64.encodeToString(keys.public.encoded, Base64.DEFAULT))
+        /*println("Public key: ")
+        println(Base64.encodeToString(keys.public.encoded, Base64.DEFAULT))*/
         //Save private key//////////////////////////////////////////////////////////////////////////
         var parentFile : File?
         println(Environment.getExternalStorageState())
-        if(Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED) {
+        if(Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED)
             parentFile = context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)
-            println("Private key at: ")
-            println(context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)?.absolutePath)
-            println(context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)?.path)
-            println(context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)?.canonicalPath)
-        }
         else
             parentFile = context.filesDir
         val privFile = File(parentFile, "userPrivKey.pk")
-        privateDirectory = privFile.absolutePath
+        privateDirectory = privFile.path
         privFile.writeBytes(keys.private.encoded)
         
-        println("Private key: ")
-        println(Base64.encodeToString(keys.private.encoded, Base64.DEFAULT))
+        /*println("Private key: ")
+        println(Base64.encodeToString(keys.private.encoded, Base64.DEFAULT))*/
     }
 
     fun getPubKeyAsString():String{
