@@ -208,3 +208,7 @@ dist
 # rsa keys
 *rsa.public
 *rsa.private
+
+#Conexion ssh
+*.rnd
+*.sslcert

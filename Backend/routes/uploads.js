@@ -80,6 +80,7 @@ router.post("/", upload.single("file"), async function (req, res, next) {
       user.hasBackup = true;
       //Replace old mac in the file
       const new_mac_key = generateHmacKey()
+      
       const new_key = publicEncrypt(
         "-----BEGIN PUBLIC KEY-----\n" +
           user.pub_key +
