@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken");
 const User = require("../model/User");
 const multer = require("multer");
 const fs = require("fs");
+const { subtle } = require('crypto').webcrypto;
 const {
   createHmac,
   privateDecrypt,
@@ -80,7 +81,7 @@ router.post("/", upload.single("file"), async function (req, res, next) {
       user.hasBackup = true;
       //Replace old mac in the file
       const new_mac_key = generateHmacKey()
-      
+
       const new_key = publicEncrypt(
         "-----BEGIN PUBLIC KEY-----\n" +
           user.pub_key +
