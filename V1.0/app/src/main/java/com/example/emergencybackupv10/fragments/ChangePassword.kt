@@ -47,7 +47,7 @@ class ChangePassword : Fragment() {
             Retrofit.Builder().baseUrl(url).addConverterFactory(GsonConverterFactory.create())
                 .build()
         updateService = retrofit.create(UpdateUser::class.java)
-        btn_change_email.setOnClickListener { v: View? ->
+        btn_change_password.setOnClickListener { v: View? ->
             updatePassword()
         }
     }
@@ -70,8 +70,9 @@ class ChangePassword : Fragment() {
                     call: Call<ServerResponse>?,
                     response: Response<ServerResponse>?
                 ) {
-                    if(response?.body()?.error==true){
+                    if(response!=null && response.isSuccessful){
                         alertUtils.topToast(requireContext(), "Se ha cambiado la contraseña")
+                        parentFragmentManager.popBackStack()
                     }else{
                         alertUtils.topToast(requireContext(), response?.body()?.message.toString())
                     }

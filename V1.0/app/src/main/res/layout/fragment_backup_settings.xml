@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -34,7 +35,8 @@
             android:layout_marginTop="50dp"
             android:background="@drawable/custom_button"
             android:text="Agregar carpeta"
-            android:textColor="@color/button_font" />
+            android:textColor="@color/button_font"
+            app:backgroundTint="#FFFFFF" />
 
         <Button
             android:id="@+id/btn_save_changes"
@@ -43,8 +45,10 @@
             android:layout_marginHorizontal="60dp"
             android:layout_marginTop="30dp"
             android:background="@drawable/custom_button"
+            android:backgroundTint="#FFFFFF"
             android:text="Guardar cambios"
-            android:textColor="@color/button_font" />
+            android:textColor="@color/button_font"
+            app:backgroundTint="#FFFFFF" />
 
     </LinearLayout>
 </FrameLayout>

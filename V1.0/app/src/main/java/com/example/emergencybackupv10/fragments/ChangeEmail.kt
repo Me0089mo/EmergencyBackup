@@ -65,7 +65,12 @@ class ChangeEmail : Fragment() {
                 }
 
                 override fun onResponse(call: Call<ServerResponse>?, response: Response<ServerResponse>?) {
-                    Log.i("retrofit response", response.toString())
+                    if(response!=null && response.isSuccessful){
+                        alertUtils.topToast(requireContext(), "Se ha cambiado la la dirección de correo")
+                        parentFragmentManager.popBackStack()
+                    }else{
+                        alertUtils.topToast(requireContext(), response?.body()?.message.toString())
+                    }
                 }
             }
             );

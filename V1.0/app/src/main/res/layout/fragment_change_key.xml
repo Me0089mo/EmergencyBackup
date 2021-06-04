@@ -61,9 +61,10 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="60dp"
             android:layout_marginTop="40dp"
-            android:textColor="@color/button_font"
             android:background="@drawable/custom_button"
-            android:text="Generar nueva llave" />
+            android:text="Generar nueva llave"
+            android:textColor="@color/button_font"
+            app:backgroundTint="#FFFFFF" />
 
     </LinearLayout>
 

@@ -2,6 +2,7 @@ package com.example.emergencybackupv10.fragments
 
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -55,9 +56,16 @@ class ChangeKey : Fragment() {
         }
     }
 
-    fun updateKey(){
-        val t = sharedPreferences.getString(getString(R.string.CONFIG_TOKEN), "")!!
+    fun updateKey() {
+
+
         val p = update_key_password.text.toString();
+        if (p == "") {
+            alertUtils.topToast(requireContext(), "Debes introducir tu contraseña")
+            return
+        }
+
+        val t = sharedPreferences.getString(getString(R.string.CONFIG_TOKEN), "")!!
         val call: Call<ServerResponse> = updateService.update_key(
             auth = t,
             password = p,
@@ -65,16 +73,21 @@ class ChangeKey : Fragment() {
         )
         call.enqueue(object : Callback<ServerResponse> {
             override fun onFailure(call: Call<ServerResponse>?, t: Throwable?) {
-                alertUtils.topToast(requireContext(), "Hubo un error por favor intentalo otra vez mas tarde")
+                alertUtils.topToast(
+                    requireContext(),
+                    "Hubo un error por favor intentalo otra vez mas tarde"
+                )
             }
+
             override fun onResponse(
                 call: Call<ServerResponse>?,
                 response: retrofit2.Response<ServerResponse>?
             ) {
-                if(response?.body()?.error==true){
+                if (response!=null && response.isSuccessful) {
                     alertUtils.topToast(requireContext(), "Se ha cambiado la contraseña")
-                }else{
-                    alertUtils.topToast(requireContext(), response?.body()?.message.toString())
+                    parentFragmentManager.popBackStack()
+                } else {
+                    alertUtils.topToast(requireContext(), "La contraseña es incorrecta, por favor vuelve a intentarlo")
                 }
             }
         }
