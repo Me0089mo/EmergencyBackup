@@ -64,6 +64,7 @@ class SignUp : AppCompatActivity() {
                         getString(R.string.CONFIG_SERVER_PEM_CERTIFICATE),
                         jwt.getClaim(getString(R.string.CONFIG_SERVER_PEM_CERTIFICATE)).asString()
                     )
+                    putInt(getString(R.string.CONFIG_TIME_PERIOD),1)
                     apply()
                 }
                 val intent = Intent(this, RegistrationSuccess::class.java)

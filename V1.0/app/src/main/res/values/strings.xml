@@ -33,7 +33,9 @@
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dash</string>
     <string name="title_notifications">Notif</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="fragment_time_period_Instructions_header">¿Qué tal seguido realizas tus repaldos?</string>
+    <string name="fragment_time_period_Instructions_text_1">En caso de una emergencia, respaldaremos solo los archivos que que se hayan creado despues de tu ultimo respaldo usando este dato como referencia</string>
+    <string name="fragment_time_period_Instructions_text_2">Selecciona un periodo de tiempo</string>
     <string name="button_seleccionar">Seleccionar</string>
     <string name="button_cifrar">Cifrar</string>
     <string name="button_descifrar">Descifrar</string>

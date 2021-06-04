@@ -138,6 +138,27 @@
                     app:layout_constraintTop_toBottomOf="@+id/backup_config_button" />
 
                 <Button
+                    android:id="@+id/update_time_period"
+                    style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/button_h_m"
+                    android:layout_marginTop="3dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="Configurar periodo respaldo"
+                    android:textAlignment="viewStart"
+                    android:textColor="@color/button_font_negative"
+                    android:textSize="14sp"
+                    app:icon="@drawable/ic_baseline_arrow_forward_ios_24"
+                    app:iconGravity="end"
+                    app:iconTint="@color/button_font_negative"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/get_new_key_button" />
+
+                <Button
                     android:id="@+id/dashboard_logOut_button"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

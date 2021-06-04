@@ -21,6 +21,7 @@ class SettingsFragment : Fragment() {
     private val changePasswordFragment = ChangePassword()
     private val changeKeyFragment = ChangeKey()
     private val backupSettingsFragment = BackupSettings()
+    private val timePeriodFragment = TimePeriodSettings()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,6 +45,8 @@ class SettingsFragment : Fragment() {
         change_password_button.setOnClickListener { v -> changeFragment(changePasswordFragment, "change_password_frag")}
         backup_config_button.setOnClickListener { v -> changeFragment(backupSettingsFragment, "backup_config_frag") }
         get_new_key_button.setOnClickListener { v -> changeFragment(changeKeyFragment, "change_key_frag") }
+        update_time_period.setOnClickListener { v -> changeFragment(timePeriodFragment, "update_time_period") }
+
     }
 
 
