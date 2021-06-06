@@ -50,6 +50,7 @@ class ChangeKey : Fragment() {
         updateService = retrofit.create(UpdateUser::class.java)
         btn_change_key.setOnClickListener { v ->
             val keyMan = KeyManager(requireActivity().applicationContext)
+            //Log.i("Old public key", "\n${keyMan.getPubKeyAsString()}")
             keyMan.generateKeys()
             publicKey = keyMan.getPubKeyAsString()
             updateKey()
@@ -57,8 +58,6 @@ class ChangeKey : Fragment() {
     }
 
     fun updateKey() {
-
-
         val p = update_key_password.text.toString();
         if (p == "") {
             alertUtils.topToast(requireContext(), "Debes introducir tu contraseña")

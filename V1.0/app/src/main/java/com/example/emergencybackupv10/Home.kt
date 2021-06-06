@@ -1,13 +1,17 @@
 package com.example.emergencybackupv10
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.net.ConnectivityManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.util.Log
 import android.view.View
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.documentfile.provider.DocumentFile
@@ -41,12 +45,12 @@ class Home : AppCompatActivity() {
     private val BACKUP_CONFIG = 42
     private val KEY_SELECTION = 43
     private val BACKUP_SELECTION = 44
-    private var backUpOnCloud: Boolean = false;
-    private var username: String? = ""
-    private var id: String? = ""
     private val homeFragment = HomeFragment()
     private val restoreFragment = RestoreFragment()
     private val settingsFragment = SettingsFragment()
+    private var backUpOnCloud: Boolean = false;
+    private var username: String? = ""
+    private var id: String? = ""
     private lateinit var sharedPreferences: SharedPreferences
     private var publicKeyFile: String? = ""
     private var privateKeyFile: Uri? = null
@@ -54,6 +58,8 @@ class Home : AppCompatActivity() {
     private lateinit var  url:String
     private var emergency: Boolean? = null
     private var downloadsDir: String? = null
+    private var waitingToUpload = mutableListOf<File>()
+    private lateinit var cm: ConnectivityManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -81,7 +87,6 @@ class Home : AppCompatActivity() {
             startBackup()
         }
         downloadsDir = applicationContext.filesDir.absolutePath + "/Backup"
-        //directoryToRestore = applicationContext.filesDir.absolutePath + "/CipheredData"
     }
 
     private fun getDataFromIntent() {
@@ -176,21 +181,44 @@ class Home : AppCompatActivity() {
 
     fun startBackup() {
         val cipher = AEScfbCipher(this)
-        val createBackup = Backup(this, getDirList(), cipher)
+        var period_time = sharedPreferences.getInt(getString(R.string.CONFIG_TIME_PERIOD), 0)
+        val time: Long = (period_time*24*60*60*1000).toLong()
+        val createBackup = Backup(this, getDirList(), cipher, time)
         createBackup.start()
-        uploadBackup()
+        cm = applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        uploadBackup(File(applicationContext.filesDir.absolutePath, "CipheredData"))
+        Log.i("Files waiting", waitingToUpload.size.toString())
+        if(waitingToUpload.isNotEmpty()) {
+            GlobalScope.launch(Main) { uploadRetarded() }
+        }
     }
 
-    fun uploadBackup() {
-        val cipherDataFile = File(applicationContext.filesDir.absolutePath, "CipheredData")
-        cipherDataFile.listFiles().forEach { file ->
-            uploadFile(file)
+    fun uploadBackup(files: File) {
+        files.listFiles().forEach { file ->
+            if(file.isDirectory)
+                uploadBackup(file)
+            else {
+                if(cm.activeNetworkInfo != null && cm.activeNetworkInfo.isConnected)
+                    uploadFile(file)
+                else
+                    waitingToUpload.add(file)
+            }
         }
-        Log.i("debug files=", "done!")
+        //Log.i("debug files=", "done!")
+    }
+
+    suspend fun uploadRetarded(){
+        return withContext(Dispatchers.IO) {
+            while(waitingToUpload.isNotEmpty()){
+                if (cm.activeNetworkInfo != null && cm.activeNetworkInfo.isConnected) {
+                    uploadFile(waitingToUpload[0])
+                    waitingToUpload.removeAt(0)
+                }
+            }
+        }
     }
 
     fun downloadBackup(){
-        //File(applicationContext.filesDir.absoluteFile, "CipheredData").mkdir()
         File(downloadsDir).mkdir()
         var files: List<String>? = null
         val retrofit = Retrofit.Builder()
@@ -225,17 +253,16 @@ class Home : AppCompatActivity() {
     }
 
     fun restoreBackup(){
-        val rootDir = mutableListOf<String>()
+        val rootDir = mutableSetOf<String>()
         directoryToRestore?.let { rootDir.add(it) }
         val decipher = DescifradorAES_CFB(this, privateKeyFile)
-        val restoreBackup = Backup(this, rootDir.toMutableSet(), decipher)
+        val restoreBackup = Backup(this, rootDir, decipher)
         restoreBackup.start()
     }
 
     fun uploadFile(file:File) {
         Log.i("debug upload", "uploading ${file.name}")
         val fileURI = Uri.fromFile(file)
-        Log.i("debug upload", "URI: ${fileURI.toString()}")
 
         val reqFilePart = RequestBody.create(
                 MediaType.parse("file"),
@@ -333,7 +360,7 @@ class Home : AppCompatActivity() {
             var dirList = getDirList()
             val num = dirList.size + 1
             resultData?.data?.also { uri ->
-                dirList.add("${num}|${uri.toString()}")
+                dirList.add("${num}|${uri}")
                 saveDirList(dirList)
             }
             val backupFrag : BackupSettings =

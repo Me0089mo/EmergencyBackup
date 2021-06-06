@@ -63,20 +63,14 @@ class BackupSettings : Fragment() {
 
     fun getValuesFromDirList(dirList: MutableSet<String>){
         directories.clear()
-        println("Before sort")
         for (dir in dirList) {
             val onlyName = dir.indexOfLast { it == '%' }
             var priority = dir.dropLastWhile { it != '|' }
             val onlyUri = dir.dropWhile { it != '|' }.substring(1)
             priority = priority.substring(0, priority.length-1)
-            println(dir)
             directories.add(Pair(priority.toInt(), Pair(dir.drop(onlyName + 3), onlyUri)))
         }
-        //println("Before sort")
-        //directories.forEach { println("${it.first} ${it.second.second}") }
         directories.sortBy { it.first }
-        println("After sort")
-        directories.forEach { println("${it.first} ${it.second.second}") }
     }
 
     companion object {

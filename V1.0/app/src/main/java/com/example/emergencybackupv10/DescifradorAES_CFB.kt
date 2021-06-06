@@ -36,15 +36,15 @@ class DescifradorAES_CFB(val applicationContext : Context, val pkDirectory: Uri?
     private var errorProcessingKeys: Boolean = false
     private val alertUtils = AlertUtils()
     private var macMatches = false
-    private val decipheredDataPath: String = applicationContext.filesDir.absolutePath + "/DecipheredData"
+    override val outDataPath: String = applicationContext.filesDir.absolutePath + "/DecipheredData"
 
     init {
         userPrivateKey = pkDirectory?.let { keyManager.recoverPrivateKey(it) }!!
-        File(decipheredDataPath).mkdir()
+        File(outDataPath).mkdir()
     }
 
-    override fun processFile(path: Uri, fileName: String) {
-        createOutputFile(decipheredDataPath, fileName)
+    override fun processFile(path: Uri, fileName: String, outPath: String?) {
+        createOutputFile(outDataPath, fileName)
         errorProcessingKeys = false
         applicationContext.contentResolver.openInputStream(path)?.use { reader ->
             val fileInput = BufferedInputStream(reader)
@@ -61,7 +61,6 @@ class DescifradorAES_CFB(val applicationContext : Context, val pkDirectory: Uri?
             fileInput.read(iv)
 
             initializeCipher(cipheredKey, iv, cipheredKeyMac)
-            println("Error: $errorProcessingKeys")
             if(errorProcessingKeys){
                 alertUtils.topToast(applicationContext, "Llaves de archivo corruptas")
                 closeStreams()
@@ -164,7 +163,7 @@ class DescifradorAES_CFB(val applicationContext : Context, val pkDirectory: Uri?
         var newName = ""
         for (index in (name.length - 1).downTo(0)) {
             if (name[index] == '.') {
-                newName = name.substring(0, index-8) + "Deciphered"
+                newName = name.substring(0, index-1) + "Deciphered"
                 newName += name.substring(index, name.length)
                 break
             }

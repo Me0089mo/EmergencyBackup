@@ -27,17 +27,11 @@ private const val ARG_BU_AVAILABLE = "backUpAvailable"
 class HomeFragment : Fragment() {
 
     private var backUpOnCloud: Boolean = false
-    private var cipheredDataPath: String? = null
-    private var decipheredDataPath : String? = null
-    private var publicKeyFile : String? = ""
-    private var privateKeyFile : String? = ""
     private var sharedPreferences : SharedPreferences? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
             backUpOnCloud = it.getBoolean(ARG_BU_AVAILABLE)
-            publicKeyFile = it.getString(getString(R.string.ARG_PUB_KEY))
-            privateKeyFile = it.getString(getString(R.string.ARG_PRIV_KEY))
         }
     }
 
@@ -76,12 +70,10 @@ class HomeFragment : Fragment() {
 
     companion object {
         @JvmStatic
-        fun newInstance(backUpOnCloud: Boolean, privateKeyFile: String) =
+        fun newInstance(backUpOnCloud: Boolean) =
             HomeFragment().apply {
                 arguments = Bundle().apply {
                     putBoolean(ARG_BU_AVAILABLE, backUpOnCloud)
-                    //putString(getString(R.string.ARG_PUB_KEY), publicKeyFile)
-                    putString(getString(R.string.ARG_PRIV_KEY), privateKeyFile)
                 }
             }
     }

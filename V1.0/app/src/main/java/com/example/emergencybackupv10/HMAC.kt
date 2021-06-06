@@ -1,5 +1,6 @@
 package com.example.emergencybackupv10
 
+import android.util.Log
 import javax.crypto.KeyGenerator
 import javax.crypto.Mac
 import javax.crypto.SecretKey
@@ -21,7 +22,7 @@ class HMAC constructor(){
     }
 
     private fun generateKey(){
-        keyGenerator.init(128)
+        keyGenerator.init(256)
         key = keyGenerator.generateKey()
     }
 
@@ -34,12 +35,23 @@ class HMAC constructor(){
     }
 
     fun verifyMac(tagRecovered : ByteArray) : Boolean{
-        println("Tag recibido")
-        tagRecovered.forEach { b -> print("$b ") }
-        println("\nTag calculado")
-        tag.forEach { b -> print("$b ") }
-        println("")
+        Log.i("Tag recibido", "\n${print_bytes(tagRecovered)}")
+        Log.i("Tag calculado", "\n${print_bytes(tag)}")
         return tag.contentEquals(tagRecovered)
+    }
+
+    fun print_bytes(bytes: ByteArray): String? {
+        val sb = StringBuilder()
+        sb.append("[ ")
+        var i = 0
+        for (b in bytes) {
+            i++
+            sb.append(String.format("0x%02X ", b))
+            if(i%8 == 0)
+                sb.append("\n")
+        }
+        sb.append("]")
+        return sb.toString()
     }
 
 }

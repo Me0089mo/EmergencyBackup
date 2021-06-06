@@ -42,7 +42,7 @@ class TimePeriodSettings : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        fragment_time_period_picker.maxValue = 7
+        fragment_time_period_picker.maxValue = 30
         fragment_time_period_picker.minValue = 1
         fragment_time_period_picker.value = sharedPreferences.getInt(getString(R.string.CONFIG_TIME_PERIOD),1)
         time_period_btn_save_changes.setOnClickListener {view -> updateTimePeriod() }

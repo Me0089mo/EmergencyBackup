@@ -5,9 +5,6 @@ import android.net.Uri
 import android.os.Environment
 import java.io.*
 import java.security.*
-import java.security.spec.X509EncodedKeySpec
-import java.util.zip.ZipEntry
-import java.util.zip.ZipOutputStream
 import javax.crypto.*
 
 class AEScfbCipher(val applicationContext: Context) : CipherFactory(){
@@ -22,9 +19,9 @@ class AEScfbCipher(val applicationContext: Context) : CipherFactory(){
     override lateinit var byteOutStream: ByteArrayOutputStream
     override lateinit var mac : HMAC
     private val keyGenerator = KeyGenerator.getInstance("AES")
-    private val cipheredDataPath: String = applicationContext.filesDir.absolutePath + "/CipheredData"
+    override var outDataPath: String = applicationContext.filesDir.absolutePath + "/CipheredData"
     //Para pruebas
-    //private val cipheredDataPath: String = applicationContext.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)!!.absolutePath + "/CipheredData"
+    //override val outDataPath: String = applicationContext.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)!!.absolutePath + "/CipheredData"
     private var userPublicKey : PublicKey
     private var serverPublicKey : PublicKey
 
@@ -34,11 +31,12 @@ class AEScfbCipher(val applicationContext: Context) : CipherFactory(){
         val pKeys = keyManager.recoverPublicKeys()
         userPublicKey = pKeys[0]
         serverPublicKey = pKeys[1]
-        File(cipheredDataPath).mkdir()
+        File(outDataPath).mkdir()
     }
 
-    override fun processFile(path : Uri, fileName : String){
-        createOutputFile(cipheredDataPath, fileName)
+    override fun processFile(path : Uri, fileName : String, outPath: String?){
+        createOutputFile(outPath!!, fileName.filter { c ->
+            Character.getNumericValue(c) != -1 || (c == ' ' || c == '.')})
         applicationContext.contentResolver.openInputStream(path)?.use { reader ->
             val inputStream = BufferedInputStream(reader)
             val readingArray = ByteArray(1024)
@@ -100,10 +98,7 @@ class AEScfbCipher(val applicationContext: Context) : CipherFactory(){
 
     override fun processKey(cipherKey : Key, data : ByteArray) : ByteArray?{
         keyCipher.init(Cipher.ENCRYPT_MODE, cipherKey)
-        val ciphKey = keyCipher.doFinal(data)
-        //println("Ciphered MAC ")
-        //ciphKey.forEach { b -> print("$b ") }
-        return ciphKey
+        return keyCipher.doFinal(data)
     }
 
     fun print_bytes(bytes: ByteArray): String? {
