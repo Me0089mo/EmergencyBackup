@@ -2,7 +2,6 @@ package com.example.emergencybackupv10
 
 import android.content.Context
 import android.net.Uri
-import android.os.Environment
 import java.io.*
 import java.security.*
 import javax.crypto.*

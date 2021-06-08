@@ -21,7 +21,7 @@ class CommandAccess : AccessibilityService() {
     }
 
     private fun startIntent(){
-        val intent = Intent(this, Home::class.java)
+        val intent = Intent(this, Login::class.java)
         intent.apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK
         }

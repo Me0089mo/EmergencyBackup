@@ -68,11 +68,12 @@ class Home : AppCompatActivity() {
         url = getString(R.string.host_url)
         val wasLogedIn = intent.getBooleanExtra(getString(R.string.CONFIG_WAS_LOGED_IN), false)
         if (wasLogedIn) {
+            emergency = intent.getBooleanExtra(getString(R.string.EMERGENCY), false)
+            Log.i("Emergency", emergency.toString())
             getDataFromServer()
         } else {
             getDataFromIntent()
         }
-        //emergency = intent.getBooleanExtra(getString(R.string.EMERGENCY), false)
         changeFragment(homeFragment, "home_frag")
         bottom_nav.selectedItemId = R.id.navigation_home
         bottom_nav.setOnNavigationItemSelectedListener {
