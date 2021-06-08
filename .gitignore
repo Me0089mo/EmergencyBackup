@@ -212,3 +212,4 @@ dist
 #Conexion ssh
 *.rnd
 *.sslcert
+*.pem

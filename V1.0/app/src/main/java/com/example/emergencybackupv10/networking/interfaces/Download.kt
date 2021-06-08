@@ -9,6 +9,9 @@ import retrofit2.http.Streaming
 import java.util.*
 
 interface Download {
+    @GET("/api/users/has_backup")
+    fun has_backup(@Header("authorization") authorization: String): Call<ServerResponse>
+
     @GET("/api/download")
     fun download(@Header("authorization") authorization: String): Call<ServerResponse>
 

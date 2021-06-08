@@ -25,29 +25,31 @@ import java.io.File
 private const val ARG_BU_AVAILABLE = "backUpAvailable"
 
 class HomeFragment : Fragment() {
-
-    private var backUpOnCloud: Boolean = false
+    private var backUpOnCloud:Boolean = false;
     private var sharedPreferences : SharedPreferences? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            backUpOnCloud = it.getBoolean(ARG_BU_AVAILABLE)
-        }
+
+
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
+
     ): View? {
+
         return inflater.inflate(R.layout.fragment_home, container, false)
     }
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onStart() {
         super.onStart()
-        setText()
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(activity?.applicationContext)
-
+        arguments?.let {
+            backUpOnCloud = it.getBoolean(getString(R.string.ARG_BU_AVAILABLE))
+        }
+        setText(backUpOnCloud)
         btn_cifrar.setOnClickListener { v: View? ->
             if (v != null) {
                 (activity as Home).startBackup()
@@ -60,8 +62,8 @@ class HomeFragment : Fragment() {
     }
 
 
-    private fun setText() {
-        if(backUpOnCloud){
+    public fun setText(backup_available:Boolean) {
+        if(backup_available){
             text_home.text = "Hay un respaldo en la nube"
         }else{
             text_home.text = "No hay un respaldo pendiente\n Hurray?"
