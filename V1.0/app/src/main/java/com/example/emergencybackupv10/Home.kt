@@ -11,6 +11,7 @@ import android.os.Bundle
 import android.os.Environment
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
@@ -21,6 +22,7 @@ import com.auth0.android.jwt.JWT
 import com.example.emergencybackupv10.fragments.*
 import com.example.emergencybackupv10.networking.interfaces.Download
 import com.example.emergencybackupv10.networking.interfaces.ServerResponse
+import com.example.emergencybackupv10.networking.interfaces.UpdateUser
 import com.example.emergencybackupv10.networking.interfaces.Upload
 import com.example.emergencybackupv10.utils.AlertUtils
 import kotlinx.android.synthetic.main.activity_home.*
@@ -59,13 +61,18 @@ class Home : AppCompatActivity() {
     private var emergency: Boolean? = null
     private var downloadsDir: String? = null
     private var waitingToUpload = mutableListOf<File>()
+    private lateinit var retrofit:Retrofit;
+    private lateinit var downloadService: Download;
     private lateinit var cm: ConnectivityManager
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        url = getString(R.string.host_url)
+        retrofit = Retrofit.Builder().baseUrl(url).addConverterFactory(GsonConverterFactory.create()).build()
+        downloadService= retrofit.create(Download::class.java)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
-        url = getString(R.string.host_url)
         val wasLogedIn = intent.getBooleanExtra(getString(R.string.CONFIG_WAS_LOGED_IN), false)
         if (wasLogedIn) {
             emergency = intent.getBooleanExtra(getString(R.string.EMERGENCY), false)
@@ -99,22 +106,39 @@ class Home : AppCompatActivity() {
     }
 
     private fun getDataFromServer() {
-        val t = sharedPreferences.getString(getString(R.string.CONFIG_TOKEN), null)
-        if (t == null) {
+        val t = sharedPreferences.getString(getString(R.string.CONFIG_TOKEN), "")
+        if (t == "") {
             logOut();
             return;
         }
-        val jwt = JWT(t)
+        val jwt = JWT(t!!)
         username = jwt.getClaim(getString(R.string.ARG_NAME)).asString()
         id = jwt.getClaim(getString(R.string.ARG_ID)).asString()
-        backUpOnCloud = false
+        val call:Call<ServerResponse> = downloadService.has_backup(authorization = t.toString())
+        call.enqueue(object : Callback<ServerResponse> {
+            override fun onFailure(call: Call<ServerResponse>?, t: Throwable?) {
+
+                logOut();
+            }
+            override fun onResponse(
+                call: Call<ServerResponse>?,
+                response: Response<ServerResponse>?
+            ) {
+                if (response != null && response.isSuccessful) {
+                    backUpOnCloud = (response.body()?.message == "true")
+                    homeFragment.setText(backUpOnCloud)
+                } else if (response!=null){
+                    logOut();
+                }
+            }
+        });
     }
 
     private fun changeFragment(fragment: Fragment, tag: String) {
         fragment.arguments = bundleOf(
-                R.string.ARG_BU_AVAILABLE.toString() to backUpOnCloud,
-                R.string.ARG_NAME.toString() to username,
-                R.string.ARG_ID.toString() to id,
+                getString(R.string.ARG_BU_AVAILABLE)  to backUpOnCloud,
+                getString(R.string.ARG_NAME)  to username,
+                getString(R.string.ARG_ID)  to id,
                 getString(R.string.ARG_PUB_KEY) to publicKeyFile
         )
 
