@@ -16,7 +16,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { LoginCardComponent } from './components/login-card/login-card.component';
 import { BackupsModalComponent } from './components/backups-modal/backups-modal.component';
-
+import { MatTooltipModule } from '@angular/material/tooltip';
 @NgModule({
   declarations: [AppComponent, LoginCardComponent, BackupsModalComponent],
   imports: [
@@ -29,6 +29,7 @@ import { BackupsModalComponent } from './components/backups-modal/backups-modal.
     MatListModule,
     MatDialogModule,
     MatSnackBarModule,
+    MatTooltipModule,
     FormsModule,
     MatProgressSpinnerModule,
     HttpClientModule,

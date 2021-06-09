@@ -10,14 +10,16 @@ import { environment } from 'src/environments/environment';
 })
 export class LoginCardComponent implements OnInit {
   @Output('token') user_token = new EventEmitter<string>();
-  public username: string = 'asdf1234damian@gmail.com';
-  public password: string = 'passw0rd';
+  public username: string = 'memonar@gmail.com';
+  public password: string = 'memo1234';
   public showSpinner: boolean = false;
   public displayError: boolean = false;
 
   constructor(private http: HttpClient, private snackBar: MatSnackBar) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.login();
+  }
 
   login(): void {
     this.showSpinner = true;

@@ -14,21 +14,27 @@ export class BackupsModalComponent implements OnInit {
   constructor(private http: HttpClient) {}
   ngOnInit(): void {}
 
-  download(filename: string) {
+  download() {
     this.http
-      .get(`${environment.host_url + environment.api_download}/${filename}`, {
+      .get(`${environment.host_url + environment.api_download}`, {
         headers: {
-          'Content-Type': 'application/json',
           authorization: this.user_token,
+          all: 'true',
         },
         responseType: 'arraybuffer',
       })
       .subscribe({
-        next: (res) => {
-          let blob = new Blob([res], { type: 'text/csv' });
-          saveAs(blob, filename);
+        next: (res: ArrayBuffer) => {
+          console.log(res);
+          var blob = new Blob([new Uint8Array(res, 0, res.byteLength)], {
+            type: '	application/zip',
+          });
+
+          saveAs(blob, 'respaldo.zip');
         },
-        error: () => {},
+        error: (err) => {
+          console.log(err);
+        },
       });
   }
 }

@@ -23,6 +23,7 @@
       mat-raised-button
       class="btn-main"
       [disabled]="!logedIn ? 'true' : 'false'"
+      (click)="checkForBackup()"
     >
       Descargar
     </button>

@@ -1,9 +1,21 @@
-<mat-action-list>
-  <button
-    mat-list-item
-    *ngFor="let filename of file_name_arr"
-    (click)="download(filename)"
-  >
-    {{ filename }}
-  </button>
-</mat-action-list>
+<div class="backup_wrapper">
+  <div class="header">
+    <h1>Hemos encontrado: {{ file_name_arr.length }} archivos</h1>
+  </div>
+  <div class="action_wrapper">
+    <div class="action_button_wrapper">
+      <button
+        mat-raised-button
+        #tooltip="matTooltip"
+        matTooltip="Info about the action"
+        matTooltipPosition="right"
+        matTooltipHideDelay="100000"
+        aria-label="Button that displays a tooltip that hides when scrolled out of the container"
+        class="example-button"
+        (click)="download()"
+      >
+        Descargar en un Zip
+      </button>
+    </div>
+  </div>
+</div>

@@ -36,6 +36,7 @@ export class AppComponent {
     login_modal_ref.componentInstance.user_token.subscribe({
       next: (res: string) => {
         this.user_token = res;
+        this.logedIn = true;
         login_modal_ref.close();
         this.checkForBackup();
       },
@@ -51,8 +52,8 @@ export class AppComponent {
         },
       })
       .subscribe({
-        next: (res) => {
-          if (res) {
+        next: (res: any) => {
+          if (res['message']) {
             this.display_backup();
           } else {
             this.display_no_backup();
@@ -83,7 +84,13 @@ export class AppComponent {
       });
   }
 
-  display_no_backup() {}
+  display_no_backup() {
+    this.snackBar.open(
+      'No pudimos encontrar ningun respaldo correspondiente a esta cuenta',
+      'OK',
+      { duration: 5000 }
+    );
+  }
   display_error() {}
 
   // getScreenSize() {
