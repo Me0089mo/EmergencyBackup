@@ -22,6 +22,7 @@ class Backup(val applicationContext : Context,
             getValuesFromDirList()
         else
             directories = dirList.toMutableList()
+        Log.i("Dir size", directories.size.toString())
         directories.forEach { dir ->
             var docFile: DocumentFile?
             try {
@@ -38,7 +39,6 @@ class Backup(val applicationContext : Context,
                     }
                 }
                 else {
-                    //File(cipherFactory.outDataPath, docFile.name).mkdir()
                     decryptDir(docFile)
                 }
             }
@@ -75,7 +75,10 @@ class Backup(val applicationContext : Context,
         var directories: MutableList<Pair<Int, String>> = mutableListOf()
         for (dir in dirList) {
             var priority = dir.dropLastWhile { it != '|' }
-            val onlyUri = dir.dropWhile { it != '|' }.substring(1)
+            priority = priority.substring(0, priority.length-1).dropLastWhile { it != '|' }
+            var onlyUri = dir.dropWhile { it != '|' }.substring(1)
+            val onlyName = onlyUri.dropWhile { it != '|' }.substring(1)
+            onlyUri = onlyUri.substring(0, onlyUri.length-1-onlyName.length)
             priority = priority.substring(0, priority.length-1)
             directories.add(Pair(priority.toInt(), onlyUri))
         }

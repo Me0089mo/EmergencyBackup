@@ -50,15 +50,6 @@ class HomeFragment : Fragment() {
             backUpOnCloud = it.getBoolean(getString(R.string.ARG_BU_AVAILABLE))
         }
         setText(backUpOnCloud)
-        btn_cifrar.setOnClickListener { v: View? ->
-            if (v != null) {
-                (activity as Home).startBackup()
-            }
-        }
-
-        btn_decifrar.setOnClickListener { v : View? ->
-            v?.let { (activity as Home).restoreBackup() }
-        }
     }
 
 

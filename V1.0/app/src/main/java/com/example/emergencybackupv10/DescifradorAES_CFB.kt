@@ -2,6 +2,7 @@ package com.example.emergencybackupv10
 
 import android.content.Context
 import android.net.Uri
+import android.os.Environment
 import com.example.emergencybackupv10.utils.AlertUtils
 import java.io.*
 import java.lang.Exception
@@ -36,7 +37,8 @@ class DescifradorAES_CFB(val applicationContext : Context, val pkDirectory: Uri?
     private var errorProcessingKeys: Boolean = false
     private val alertUtils = AlertUtils()
     private var macMatches = false
-    override val outDataPath: String = applicationContext.filesDir.absolutePath + "/DecipheredData"
+    override val outDataPath: String = applicationContext.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)!!.absolutePath + "/CipheredData"
+    //override val outDataPath: String = applicationContext.filesDir.absolutePath + "/DecipheredData"
 
     init {
         userPrivateKey = pkDirectory?.let { keyManager.recoverPrivateKey(it) }!!

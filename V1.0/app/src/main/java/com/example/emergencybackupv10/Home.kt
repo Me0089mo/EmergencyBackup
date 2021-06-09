@@ -207,12 +207,12 @@ class Home : AppCompatActivity() {
     fun startBackup() {
         val cipher = AEScfbCipher(this)
         var period_time = sharedPreferences.getInt(getString(R.string.CONFIG_TIME_PERIOD), 0)
-        val time: Long = (period_time*24*60*60*1000).toLong()
+        val time: Long = period_time.toLong()*24*60*60*1000
         val createBackup = Backup(this, getDirList(), cipher, time)
         createBackup.start()
         cm = applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         uploadBackup(File(applicationContext.filesDir.absolutePath, "CipheredData"))
-        Log.i("Files waiting", waitingToUpload.size.toString())
+        //Log.i("Files waiting", waitingToUpload.size.toString())
         if(waitingToUpload.isNotEmpty()) {
             GlobalScope.launch(Main) { uploadRetarded() }
         }
@@ -385,7 +385,8 @@ class Home : AppCompatActivity() {
             var dirList = getDirList()
             val num = dirList.size + 1
             resultData?.data?.also { uri ->
-                dirList.add("${num}|${uri}")
+                val dirName = DocumentFile.fromTreeUri(this, uri)?.name
+                dirList.add("$num|$uri|$dirName")
                 saveDirList(dirList)
             }
             val backupFrag : BackupSettings =

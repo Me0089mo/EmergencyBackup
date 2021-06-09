@@ -1,6 +1,7 @@
 package com.example.emergencybackupv10.fragments
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -50,7 +51,7 @@ class BackupSettings : Fragment() {
 
         btn_save_changes.setOnClickListener { v ->
             (activity as Home).resetDirList()
-            val newList: List<String> = backupAdapter.getItems().map { "${it.first}|${it.second.second}" }
+            val newList: List<String> = backupAdapter.getItems().map { "${it.first}|${it.second.second}|${it.second.first}" }
             (activity as Home).saveDirList(newList.toMutableSet())
         }
     }
@@ -64,11 +65,13 @@ class BackupSettings : Fragment() {
     fun getValuesFromDirList(dirList: MutableSet<String>){
         directories.clear()
         for (dir in dirList) {
-            val onlyName = dir.indexOfLast { it == '%' }
             var priority = dir.dropLastWhile { it != '|' }
-            val onlyUri = dir.dropWhile { it != '|' }.substring(1)
+            priority = priority.substring(0, priority.length-1).dropLastWhile { it != '|' }
+            var onlyUri = dir.dropWhile { it != '|' }.substring(1)
+            val onlyName = onlyUri.dropWhile { it != '|' }.substring(1)
+            onlyUri = onlyUri.substring(0, onlyUri.length-1-onlyName.length)
             priority = priority.substring(0, priority.length-1)
-            directories.add(Pair(priority.toInt(), Pair(dir.drop(onlyName + 3), onlyUri)))
+            directories.add(Pair(priority.toInt(), Pair(onlyName, onlyUri)))
         }
         directories.sortBy { it.first }
     }
