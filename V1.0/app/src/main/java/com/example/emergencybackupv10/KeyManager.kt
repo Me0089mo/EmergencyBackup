@@ -26,7 +26,7 @@ class KeyManager(val context : Context) {
         publicDirectory = pubFile.absolutePath
         pubFile.writeBytes(keys.public.encoded)
 
-        //Log.i("New public key", "\n${Base64.encodeToString(keys.public.encoded, Base64.DEFAULT)}")
+        Log.i("New public key", "\n${Base64.encodeToString(keys.public.encoded, Base64.DEFAULT)}")
         //Save private key//////////////////////////////////////////////////////////////////////////
         var parentFile : File?
         println(Environment.getExternalStorageState())
@@ -38,7 +38,7 @@ class KeyManager(val context : Context) {
         privateDirectory = privFile.path
         privFile.writeBytes(keys.private.encoded)
 
-        //Log.i("New private key", "\n${Base64.encodeToString(keys.private.encoded, Base64.DEFAULT)}")
+        Log.i("New private key", "\n${Base64.encodeToString(keys.private.encoded, Base64.DEFAULT)}")
     }
 
     fun getPubKeyAsString():String{

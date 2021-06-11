@@ -10,6 +10,9 @@ import com.example.emergencybackupv10.Home
 import com.example.emergencybackupv10.R
 import com.example.emergencybackupv10.utils.AlertUtils
 import kotlinx.android.synthetic.main.fragment_restore.*
+import kotlinx.coroutines.Dispatchers.Main
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class RestoreFragment : Fragment() {
     private val alertUtils = AlertUtils()
@@ -60,7 +63,6 @@ class RestoreFragment : Fragment() {
         @JvmStatic
         fun newInstance() =
             RestoreFragment()
-
     }
 
 

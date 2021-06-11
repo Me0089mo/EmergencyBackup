@@ -1,0 +1,782 @@
+[33mcommit 9b73f5bbec9fce73e3051bb63a12c28a84bc8154[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m)[m
+Author: Memo <memoriasnaranjo98@gmail.com>
+Date:   Wed Jun 9 19:38:56 2021 -0500
+
+    Archivos de pruebas
+
+[33mcommit 7a6b4d800f9281012c511a8d706f54782fd37440[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: Damian <asdf1234damian@gmail.com>
+Date:   Wed Jun 9 16:59:40 2021 -0500
+
+    Descarga usando zip
+
+[33mcommit afdaec756f9de929220e44f34d89caa8389abcd5[m
+Author: Damian <asdf1234damian@gmail.com>
+Date:   Wed Jun 9 14:24:10 2021 -0500
+
+    Cambio de directorio, nada más
+
+[33mcommit f4b42179f382a1ec305528adc90ce611e9e1b454[m
+Author: Memo <memoriasnaranjo98@gmail.com>
+Date:   Wed Jun 9 11:01:25 2021 -0500
+
+    Ultimos cambios al hacer y subir respaldo
+
+[33mcommit 4eb52a0a0a5b86efadfb52c4b115259cbb665b71[m
+Merge: 9c2f2f8 6b72836
+Author: Memo <memoriasnaranjo98@gmail.com>
+Date:   Tue Jun 8 15:13:22 2021 -0500
+
+    Merge branch 'main' of https://github.com/Me0089mo/EmergencyBackup into main
+
+[33mcommit 9c2f2f8ed7a2a3e51480ad349c1d93a44c7626f8[m
+Author: Memo <memoriasnaranjo98@gmail.com>
+Date:   Tue Jun 8 15:13:07 2021 -0500
+
+    Cambios a CommandAccess
+
+[33mcommit 6b72836a1759e88edbc26cffff16ab703262467e[m
+Author: Damian <asdf1234damian@gmail.com>
+Date:   Mon Jun 7 21:27:32 2021 -0500
+
+    Se checa si hay respaldo apenas se inicia la app
+
+[33mcommit 1d3d3f254c31fe91e9cad26b0cb3ca18a5cd61eb[m
+Author: Memo <memoriasnaranjo98@gmail.com>
+Date:   Sun Jun 6 16:39:52 2021 -0500
+
+    Ajustes en Backup y subida de archivos para respaldar solo los archivos recién creados y en caso de desconexión, mantener archivos en cola hasta que se reestablezca
+
+[33mcommit 9cc44e152862c4af560f6b3adc4896a18221bb1a[m
+Author: Damian <asdf1234damian@gmail.com>
+Date:   Fri Jun 4 11:32:17 2021 -0500
+
+    QOL Regreso automatico despues de guardar config
+
+[33mcommit c037d040812f5caab94886332b8dc6346c1c7e1e[m
+Author: Damian <asdf1234damian@gmail.com>
+Date:   Fri Jun 4 11:32:01 2021 -0500
+
+    Fragmento para configurar periodo de respaldo
+
+[33mcommit e2e6f4396d9af70270f4031f2dcdf93ce443fc23[m
+Author: Memo <memoriasnaranjo98@gmail.com>
+Date:   Thu Jun 3 17:55:47 2021 -0500
+
+    Hmac server
+
+[33mcommit bb430150936d69b666b6ee3332e308887824029d[m
+Author: Memo <memoriasnaranjo98@gmail.com>
+Date:   Thu Jun 3 17:47:09 2021 -0500
+
+    Add subtle
+
+[33mcommit 7f9f57416c39e0a44421af03cb0fc4bd7f16a905[m
+Author: Memo <memoriasnaranjo98@gmail.com>
+Date:   Thu Jun 3 17:10:34 2021 -0500
+
+    Agregar a gitignore
+
+[33mcommit 81d961b119d234b83db510ea03afabc8cec4ea7b[m
+Author: Memo <memoriasnaranjo98@gmail.com>
+Date:   Thu Jun 3 16:47:20 2021 -0500
+
+    Decifrado y restaurado correcto de archivos. Correciones en hmac de servidor
+
+[33mcommit 4e237e902f8c9aecb3468e99b8b82e12a6f8f6b7[m
+Author: Damian <asdf1234damian@gmail.com>
+Date:   Wed Jun 2 15:14:41 2021 -0500
+
+    Correciones cambio de llave publica y logout
+
+[33mcommit df4cf36e6453d60904b6f2ef4915346b83155737[m
+Author: Damian <asdf1234damian@gmail.com>
+Date:   Wed Jun 2 14:46:13 2021 -0500
+
+    Correcion bug barra de navegación
+
+[33mcommit 5913aa704ddec16e4e4f52cc078488dddef82675[m
+Author: Memo <memoriasnaranjo98@gmail.com>
+Date:   Wed Jun 2 11:53:42 2021 -0500
+
+    Descarga funciona. Falta linkear el fragment de cambio de llave y correcta habilitación del botón de restablecer en fragment Restore
+
+[33mcommit 67b406d47dc4fe13ac86c406de4a0e3372080738[m
+Merge: e78bbaf f4cd960
+Author: Damian <asdf1234damian@gmail.com>
+Date:   Sun May 30 22:28:14 2021 -0500
+
+    Merge remote-tracking branch 'origin/main' into main
+
+[33mcommit e78bbaf6d8ab7b64318e2331feb31fa28500ccc0[m
+Author: Damian <asdf1234damian@gmail.com>
+Date:   Sun May 30 22:27:52 2021 -0500
+
+    Nueva manera de descargar archivos: Web app
+
+[33mcommit f4cd960fa51eaa20a4e6334d14c9d77a94dc5f99[m
+Merge: 3b91419 606b4a7
+Author: Memo <memoriasnaranjo98@gmail.com>
+Date:   Fri May 28 10:39:56 2021 -0500
+
+    Merge branch 'main' of https://github.com/Me0089mo/EmergencyBackup into main
+
+[33mcommit 3b914198948139381ea14cd32bc6615ebed15e5e[m
+Author: Memo <memoriasnaranjo98@gmail.com>
+Date:   Fri May 28 10:39:48 2021 -0500
+
+    Arreglo a ChangeKey
+
+[33mcommit 606b4a7652993089239d5395181a6de8f104cd69[m
+Merge: 73bfb23 de7667b
+Author: Damian <asdf1234damian@gmail.com>
+Date:   Fri May 28 10:24:59 2021 -0500
+
+    Merge remote-tracking branch 'origin/main' into main
+
+[33mcommit 73bfb235dba5492f2128a2a742f48748036e914d[m
+Author: Damian <asdf1234damian@gmail.com>
+Date:   Fri May 28 10:20:48 2021 -0500
+
+    Cambios a la manera en la que se suben y bajan archivos
+
+[33mcommit de7667baa4ee9b464cfc3a064f10694c9bc7a884[m
+Author: Memo <memoriasnaranjo98@gmail.com>
+Date:   Fri May 28 02:57:59 2021 -0500
+
+    Servicio de accesibilidad. Pantalla de cambio de llaves. Un intento de hacer el cambio de llaves e
+
+[33mcommit 2231b2f5cbc2ccf84ed6947e2fcfa1114e7bc717[m
+Author: Damian <asdf1234damian@gmail.com>
+Date:   Thu May 27 16:30:45 2021 -0500
+
+    Habilitado https
+
+[33mcommit 92d72bd7a71107a5d52e7c6c97b1c13f52d8511e[m
+Merge: ca15bd8 efcee6c
+Author: Damian <asdf1234damian@gmail.com>
+Date:   Thu May 27 09:30:44 2021 -0500
+
+    Merge remote-tracking branch 'origin/main' into main
+
+[33mcommit ca15bd8d1e17c19adcb7a46a05117aee106cfae6[m
+Author: Damian <asdf1234damian@gmail.com>
+Date:   Thu May 27 09:29:26 2021 -0500
+
+    ✔ Se marca como "has back up" cuando se crea un respaldo
+
+[33mcommit efcee6c0e9c24430a89e63653b37c03bf3c7cc7e[m
+Merge: d55918d 54bb9db
+Author: Memo <memoriasnaranjo98@gmail.com>
+Date:   Wed May 26 18:24:50 2021 -0500
+
+    Merge branch 'main' of https://github.com/Me0089mo/EmergencyBackup into main
+
+[33mcommit d55918dbe1e84999d3e72dfb8c6873338cab0da5[m
+Author: Memo <memoriasnaranjo98@gmail.com>
+Date:   Wed May 26 18:24:36 2021 -0500
+
+    Se mantiene el orden en la configuración de las carpetas a cifrar
+
+[33mcommit 54bb9dbcc418d772f6a6d75606e5e44ff6210b01[m
+Author: Damian <asdf1234damian@gmail.com>
+Date:   Wed May 26 09:58:48 2021 -0500
+
+    Correción de typos
+
+[33mcommit cad04868553e73e0f2b214a208c17a88de533c22[m
+Author: Damian <asdf1234damian@gmail.com>
+Date:   Tue May 25 17:52:19 2021 -0500
+
+    Uploads confirma la hmac y da respuesta acorde
+    
+    También algunas correciones menores
+
+[33mcommit 704cc24683387c2db28797e28972f0b32308a045[m
+Author: Me0089mo <31458680+Me0089mo@users.noreply.github.com>
+Date:   Tue May 25 10:47:07 2021 -0500
+
+    Merge solucionado
+
+[33mcommit ce4f896705fdbd4833f5f4150a4c89d7463ea1ef[m
+Merge: 864bc9a 2266a55
+Author: Me0089mo <31458680+Me0089mo@users.noreply.github.com>
+Date:   Tue May 25 10:45:07 2021 -0500
+
+    Solucionando merge
+
+[33mcommit 864bc9ac56b8036829557ae605ae627e283edf43[m
+Author: Me0089mo <31458680+Me0089mo@users.noreply.github.com>
+Date:   Tue May 25 10:42:11 2021 -0500
+
+    Nada especial
+
+[33mcommit 2266a55c7d29897865fee6647b7e274642eb97ce[m
+Author: Damián <asdf1234damian@gmail.com>
+Date:   Tue May 25 13:54:57 2021 +0000
+
+    changes in how upload handles the private key
+
+[33mcommit d43bb8c22df9b003f5a1605cfbf1e7aa64fe87c8[m
+Author: Damian <asdf1234damian@gmail.com>
+Date:   Mon May 24 15:17:49 2021 -0500
+
+    Creación llave publica desde PEM
+
+[33mcommit 3819af5fd7a694f457873ad4c905f02168924455[m
+Author: Damian <asdf1234damian@gmail.com>
+Date:   Mon May 24 12:42:39 2021 -0500
+
+    Llave publica server, incompleto
+
+[33mcommit 7e74f1ad5ddab0c2f546653a065e5b0966d7a878[m
+Author: Damian <asdf1234damian@gmail.com>
+Date:   Mon May 24 09:13:35 2021 -0500
+
+    Cambios en como se manda la llave publica del servidor
+
+[33mcommit ce0a09c4f632bbbb39a8c0843b04e2d6bec68d9f[m
+Merge: 996a909 bbb8633
+Author: Damian <asdf1234damian@gmail.com>
+Date:   Mon May 24 08:41:57 2021 -0500
+
+    Merge branch 'main' of https://github.com/Me0089mo/EmergencyBackup
+
+[33mcommit 996a909559f6fe6596aed2d6ae248252de56c5c0[m
+Author: Damian <asdf1234damian@gmail.com>
+Date:   Mon May 24 08:41:34 2021 -0500
+
+    Changed how the key is stored in the server
+
+[33mcommit bbb8633bb4879ee0ef09f064842c285e432608be[m
+Author: Me0089mo <31458680+Me0089mo@users.noreply.github.com>
+Date:   Sun May 23 23:25:41 2021 -0500
+
+    Funcionamiento completo de la opción de restauración de respaldo (sin descarga en smartphone)
+
+[33mcommit f623a85d4def18ef72ca6be7efd3756a00b25fdd[m
+Author: Damián <asdf1234damian@gmail.com>
+Date:   Fri May 21 13:57:54 2021 +0000
+
+    updated sample
+
+[33mcommit f441414d576968daaf85be8fb207f37d2c2b4ddc[m
+Merge: 0313db0 dc2c968
+Author: Damián <asdf1234damian@gmail.com>
+Date:   Wed May 19 22:11:09 2021 +0000
+
+    Merge branch 'main' of https://github.com/Me0089mo/EmergencyBackup into main
+
+[33mcommit 0313db02323bbc7ab0e7ed0dd630d29920ce0f6a[m
+Author: Damián <asdf1234damian@gmail.com>
+Date:   Wed May 19 22:09:42 2021 +0000
+
+    cipher samples
+
+[33mcommit dc2c968e3091a3243185375396f747c1c3576db1[m
+Author: Me0089mo <31458680+Me0089mo@users.noreply.github.com>
+Date:   Tue May 18 12:43:58 2021 -0500
+
+    Recycler funcionando. Selección y funcionamiento correcto en pantalla de Restore. Sigue fallando la decompresión
+
+[33mcommit 53b38340a395b88230297b524daedca1404aed22[m
+Author: Me0089mo <31458680+Me0089mo@users.noreply.github.com>
+Date:   Sun May 16 11:41:59 2021 -0500
+
+    Pantalla de reestablecimiento. RecyclerView funciona al agregar y mover elementos pero solo en vista, falta aplicar cambios en archivo. Acomplamiento del decifrador a su interfaz
+
+[33mcommit 355bf7b628ea8856d885424a8aee0324148bc7dc[m
+Author: Damian <asdf1234damian@gmail.com>
+Date:   Thu May 13 16:35:35 2021 -0500
+
+    missing export fix
+
+[33mcommit 17846b4559b6b180085a945aa49e02ed06044850[m
+Author: Damian <asdf1234damian@gmail.com>
+Date:   Thu May 13 16:20:38 2021 -0500
+
+    Se estandarizo la respuesta del servidor
+    Corregido un error con token
+
+[33mcommit e47e9232236ca5e688c3071023191e22be8c29ec[m
+Merge: d4a6e52 c580618
+Author: Damian <asdf1234damian@gmail.com>
+Date:   Wed May 12 20:04:47 2021 -0500
+
+    Merge branch 'main' of https://github.com/Me0089mo/EmergencyBackup
+
+[33mcommit d4a6e52c0bdd6b83e8d84e3e4f96f76703a71fe2[m
+Author: Damian <asdf1234damian@gmail.com>
+Date:   Wed May 12 20:04:16 2021 -0500
+
+    Change password and email
+
+[33mcommit c58061866ef3f0bfa66f271f3ca72d0af0dec83c[m
+Author: Damián <asdf1234damian@gmail.com>
+Date:   Thu May 13 01:03:28 2021 +0000
+
+    password and email update
+
+[33mcommit 8072c68fa319b416c3bf6ba98042f250502cfbc6[m
+Author: Damián <asdf1234damian@gmail.com>
+Date:   Tue May 11 21:52:37 2021 +0000
+
+    Missing error response for no token
+
+[33mcommit 642ca6e5674ab2d78f2e04746c375d3afc3d4472[m
+Author: Damian <asdf1234damian@gmail.com>
+Date:   Tue May 11 15:17:18 2021 -0500
+
+    update_password
+
+[33mcommit 63f60fb32f18c80d7087e59e042cd5cc7e4108dc[m
+Merge: f36e667 671ee54
+Author: Damián <asdf1234damian@gmail.com>
+Date:   Tue May 11 18:45:25 2021 +0000
+
+    Merge branch 'main' of https://github.com/Me0089mo/EmergencyBackup into main
+
+[33mcommit f36e6670c41f59e7e4eb9edf26cf10c8050a842a[m
+Author: Damián <asdf1234damian@gmail.com>
+Date:   Tue May 11 18:44:56 2021 +0000
+
+    validation and auth
+
+[33mcommit 4b78a8a2823f1f0af60b82a11c2f927f672c3687[m
+Author: Damián <asdf1234damian@gmail.com>
+Date:   Tue May 11 18:40:55 2021 +0000
+
+    password update
+
+[33mcommit 671ee544228e6f87fa36b844d10edc56de647ee1[m
+Merge: 1287c49 31fd3d9
+Author: Me0089mo <31458680+Me0089mo@users.noreply.github.com>
+Date:   Tue May 11 12:52:18 2021 -0500
+
+    Merge branch 'last-mods' into main
+
+[33mcommit 31fd3d9aed3b87344b2958c3d96a7a4da682a6b4[m[33m ([m[1;31morigin/last-mods[m[33m, [m[1;32mlast-mods[m[33m)[m
+Author: Me0089mo <31458680+Me0089mo@users.noreply.github.com>
+Date:   Tue May 11 12:50:48 2021 -0500
+
+    Vista lista de archivos funciona (algo así)
+
+[33mcommit 1287c49151dcfcd0f6db13662ad4ba8a039dced4[m
+Author: Damian <asdf1234damian@gmail.com>
+Date:   Tue May 11 10:42:13 2021 -0500
+
+    models
+
+[33mcommit 9d18b7156b6e360efcc20baed071ec56b14831c8[m
+Author: Damian <asdf1234damian@gmail.com>
+Date:   Tue May 11 10:39:00 2021 -0500
+
+    update_password tes
+
+[33mcommit f8c22b7409ed147f326ff4c3bf738913d2352bc2[m
+Merge: e797d32 2654b99
+Author: Damian <asdf1234damian@gmail.com>
+Date:   Mon May 10 22:35:57 2021 -0500
+
+    Merge branch 'main' of https://github.com/Me0089mo/EmergencyBackup
+
+[33mcommit 2654b998ac3f21a57f722bfdaed97215b1542d7b[m
+Author: Damián <asdf1234damian@gmail.com>
+Date:   Tue May 11 03:35:12 2021 +0000
+
+    backend updates
+
+[33mcommit e797d328223895f73ee673a360bb6a6031a30468[m
+Merge: 40aa112 ed728bc
+Author: Damian <asdf1234damian@gmail.com>
+Date:   Sun May 9 11:57:10 2021 -0500
+
+    Merge branch 'last-mods' into main
+
+[33mcommit ed728bc3afdeca3ee5be0dc97dc0b3bf50faa62b[m
+Author: Me0089mo <31458680+Me0089mo@users.noreply.github.com>
+Date:   Sat May 8 23:06:17 2021 -0500
+
+    Pantallas de cambio de correo y contraseña. Pantalla de lista de directorios sin terminar
+
+[33mcommit 5d1ef9e37d342abf81c3c3810467d4937b62ef8e[m[33m ([m[1;31morigin/web-experiment[m[33m)[m
+Author: Me0089mo <31458680+Me0089mo@users.noreply.github.com>
+Date:   Wed Apr 14 03:48:24 2021 -0500
+
+    Version experimental terminada
+
+[33mcommit c7b72da623fdae4cdd26021d27557e1a64a80938[m
+Author: Me0089mo <31458680+Me0089mo@users.noreply.github.com>
+Date:   Wed Apr 14 00:56:24 2021 -0500
+
+    Viendo como quedaría de otra forma
+
+[33mcommit 40aa11245ca20ad60200d41fc990c57df1088996[m
+Author: Me0089mo <31458680+Me0089mo@users.noreply.github.com>
+Date:   Mon Apr 12 18:43:31 2021 -0500
+
+    Checa tamanio de pantalla e inhabilita boton de ingreso
+
+[33mcommit 7bee6185e939811bcecd4deb7c2e4e1203d52b21[m
+Author: Damian <asdf1234damian@gmail.com>
+Date:   Mon Apr 12 11:31:36 2021 -0500
+
+    update
+    
+    update url backend
+
+[33mcommit 8363853c945282d41610252764d577f5774c50b4[m
+Merge: 0f5f1b5 33403de
+Author: Damián <asdf1234damian@gmail.com>
+Date:   Mon Apr 12 16:30:16 2021 +0000
+
+    Merge branch 'main' of https://github.com/Me0089mo/EmergencyBackup into main
+
+[33mcommit 0f5f1b523ac453a56b3b48d65e9a43d4be2fff0b[m
+Author: Damián <asdf1234damian@gmail.com>
+Date:   Mon Apr 12 16:28:35 2021 +0000
+
+    Back end update
+
+[33mcommit 33403de0b7c050c8eaedf1154efe0ebd071cb6e3[m
+Author: Damian <asdf1234damian@gmail.com>
+Date:   Mon Apr 12 11:26:55 2021 -0500
+
+    Front end
+
+[33mcommit 2621d1bbacbdfc2cc114c6a20ea38cb94ae4406d[m
+Merge: c2b8c60 1f179ca
+Author: Damian <dmeza@aok.com.mx>
+Date:   Mon Apr 12 07:59:47 2021 -0500
+
+    Merge branch 'main' of https://github.com/Me0089mo/EmergencyBackup
+
+[33mcommit c2b8c607ca92f07c04160c6812900eb7a98bb81b[m
+Author: Damian <dmeza@aok.com.mx>
+Date:   Mon Apr 12 07:59:24 2021 -0500
+
+    download files
+
+[33mcommit 1f179cad74dcca74fc261cc88eda9f53111d152d[m
+Author: Me0089mo <31458680+Me0089mo@users.noreply.github.com>
+Date:   Sun Apr 11 21:38:42 2021 -0500
+
+    Diseño pagina web
+
+[33mcommit 54395476601bdab0241692c8778be2d5946d81de[m
+Author: Damián <asdf1234damian@gmail.com>
+Date:   Wed Jan 13 21:18:50 2021 -0600
+
+    Corregido
+
+[33mcommit bb063bcce65bdd6a22f76aea98d6523d9bbc4ec5[m
+Merge: 651bf39 7a7c459
+Author: Damián <asdf1234damian@gmail.com>
+Date:   Thu Jan 14 03:06:15 2021 +0000
+
+    Merge branch 'main' of https://github.com/Me0089mo/EmergencyBackup into main
+
+[33mcommit 651bf39be55ed74826a895fc89f61bbe9f7d5646[m
+Author: Damián <asdf1234damian@gmail.com>
+Date:   Thu Jan 14 03:05:51 2021 +0000
+
+    pendiente de correccion
+
+[33mcommit 7a7c45933b336f90f76aceeda6e5b3bbd65e8dd4[m
+Author: Damián <asdf1234damian@gmail.com>
+Date:   Wed Jan 13 17:34:22 2021 -0600
+
+    Cambios a la interfaz upload
+
+[33mcommit 478a9322ff829ed7e52f4e516ee4e1b3faac1a39[m
+Author: Me0089mo <31458680+Me0089mo@users.noreply.github.com>
+Date:   Wed Jan 13 16:33:50 2021 -0600
+
+    Ajuste campo de ingreso de contraseña en registro
+
+[33mcommit 32a2cbce0f44f8b73678a6e6a7c1c44a61a8aa0a[m
+Author: Me0089mo <31458680+Me0089mo@users.noreply.github.com>
+Date:   Tue Jan 12 15:00:11 2021 -0600
+
+    Cifrador funcionando correctamente con módulo de compresión separado
+
+[33mcommit 058ed8e8dcf8614700f30294843c588c74295802[m
+Author: Damián <asdf1234damian@gmail.com>
+Date:   Thu Jan 7 18:27:07 2021 -0600
+
+    Backend multipart Test
+
+[33mcommit 4eaaca8d2de648f2331d9b9da327eb9e20f22305[m
+Author: Damián <asdf1234damian@gmail.com>
+Date:   Thu Jan 7 17:14:12 2021 -0600
+
+    Envio de archivos
+
+[33mcommit 042537d7ec994a1b0ca80ec4d5f61ae4b5b65b6e[m
+Merge: 7b544fa aadc60f
+Author: Damián <asdf1234damian@gmail.com>
+Date:   Thu Jan 7 15:48:58 2021 -0600
+
+    Merge remote-tracking branch 'origin/main' into main
+
+[33mcommit 7b544fa5162aad0c040fdc3960381b7c5082c9f5[m
+Author: Damián <asdf1234damian@gmail.com>
+Date:   Thu Jan 7 15:41:06 2021 -0600
+
+    Merge
+
+[33mcommit aadc60f68e4d26cfe7f7cb9947fd434855fd680e[m
+Author: Damián <asdf1234damian@gmail.com>
+Date:   Thu Jan 7 21:38:34 2021 +0000
+
+    correccon server e
+
+[33mcommit 0864543aba8d48951e1f4bda05dd427accee3bda[m
+Author: Me0089mo <31458680+Me0089mo@users.noreply.github.com>
+Date:   Thu Jan 7 15:06:56 2021 -0600
+
+    Merge resuelto
+
+[33mcommit afd6cd7b5328ab5733991cd2ee4a556bcee88011[m
+Merge: b8caa07 32386bd
+Author: Me0089mo <31458680+Me0089mo@users.noreply.github.com>
+Date:   Thu Jan 7 14:48:21 2021 -0600
+
+    Separación del módulo de compresión. Creación de clase abstracta que implementan clases de cifrado y descifrado (se creo una clase de cifrado para prueba). Incorporación de métodos a la clase KeyManager
+
+[33mcommit b8caa0763e7023b87c21352b797978921a8c7d79[m
+Author: Me0089mo <31458680+Me0089mo@users.noreply.github.com>
+Date:   Thu Jan 7 14:40:05 2021 -0600
+
+    Separación del módulo de compresión. Creación de clase abstracta que implementan clases de cifrado y descifrado (se creo una clase de cifrado para prueba). Incorporación de métodos a la clase KeyManager
+
+[33mcommit 32386bda74534865f9ca9ec4e79d1fb9c3ccb657[m
+Author: Damián <asdf1234damian@gmail.com>
+Date:   Wed Jan 6 19:43:36 2021 -0600
+
+    Correciones
+    
+    Corregido error para el backend
+
+[33mcommit b8e2a4c9c8efa8c0f0dbfa6b86fe79b8fb053fdc[m
+Author: Damián <asdf1234damian@gmail.com>
+Date:   Wed Jan 6 19:40:01 2021 -0600
+
+    Correciones commit anterior
+
+[33mcommit 8e986d371b406a5e5bd74cd650811dceed83ee61[m
+Author: Damián <asdf1234damian@gmail.com>
+Date:   Wed Jan 6 19:02:42 2021 -0600
+
+    Login despues del registro
+
+[33mcommit 85febda008cb70c2568942e58cf586148987724b[m
+Author: Damián <asdf1234damian@gmail.com>
+Date:   Tue Jan 5 11:29:28 2021 -0600
+
+    App:  Enviar llave publica y correciones
+    
+    La app manda genera su llave publica desde el registro, pero aun no guarda la publica de cliente. Key generator se renombró como key manager
+
+[33mcommit 5407ff0476b915b72935eda8a56c2b89776c290e[m
+Author: Damián <asdf1234damian@gmail.com>
+Date:   Tue Jan 5 08:56:19 2021 -0600
+
+    Server Validation added
+
+[33mcommit 2897d577cba2be3aafa2cd39db51af6df3f5fe9b[m
+Author: Damián <asdf1234damian@gmail.com>
+Date:   Tue Jan 5 08:52:43 2021 -0600
+
+    Server: Recive y envia llave publica
+
+[33mcommit 991e41b4b31b38259a923029f717e8d7e446d25b[m
+Author: Me0089mo <31458680+Me0089mo@users.noreply.github.com>
+Date:   Mon Jan 4 16:35:20 2021 -0600
+
+    Cambios conjuntos
+
+[33mcommit 6e92ff11b81d95e36d0850fc4ce3a7e08477407d[m
+Author: Damián <asdf1234damian@gmail.com>
+Date:   Mon Jan 4 15:36:58 2021 -0600
+
+    merge
+
+[33mcommit 4dab688639d1af695ca0e20494cfb9e7afa13b9f[m
+Author: Me0089mo <31458680+Me0089mo@users.noreply.github.com>
+Date:   Sun Jan 3 15:11:00 2021 -0600
+
+    Cifrado completo. Generación de llaves asimétricas de usuario completa. Descifrado con errores al leer información comprimida. Recuperación de llaves simétricas completa. NOTA: Se comentaron algunas cosas meramente para pruebas de cifrado y descifrado.
+
+[33mcommit f81f6b4e0dba190440b2425f474a2a6f4e7c5618[m
+Merge: 6a8a382 2315023
+Author: Damián <asdf1234damian@gmail.com>
+Date:   Wed Dec 16 00:14:52 2020 -0600
+
+    Merge remote-tracking branch 'origin/main' into main
+
+[33mcommit 6a8a3823d9d4df5490b54ac80750938c30fb8aa9[m
+Author: Damián <asdf1234damian@gmail.com>
+Date:   Wed Dec 16 00:14:37 2020 -0600
+
+    Log in automatico y server nuevo x2
+
+[33mcommit 231502368a4730908f7af8d5c2cfa4da85f14fac[m
+Author: Damián <asdf1234damian@gmail.com>
+Date:   Wed Dec 16 00:13:46 2020 -0600
+
+    Log in automatico y server nuevo
+
+[33mcommit 7c9ae1ce530fff1671143d770f193aad4d22aa35[m
+Author: Ubuntu <TT2020-A061@TT2020-A061.0cjjz1xetdtelctb0ilqxs35rf.bx.internal.cloudapp.net>
+Date:   Thu Dec 10 00:56:10 2020 +0000
+
+    cambios a la configuración del puerto
+
+[33mcommit 9fa4d7cf20163a6f4873238c51c867beae20b8f3[m
+Author: Damián <asdf1234damian@gmail.com>
+Date:   Fri Dec 4 10:52:38 2020 -0600
+
+    Requests collection
+
+[33mcommit b554764c19bb03ab520cd6e4ec2058f7094b496e[m
+Author: Me0089mo <31458680+Me0089mo@users.noreply.github.com>
+Date:   Fri Dec 4 03:07:44 2020 -0600
+
+    Problema de memoria en cifrado solucionado. AES_GCM no funciona con CipherOutput en PruebasCifrado. En V1.0 se crea el archivo de configuración de respaldos y se lee el mismo, y realiza cifrado (AES_CBC provisional)
+
+[33mcommit 75cf6a1c3c9b6a06051831f9fbbe881697a418e5[m
+Author: Damián <asdf1234damian@gmail.com>
+Date:   Sun Nov 29 20:07:08 2020 -0600
+
+    Login y Signup
+    
+    Correciones al back y a la app para el login y el registro y comunicacion con fragmentos
+
+[33mcommit a1a488e0fa649d176977abc359423e13219b2b0a[m
+Author: asdf1234Damian <asdf1234damian@gmail.com>
+Date:   Thu Nov 26 17:38:49 2020 -0600
+
+    .gitignore fix
+
+[33mcommit bf2121c942ac1cbd6dc35e3d5c7f70956dc67165[m
+Merge: d2a427f 1c2ba78
+Author: Damian <repo@cnrservicios.com.mx>
+Date:   Wed Nov 25 16:23:41 2020 -0600
+
+    Merge branch 'main' of https://github.com/Me0089mo/EmergencyBackup into main
+
+[33mcommit d2a427f873a3dcb6b5a5f901b0ce508683fd5a14[m
+Author: Damian <repo@cnrservicios.com.mx>
+Date:   Wed Nov 25 16:23:03 2020 -0600
+
+    Cambios en el login
+
+[33mcommit 1c2ba7858406d1d4710431c5dbbd3df171926dbc[m
+Author: Me0089mo <31458680+Me0089mo@users.noreply.github.com>
+Date:   Mon Nov 23 21:59:48 2020 -0600
+
+    Pruebas de cifrado con algortmos AES_CBC, AES_CTR, AES_GCM y DESede_CBC. Compresión previa al cifrado. Problemas de memoria para archivos muy grandes. Tests 1 y 2 exitosos para el emulador, fallidos para Xperia E5
+
+[33mcommit 46f1f0a13dad41cd07c93117e914963843a38815[m
+Author: Damian <repo@cnrservicios.com.mx>
+Date:   Wed Nov 18 14:40:05 2020 -0600
+
+    Backend login funcionando
+
+[33mcommit 24b2e6cd52bf9d3b00fd02cbf05c88fe31270cfa[m
+Author: Damian <repo@cnrservicios.com.mx>
+Date:   Tue Nov 17 20:56:00 2020 -0600
+
+    Register Validation
+
+[33mcommit 0770ccee34c046c5f928ffb48aa708dec03c87a4[m
+Author: Damian <repo@cnrservicios.com.mx>
+Date:   Tue Nov 17 20:54:07 2020 -0600
+
+    Packages added
+
+[33mcommit e5c7b79c9d940c96003de3989a3cef1470cad549[m
+Author: Damian <repo@cnrservicios.com.mx>
+Date:   Tue Nov 17 20:52:32 2020 -0600
+
+    Conexión a la base de datos
+
+[33mcommit 4e06a78d27b912c343f2a090849637e5165bb4bb[m
+Author: Damian <repo@cnrservicios.com.mx>
+Date:   Sun Nov 15 17:22:38 2020 -0600
+
+    Backend registro
+
+[33mcommit c296f1013d88892b33d230a710ad42367b27d5aa[m
+Author: Damian <repo@cnrservicios.com.mx>
+Date:   Sun Nov 15 15:25:51 2020 -0600
+
+    gitignore
+
+[33mcommit c36f395347a72bad8fcbffa050441c1da50b18d3[m
+Author: Damian <repo@cnrservicios.com.mx>
+Date:   Sun Nov 15 15:23:56 2020 -0600
+
+    Cambios en la interfaz de usuario
+
+[33mcommit 8ef0d88eac650adca6b47e0ab2f22fa9e071037d[m
+Merge: d719b6d 7e0d798
+Author: Damian <repo@cnrservicios.com.mx>
+Date:   Sat Nov 14 17:15:09 2020 -0600
+
+    Merge branch 'main' of https://github.com/Me0089mo/EmergencyBackup into main
+
+[33mcommit d719b6dca0f5f47156a92f70691af154962714f3[m
+Author: Damian <repo@cnrservicios.com.mx>
+Date:   Sat Nov 14 17:15:07 2020 -0600
+
+    Necesitamos agregar un gitignore :u
+
+[33mcommit 0964addde8bdd8aac816820edfe404fe265ff2ba[m
+Author: Damian <repo@cnrservicios.com.mx>
+Date:   Sat Nov 14 17:10:19 2020 -0600
+
+    Cambios de nombres, funcionamiento del nav y ya hay comunicación entre fragmentos y actividad
+
+[33mcommit 7e0d7988ea4a270d124c64f7b4b02268200d4d7a[m
+Author: Me0089mo <31458680+Me0089mo@users.noreply.github.com>
+Date:   Thu Nov 12 21:50:45 2020 -0600
+
+    El proyecto de pruebas realiza el cifrado de directorios con múltiples niveles y almacena la información cifrada en la memoria interna correspondiente a la app. Clases creadas para cifrado: AES128 modos CBC, CTR y GCM y DESede CBC. Se agregan resultados de la primera prueba, siendo inconclusa debido atérmino prematuro de la ejecución por falta de memoria en la pila
+
+[33mcommit b6dd7545845ffe65a43caa48d5ada8c044cf3d1f[m
+Author: Me0089mo <31458680+Me0089mo@users.noreply.github.com>
+Date:   Thu Nov 5 00:47:41 2020 -0600
+
+    Acceso a directorios (por el momento solo un nivel) y lectura de archivos en pruebas de cifrado
+
+[33mcommit 42736c3c3ad3635edefff180e81661808dbfd369[m
+Author: asdf1234Damian <asdf1234damian@gmail.com>
+Date:   Wed Nov 4 21:03:38 2020 -0600
+
+    Cambios en diseño y algunos botones
+
+[33mcommit ab0a5f5b41d1e659813b3dfe0716b3ab2442f01b[m
+Author: Me0089mo <31458680+Me0089mo@users.noreply.github.com>
+Date:   Tue Nov 3 21:19:00 2020 -0600
+
+    Inicio de pruebas de cifrado con los diferentes algoritmos. La carpeta con los archivos de prueba es 'DatosPruebaCifrado'
+
+[33mcommit bd284926660ad6457c53ac3986a3258c79ff6ef4[m
+Author: Me0089mo <31458680+Me0089mo@users.noreply.github.com>
+Date:   Wed Oct 28 22:21:38 2020 -0600
+
+    Se crea View y fragments principales. Se crea la estructura de la lista que mostrará la actividad del usuario así como su adaptador
+
+[33mcommit f5d3581cbf14e38d2c2f7f89d8bfca313f1f0b63[m
+Author: Me0089mo <31458680+Me0089mo@users.noreply.github.com>
+Date:   Thu Oct 22 15:04:15 2020 -0500
+
+    Pantallas de registro de usuario
+
+[33mcommit e2b4a1852b6c23de5042b54b8cdda7d0218980e7[m
+Author: Me0089mo <31458680+Me0089mo@users.noreply.github.com>
+Date:   Wed Oct 21 14:06:09 2020 -0500
+
+    Initial commit

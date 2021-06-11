@@ -26,7 +26,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-
         <Button
             android:id="@+id/btn_cifrar"
             android:layout_width="wrap_content"
@@ -37,27 +36,8 @@
             android:onClick="startBackup"
             android:text="Cifrar"
             app:backgroundTint="@color/button_font_negative" />
-
-    <Button
-        android:id="@+id/btn_decifrar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/button_h_m"
-        android:layout_marginTop="70dp"
-        android:background="@drawable/custom_button"
-        android:text="Decifrar"
-        app:backgroundTint="@color/button_font_negative" />
-
-        <Button
-            android:id="@+id/btn_decifrar2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/button_h_m"
-            android:layout_marginTop="70dp"
-            android:background="@drawable/custom_button"
-            android:onClick="uploadBackup"
-            android:text="upload"
-            app:backgroundTint="@color/button_font_negative" />
     </LinearLayout>
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

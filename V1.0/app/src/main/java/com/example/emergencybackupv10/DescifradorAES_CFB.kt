@@ -3,6 +3,7 @@ package com.example.emergencybackupv10
 import android.content.Context
 import android.net.Uri
 import android.os.Environment
+import android.util.Log
 import com.example.emergencybackupv10.utils.AlertUtils
 import java.io.*
 import java.lang.Exception
@@ -37,7 +38,7 @@ class DescifradorAES_CFB(val applicationContext : Context, val pkDirectory: Uri?
     private var errorProcessingKeys: Boolean = false
     private val alertUtils = AlertUtils()
     private var macMatches = false
-    override val outDataPath: String = applicationContext.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)!!.absolutePath + "/CipheredData"
+    override val outDataPath: String = applicationContext.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)!!.absolutePath + "/DecipheredData"
     //override val outDataPath: String = applicationContext.filesDir.absolutePath + "/DecipheredData"
 
     init {
@@ -83,6 +84,7 @@ class DescifradorAES_CFB(val applicationContext : Context, val pkDirectory: Uri?
                 decipheredFile.delete()
                 decompressedFile.delete()
             }
+            //Log.i("Errors", "${errorProcessingKeys} ${macMatches}")
         }
     }
 
@@ -145,27 +147,28 @@ class DescifradorAES_CFB(val applicationContext : Context, val pkDirectory: Uri?
     }
 
     private fun decompressData(){
-        zipInputStream = ZipInputStream(FileInputStream(decipheredFile))
+        val zipInputStream = ZipInputStream(FileInputStream(decipheredFile))
         var readingArray = ByteArray(1024)
         var reading = 0
         if(zipInputStream.nextEntry != null){
             while(reading != -1){
                 reading = zipInputStream.read(readingArray)
+                Log.i("Bytes read", reading.toString())
                 if(reading != -1)
                     fileOutStream.write(readingArray, 0, reading)
             }
-            fileOutStream.close()
             zipInputStream.closeEntry()
+            fileOutStream.close()
         }
         zipInputStream.close()
-        decipheredFile.delete()
+        //decipheredFile.delete()
     }
 
     private fun generateNewName(name:String):String {
         var newName = ""
         for (index in (name.length - 1).downTo(0)) {
             if (name[index] == '.') {
-                newName = name.substring(0, index-1) + "Deciphered"
+                newName = name.substring(0, index) + "Deciphered"
                 newName += name.substring(index, name.length)
                 break
             }

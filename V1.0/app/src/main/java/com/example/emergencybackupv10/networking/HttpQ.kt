@@ -1,6 +1,7 @@
 package com.example.emergencybackupv10.networking
 
 import android.content.Context
+import android.util.Log
 import com.android.volley.*
 import com.android.volley.toolbox.Volley
 
@@ -28,6 +29,8 @@ class HttpQ constructor(context: Context) {
     }
 
      fun getErrorMsg (error: VolleyError) : String {
+         Log.i("Volley Error", error.message)
+         Log.i("Error cause", error.cause.toString())
         if (error is NoConnectionError){
             return "No hay conexión"
         }

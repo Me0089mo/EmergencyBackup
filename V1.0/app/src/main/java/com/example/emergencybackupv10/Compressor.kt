@@ -1,15 +1,15 @@
 package com.example.emergencybackupv10
 
 import java.io.ByteArrayOutputStream
+import java.io.File
 import java.io.FileInputStream
-import java.util.zip.Deflater
-import java.util.zip.DeflaterOutputStream
-import java.util.zip.ZipEntry
-import java.util.zip.ZipOutputStream
+import java.io.FileOutputStream
+import java.util.zip.*
 
 class Compressor {
     private var byteOutReadStream = ByteArrayOutputStream()
     private lateinit var zipOutStream: ZipOutputStream
+    //private lateinit var zipInputStream: ZipInputStream
 
     fun newFile(fileName: String): ByteArray{
         zipOutStream = ZipOutputStream(byteOutReadStream)
@@ -31,4 +31,20 @@ class Compressor {
         zipOutStream.close()
         return entryClosing
     }
+
+    /*fun decompressFile(decipheredFile: File, fileOutStream: FileOutputStream){
+        zipInputStream = ZipInputStream(FileInputStream(decipheredFile))
+        var readingArray = ByteArray(1024)
+        var reading = 0
+        if(zipInputStream.nextEntry != null){
+            while(reading != -1){
+                reading = zipInputStream.read(readingArray)
+                if(reading != -1)
+                    fileOutStream.write(readingArray, 0, reading)
+            }
+            fileOutStream.close()
+            zipInputStream.closeEntry()
+        }
+        zipInputStream.close()
+    }*/
 }

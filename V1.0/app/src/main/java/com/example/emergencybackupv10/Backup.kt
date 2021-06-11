@@ -22,7 +22,6 @@ class Backup(val applicationContext : Context,
             getValuesFromDirList()
         else
             directories = dirList.toMutableList()
-        Log.i("Dir size", directories.size.toString())
         directories.forEach { dir ->
             var docFile: DocumentFile?
             try {
@@ -66,8 +65,10 @@ class Backup(val applicationContext : Context,
                 File(applicationContext.filesDir, file.name!!).mkdir()
                 decryptDir(file)
             }
-            else
+            else {
+                Log.i("Restoring", "${file.name}")
                 cipherFactory.processFile(file.uri, file.name!!)
+            }
         }
     }
 
