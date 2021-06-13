@@ -27,12 +27,9 @@ import com.example.emergencybackupv10.networking.interfaces.Upload
 import com.example.emergencybackupv10.utils.AlertUtils
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.activity_login.*
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import okhttp3.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -41,6 +38,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.*
 import java.nio.CharBuffer
+import java.util.*
 
 
 class Home : AppCompatActivity() {
@@ -64,7 +62,10 @@ class Home : AppCompatActivity() {
     private lateinit var retrofit:Retrofit;
     private lateinit var downloadService: Download;
     private lateinit var cm: ConnectivityManager
-
+    var startUploadTime: Long = 0
+    var finalUploadTime: Long = 0
+    var startBackupTime: Long = 0
+    var finalCipherTime: Long = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         url = getString(R.string.host_url)
@@ -209,27 +210,38 @@ class Home : AppCompatActivity() {
         var period_time = sharedPreferences.getInt(getString(R.string.CONFIG_TIME_PERIOD), 0)
         val time: Long = period_time.toLong()*24*60*60*1000
         val createBackup = Backup(this, getDirList(), cipher, time)
+        startBackupTime = Calendar.getInstance().timeInMillis
+        Log.i("Empieza respaldo", startBackupTime.toString())
         createBackup.start()
+        finalCipherTime = Calendar.getInstance().timeInMillis
+        Log.i("Cifrado finalizado", finalCipherTime.toString())
         cm = applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         uploadBackup(File(applicationContext.filesDir.absolutePath, "CipheredData"))
-        //Log.i("Files waiting", waitingToUpload.size.toString())
-        if(waitingToUpload.isNotEmpty()) {
+        if (waitingToUpload.isNotEmpty()) {
             GlobalScope.launch(Main) { uploadRetarded() }
         }
+    /*runBlocking {
+            val upCorroutine = GlobalScope.launch(Dispatchers.IO) {
+                uploadBackup(File(applicationContext.filesDir.absolutePath, "CipheredData"))
+            }
+            upCorroutine.join()
+            if (waitingToUpload.isNotEmpty()) {
+                GlobalScope.launch(Main) { uploadRetarded() }
+            }
+        }*/
     }
 
     fun uploadBackup(files: File) {
         files.listFiles().forEach { file ->
-            if(file.isDirectory)
+            if (file.isDirectory)
                 uploadBackup(file)
             else {
-                if(cm.activeNetworkInfo != null && cm.activeNetworkInfo.isConnected)
+                if (cm.activeNetworkInfo != null && cm.activeNetworkInfo.isConnected)
                     uploadFile(file)
                 else
                     waitingToUpload.add(file)
             }
         }
-        //Log.i("debug files=", "done!")
     }
 
     suspend fun uploadRetarded(){
@@ -280,9 +292,9 @@ class Home : AppCompatActivity() {
     fun restoreBackup(){
         val rootDir = mutableSetOf<String>()
         directoryToRestore?.let { rootDir.add(it) }
-        val decipher = DescifradorAES_CFB(this, privateKeyFile)
-        val restoreBackup = Backup(this, rootDir, decipher)
-        restoreBackup.start()
+        val decipher = DescifradorAES_CFB(applicationContext, privateKeyFile)
+        val restoreBack = Backup(applicationContext, rootDir, decipher)
+        restoreBack.start()
     }
 
     fun uploadFile(file:File) {
@@ -314,16 +326,21 @@ class Home : AppCompatActivity() {
             ,file = multipartFile
         )
 
+        startUploadTime = Calendar.getInstance().timeInMillis
+        Log.i("Empieza carga", "acrchivo ${file.name} ${startUploadTime}")
         call.enqueue(object : Callback<ServerResponse> {
             override fun onFailure(call: Call<ServerResponse>?, t: Throwable?) {
-                Log.i("retrofit fail ", "call fai   led")
+                Log.i("retrofit fail ", "call failed for ${file.name}")
             }
 
             override fun onResponse(call: Call<ServerResponse>?, response: Response<ServerResponse>?) {
-                Log.i("retrofit response", response.toString())
+                //Log.i("Uploaded", "${file.name}")
+                finalUploadTime = Calendar.getInstance().timeInMillis
+                Log.i("Termina carga", "acrchivo ${file.name} ${finalUploadTime}")
             }
-        }
-        )
+        })
+        //finalUploadTime = Calendar.getInstance().timeInMillis
+        //Log.i("Termina carga", "acrchivo ${file.name} ${finalUploadTime}")
     }
 
     fun downloadFile(fileName: String){
@@ -366,9 +383,14 @@ class Home : AppCompatActivity() {
             val fileOutputStream = FileOutputStream(file)
             val inStream = BufferedInputStream(response.body()?.byteStream())
             val data = ByteArray(1024)
-            var read = 0;
+            var read = 0
             while (read != -1) {
-                read = inStream.read(data)
+                //try{
+                    read = inStream.read(data)
+                /*}catch (excep: Exception){
+                    read = -1
+
+                }*/
                 if (read != -1)
                     fileOutputStream.write(data, 0, read)
             }

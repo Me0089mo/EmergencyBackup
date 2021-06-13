@@ -2,6 +2,7 @@ package com.example.emergencybackupv10
 
 import android.content.Context
 import android.net.Uri
+import android.os.Environment
 import java.io.*
 import java.security.*
 import javax.crypto.*
@@ -98,28 +99,6 @@ class AEScfbCipher(val applicationContext: Context) : CipherFactory(){
     override fun processKey(cipherKey : Key, data : ByteArray) : ByteArray?{
         keyCipher.init(Cipher.ENCRYPT_MODE, cipherKey)
         return keyCipher.doFinal(data)
-    }
-
-    fun print_bytes(bytes: ByteArray): String? {
-        val sb = StringBuilder()
-        sb.append("[ ")
-        for (b in bytes) {
-            sb.append(String.format("0x%02X ", b))
-        }
-        sb.append("]")
-        return sb.toString()
-    }
-
-    private fun generateNewName(name:String):String {
-        var newName = ""
-        for (index in (name.length - 1).downTo(0)) {
-            if (name[index] == '.') {
-                newName = name.substring(0, index) + "Ciphered"
-                newName += name.substring(index, name.length)
-                break
-            }
-        }
-        return newName
     }
 
     override fun isCipher(): Boolean = cipherOrDecipher

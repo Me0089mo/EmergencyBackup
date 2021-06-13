@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.TextUtils
+import android.util.Log
 import android.util.Patterns
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -15,6 +16,7 @@ import com.android.volley.toolbox.StringRequest
 import com.auth0.android.jwt.JWT
 import com.example.emergencybackupv10.utils.AlertUtils
 import kotlinx.android.synthetic.main.activity_signup.*
+import java.util.regex.Pattern
 
 
 class SignUp : AppCompatActivity() {
@@ -97,6 +99,9 @@ class SignUp : AppCompatActivity() {
     }
 
     fun confirmPassword(): Boolean {
+        if(!isValidPassword(signup_password_input.text.toString())){
+            return false
+        }
         return signup_password_confirm.text.toString() == signup_password_input.text.toString()
     }
 
@@ -107,4 +112,34 @@ class SignUp : AppCompatActivity() {
             Patterns.EMAIL_ADDRESS.matcher(target).matches()
         }
     }
+
+    fun isValidPassword(target: CharSequence?): Boolean {
+        return if (TextUtils.isEmpty(target)) {
+            false
+        } else {
+            var lower = false
+            var upper = false
+            var digit = false
+            var symbol = false
+            target?.forEach { carac ->
+                Log.i("Char cat", "$carac ${carac.category}")
+                if(carac.isDigit()) digit = true
+                if(carac.isLowerCase()) lower = true
+                if(carac.isUpperCase()) upper = true
+                val sym_val = carac.toInt()
+                if((sym_val>=33 && sym_val<=47) || (sym_val>=58 && sym_val<=64)
+                    || (sym_val>=91 && sym_val<=96) || (sym_val>=123 && sym_val<=126))
+                        symbol = true
+            }
+            if(lower && upper && digit && symbol && target!!.length>=8)
+                return true
+            else{
+                alertUtils.topToast(this, "Contraseña inválida. Debe tener al menos una " +
+                        "minúscula, una mayúscula, un número y un símbolo, y de longitud mayor o igual a 8" +
+                        "caracteres")
+                return false
+            }
+        }
+    }
+
 }

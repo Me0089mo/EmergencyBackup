@@ -1,5 +1,6 @@
 package com.example.emergencybackupv10
 
+import android.util.Log
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileInputStream
@@ -9,11 +10,12 @@ import java.util.zip.*
 class Compressor {
     private var byteOutReadStream = ByteArrayOutputStream()
     private lateinit var zipOutStream: ZipOutputStream
-    //private lateinit var zipInputStream: ZipInputStream
+    private lateinit var zipInputStream: ZipInputStream
 
     fun newFile(fileName: String): ByteArray{
         zipOutStream = ZipOutputStream(byteOutReadStream)
         val zipEntry = ZipEntry(fileName)
+        Log.i("New entry", "$zipEntry for file $fileName")
         zipOutStream.putNextEntry(zipEntry)
         return byteOutReadStream.toByteArray()
     }
@@ -29,10 +31,11 @@ class Compressor {
         zipOutStream.finish()
         val entryClosing = byteOutReadStream.toByteArray()
         zipOutStream.close()
+        byteOutReadStream.reset()
         return entryClosing
     }
 
-    /*fun decompressFile(decipheredFile: File, fileOutStream: FileOutputStream){
+    fun decompressFile(decipheredFile: File, fileOutStream: FileOutputStream){
         zipInputStream = ZipInputStream(FileInputStream(decipheredFile))
         var readingArray = ByteArray(1024)
         var reading = 0
@@ -46,5 +49,6 @@ class Compressor {
             zipInputStream.closeEntry()
         }
         zipInputStream.close()
-    }*/
+        decipheredFile.delete()
+    }
 }

@@ -78,13 +78,13 @@ class DescifradorAES_CFB(val applicationContext : Context, val pkDirectory: Uri?
                 processData(readingArray, readLong)
             }while(readLong >= 0)
             finalizeCipher()
-            if(macMatches) decompressData()
+            if(macMatches)
+                compressor.decompressFile(decipheredFile, fileOutStream)
             else{
                 AlertUtils().topToast(applicationContext, "Archivo $fileName corrupto. No se restaurará y será eliminado")
                 decipheredFile.delete()
                 decompressedFile.delete()
             }
-            //Log.i("Errors", "${errorProcessingKeys} ${macMatches}")
         }
     }
 
@@ -144,24 +144,6 @@ class DescifradorAES_CFB(val applicationContext : Context, val pkDirectory: Uri?
         mac.finalizeMac()
         if(mac.verifyMac(macTag))
             macMatches = true
-    }
-
-    private fun decompressData(){
-        val zipInputStream = ZipInputStream(FileInputStream(decipheredFile))
-        var readingArray = ByteArray(1024)
-        var reading = 0
-        if(zipInputStream.nextEntry != null){
-            while(reading != -1){
-                reading = zipInputStream.read(readingArray)
-                Log.i("Bytes read", reading.toString())
-                if(reading != -1)
-                    fileOutStream.write(readingArray, 0, reading)
-            }
-            zipInputStream.closeEntry()
-            fileOutStream.close()
-        }
-        zipInputStream.close()
-        //decipheredFile.delete()
     }
 
     private fun generateNewName(name:String):String {

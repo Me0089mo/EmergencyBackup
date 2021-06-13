@@ -42,7 +42,6 @@ class Backup(val applicationContext : Context,
                 }
             }
         }
-        //println("Tiempo final: ${Calendar.getInstance().timeInMillis}")
     }
 
     private fun encryptDir(directory:DocumentFile, outPath: String){
@@ -53,8 +52,10 @@ class Backup(val applicationContext : Context,
                     encryptDir(file, "$outPath/${file.name}")
                 }
             } else {
-                if (now-time <= file.lastModified())
+                if (now-time <= file.lastModified()) {
                     cipherFactory.processFile(file.uri, file.name!!, outPath)
+                    file.delete()
+                }
             }
         }
     }
@@ -62,7 +63,7 @@ class Backup(val applicationContext : Context,
     private fun decryptDir(directory: DocumentFile){
         directory.listFiles().forEach { file ->
             if(file.isDirectory) {
-                File(applicationContext.filesDir, file.name!!).mkdir()
+                File(cipherFactory.outDataPath, file.name!!).mkdir()
                 decryptDir(file)
             }
             else {

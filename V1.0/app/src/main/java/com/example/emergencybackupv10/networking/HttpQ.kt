@@ -29,8 +29,6 @@ class HttpQ constructor(context: Context) {
     }
 
      fun getErrorMsg (error: VolleyError) : String {
-         Log.i("Volley Error", error.message)
-         Log.i("Error cause", error.cause.toString())
         if (error is NoConnectionError){
             return "No hay conexión"
         }
