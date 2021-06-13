@@ -44,8 +44,7 @@ class SignUp : AppCompatActivity() {
             return;
         }
         if (!confirmPassword()) {
-            alertUtils.topToast(this, "Las contraseñas no coinciden")
-            return;
+            return
         }
         //Generate keys
         keyMan.generateKeys()
@@ -102,7 +101,14 @@ class SignUp : AppCompatActivity() {
         if(!isValidPassword(signup_password_input.text.toString())){
             return false
         }
-        return signup_password_confirm.text.toString() == signup_password_input.text.toString()
+        else{
+            if(signup_password_confirm.text.toString() == signup_password_input.text.toString())
+                return true
+            else {
+                alertUtils.topToast(this, "Las contraseñas no coinciden")
+                return false
+            }
+        }
     }
 
     fun isValidEmail(target: CharSequence?): Boolean {
@@ -134,7 +140,7 @@ class SignUp : AppCompatActivity() {
             if(lower && upper && digit && symbol && target!!.length>=8)
                 return true
             else{
-                alertUtils.topToast(this, "Contraseña inválida. Debe tener al menos una " +
+                alertUtils.topToastLong(this, "Contraseña inválida. Debe tener al menos una " +
                         "minúscula, una mayúscula, un número y un símbolo, y de longitud mayor o igual a 8" +
                         "caracteres")
                 return false

@@ -15,7 +15,6 @@ class Compressor {
     fun newFile(fileName: String): ByteArray{
         zipOutStream = ZipOutputStream(byteOutReadStream)
         val zipEntry = ZipEntry(fileName)
-        Log.i("New entry", "$zipEntry for file $fileName")
         zipOutStream.putNextEntry(zipEntry)
         return byteOutReadStream.toByteArray()
     }

@@ -63,7 +63,7 @@ class Backup(val applicationContext : Context,
     private fun decryptDir(directory: DocumentFile){
         directory.listFiles().forEach { file ->
             if(file.isDirectory) {
-                File(cipherFactory.outDataPath, file.name!!).mkdir()
+                //File(cipherFactory.outDataPath, file.name!!).mkdir()
                 decryptDir(file)
             }
             else {

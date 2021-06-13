@@ -14,4 +14,14 @@ class AlertUtils constructor(){
         toast.setGravity(Gravity.TOP, 0, 0)
         toast.show()
     }
+
+    fun topToastLong(context: Context,mssg:String){
+        val toast = Toast.makeText(
+            context,
+            mssg,
+            Toast.LENGTH_LONG
+        )
+        toast.setGravity(Gravity.TOP, 0, 0)
+        toast.show()
+    }
 }
