@@ -92,6 +92,7 @@ class Home : AppCompatActivity() {
             }
             true
         }
+        Log.i("Is emergency", emergency.toString())
         if(emergency == true){
             startBackup()
         }
